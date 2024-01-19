@@ -116,4 +116,10 @@ constexpr int CoPilot_RPush_Button = 10;
 namespace ShooterConstant {
     constexpr int Motor1ID = 0;
     constexpr int Motor2ID = 0;
-}
+    // voir les valeurs PID
+    constexpr double kPMotors = 0.0;
+    constexpr double kIMotors = 0.0;
+    constexpr double kDMotors = 0.0;
+    constexpr double kMinInput = -1.0;
+    constexpr double kMaxInput = 1.0;
+} // namespace Shooter

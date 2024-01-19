@@ -23,7 +23,7 @@ rev::CANSparkMax m_motor2;
 // First motor -> right side
 // Second motor -> left side
 
-rev::SparkPIDController m_motor1Controller;
-rev::SparkPIDController m_motor2Controller;
+rev::SparkPIDController m_motor1PIDController;
+rev::SparkPIDController m_motor2PIDController;
 
 };
