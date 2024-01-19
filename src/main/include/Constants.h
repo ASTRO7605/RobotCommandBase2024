@@ -120,7 +120,7 @@ namespace ShooterConstant {
     constexpr double kPMotors = 0.0;
     constexpr double kIMotors = 0.0;
     constexpr double kDMotors = 0.0;
-    constexpr double kMinInput = 0;
-    constexpr double kMaxInput = 5500; // un peu moins que la capacité de rmp d'un moteur NEO rev
-    constexpr double speed = 5;
+    constexpr double kMinInput = -1.0;
+    constexpr double kMaxInput = 1.0; // un peu moins que la capacité de rmp d'un moteur NEO rev
+    constexpr double RMPManuallyControl = 5;
 } // namespace Shooter

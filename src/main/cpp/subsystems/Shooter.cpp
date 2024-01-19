@@ -1,4 +1,4 @@
-#include <subsystems/Shooter.h>
+#include "subsystems/Shooter.h"
 
 Shooter::Shooter() : 
 m_motor1{ShooterConstant::Motor1ID, rev::CANSparkMax::MotorType::kBrushless},
@@ -19,19 +19,23 @@ m_motor2PIDController.SetP(ShooterConstant::kPMotors);
 m_motor2PIDController.SetI(ShooterConstant::kIMotors);
 m_motor2PIDController.SetD(ShooterConstant::kDMotors);
 m_motor2PIDController.SetOutputRange(ShooterConstant::kMinInput, ShooterConstant::kMaxInput);
-
-
 }
 
 void Shooter::Periodic() {
-
 }
 
 void Shooter::RunShooterManually() {
-m_motor1PIDController.SetReference(ShooterConstant::speed, rev::ControlType::kVelocity);
-m_motor2PIDController.SetReference(ShooterConstant::speed, rev::ControlType::kVelocity);
+m_motor1PIDController.SetReference(ShooterConstant::RMPManuallyControl, rev::ControlType::kVelocity);
+m_motor2PIDController.SetReference(ShooterConstant::RMPManuallyControl, rev::ControlType::kVelocity);
 }
 void Shooter::StopShooter() {
 m_motor1PIDController.SetReference(0, rev::ControlType::kVelocity);
 m_motor2PIDController.SetReference(0, rev::ControlType::kVelocity);
+}
+
+frc2::CommandPtr Shooter::RunShooterManuallyCommand() {
+    return RunEnd(
+        [this] {RunShooterManually();},
+        [this] {StopShooter();}
+    );
 }
