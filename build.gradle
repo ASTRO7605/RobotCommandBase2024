@@ -46,11 +46,6 @@ wpi.sim.addGui().defaultEnabled = true
 // Enable DS but not by default
 wpi.sim.addDriverstation()
 
-wpi.maven.useLocal = false
-wpi.maven.useDevelopment = true
-wpi.versions.wpilibVersion = '2024.+'
-wpi.versions.wpimathVersion = '2024.+'
-
 model {
     components {
         frcUserProgram(NativeExecutableSpec) {
