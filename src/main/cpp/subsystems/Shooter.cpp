@@ -27,12 +27,11 @@ void Shooter::Periodic() {
 
 }
 
-void Shooter::RunShooter() {
-
+void Shooter::RunShooterManually() {
+m_motor1PIDController.SetReference(ShooterConstant::speed, rev::ControlType::kVelocity);
+m_motor2PIDController.SetReference(ShooterConstant::speed, rev::ControlType::kVelocity);
 }
-void Shooter::Launch() {
-
-}
-void Shooter::Take() {
-
+void Shooter::StopShooter() {
+m_motor1PIDController.SetReference(0, rev::ControlType::kVelocity);
+m_motor2PIDController.SetReference(0, rev::ControlType::kVelocity);
 }

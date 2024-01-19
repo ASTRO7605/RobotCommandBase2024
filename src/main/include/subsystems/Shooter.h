@@ -12,9 +12,8 @@ class Shooter : frc2::SubsystemBase {
 public:
 Shooter();
 void Periodic() override;
-void RunShooter();
-void Launch();
-void Take();
+void RunShooterManually();
+void StopShooter();
 
 
 private:
