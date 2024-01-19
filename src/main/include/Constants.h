@@ -112,3 +112,8 @@ constexpr int CoPilot_Start_Button = 8;
 constexpr int CoPilot_LPush_Button = 9;
 constexpr int CoPilot_RPush_Button = 10;
 } // namespace OIConstant
+
+namespace ShooterConstant {
+    constexpr int Motor1ID = 0;
+    constexpr int Motor2ID = 0;
+}
