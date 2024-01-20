@@ -8,7 +8,7 @@
 
 #include <rev/CANSparkMax.h>
 #include <rev/SparkPIDController.h>
-//#include <rev/SparkRelativeEncoder.h>
+#include <rev/SparkRelativeEncoder.h>
 
 class Shooter : frc2::SubsystemBase {
 public:
@@ -28,4 +28,6 @@ rev::CANSparkMax m_motor2;
 rev::SparkPIDController m_motor1PIDController;
 rev::SparkPIDController m_motor2PIDController;
 
+rev::SparkRelativeEncoder m_motor1Encoder;
+rev::SparkRelativeEncoder m_motor2Encoder;
 };
