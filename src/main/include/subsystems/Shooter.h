@@ -7,6 +7,7 @@
 #include "Constants.h"
 
 #include <rev/CANSparkMax.h>
+#include <rev/CANSparkBase.h>
 #include <rev/SparkMaxRelativeEncoder.h>
 #include <rev/SparkPIDController.h>
 
@@ -22,6 +23,9 @@ public:
   Shooter();
 
   void Periodic() override;
+  /// @brief Set shooter wheels to a specific speed
+  /// @param speeds Speed of wheels (RPM)
+  void SetWheelSpeeds (double speeds);
 
 private:
   rev::CANSparkMax m_leftMotor;
