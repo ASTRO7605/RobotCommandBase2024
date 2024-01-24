@@ -41,3 +41,8 @@ void Shooter::Periodic() {
     frc::SmartDashboard::PutNumber("rightMotorRotations", m_rightMotorEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("rightMotorVelocity", m_rightMotorEncoder.GetVelocity());
 }
+
+void Shooter::SetWheelSpeeds(double speeds){
+  m_leftMotorPIDController.SetReference(speeds, rev::CANSparkMax::ControlType::kVelocity);
+  m_rightMotorPIDController.SetReference(speeds, rev::CANSparkMax::ControlType::kVelocity);
+}
