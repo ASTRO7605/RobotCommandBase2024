@@ -7,37 +7,23 @@
 #include <wpi/MemoryBuffer.h>
 
 void Robot::RobotInit() {
-    // frc::CameraServer::StartAutomaticCapture();
+  // frc::CameraServer::StartAutomaticCapture();
 
-    // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
-    // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
-    // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
-    frc::SmartDashboard::PutNumber("Gyro Angle", 0);
-    frc::SmartDashboard::PutNumber("Gyro Rotation 2D", 0); // test on smart dashboard
-    frc::SmartDashboard::PutNumber("Gyro Radians", 0);
+  // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
+  // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
+  // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
+  frc::SmartDashboard::PutNumber("Gyro Angle", 0);
+  frc::SmartDashboard::PutNumber("Gyro Rotation 2D", 0);
+  frc::SmartDashboard::PutNumber("Gyro Radians", 0);
 
-    frc::SmartDashboard::PutNumber("FrontRightModuleAbsolutePosition", 0);
-    frc::SmartDashboard::PutNumber("FrontRightModuleSparkMaxPosition", 0);
-    frc::SmartDashboard::PutNumber("FrontRightModuleDrivingPosition", 0);
-    frc::SmartDashboard::PutNumber("FrontRightModuleDrivingVelocity", 0);
-    frc::SmartDashboard::PutNumber("FrontLeftModuleAbsolutePosition", 0);
-    frc::SmartDashboard::PutNumber("FrontLeftModuleSparkMaxPosition", 0);
-    frc::SmartDashboard::PutNumber("FrontLeftModuleDrivingPosition", 0);
-    frc::SmartDashboard::PutNumber("FrontLeftModuleDrivingVelocity", 0);
-    frc::SmartDashboard::PutNumber("RearLeftModuleAbsolutePosition", 0);
-    frc::SmartDashboard::PutNumber("RearLeftModuleSparkMaxPosition", 0);
-    frc::SmartDashboard::PutNumber("RearLeftModuleDrivingPosition", 0);
-    frc::SmartDashboard::PutNumber("RearLeftModuleDrivingVelocity", 0);
-    frc::SmartDashboard::PutNumber("RearRightModuleAbsolutePosition", 0);
-    frc::SmartDashboard::PutNumber("RearRightModuleSparkMaxPosition", 0);
-    frc::SmartDashboard::PutNumber("RearRightModuleDrivingPosition", 0);
-    frc::SmartDashboard::PutNumber("RearRightModuleDrivingVelocity", 0);
-    frc::Preferences::RemoveAll();
+  frc::Preferences::InitDouble("kPFlywheel", 0);
+  frc::Preferences::InitDouble("kIFlywheel", 0);
+  frc::Preferences::InitDouble("kDFlywheel", 0);
 
-} /** * This function is called every 20 ms, no matter the mode. Use * this for items like
-   * diagnostics that you want to run during disabled, * autonomous, teleoperated and test. * <p>
-   * This runs after the mode specific periodic functions, but before LiveWindow and SmartDashboard
-   * integrated updating.
+} /** * This function is called every 20 ms, no matter the mode. Use * this for
+   * items like diagnostics that you want to run during disabled, * autonomous,
+   * teleoperated and test. * <p> This runs after the mode specific periodic
+   * functions, but before LiveWindow and SmartDashboard integrated updating.
    */
 
 void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
@@ -56,17 +42,17 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-    if (m_autonomousCommand.get() != nullptr) {
-        m_autonomousCommand.Schedule();
-    }
+  if (m_autonomousCommand.get() != nullptr) {
+    m_autonomousCommand.Schedule();
+  }
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
-    if (m_autonomousCommand.get() != nullptr) {
-        m_autonomousCommand.Cancel();
-    }
+  if (m_autonomousCommand.get() != nullptr) {
+    m_autonomousCommand.Cancel();
+  }
 }
 
 /**

@@ -69,8 +69,6 @@ void RobotContainer::ConfigureBindings() {
         {}}.ToPtr());
     m_CoPilotController.LeftBumper().OnTrue(
         frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
-
-m_ThrottleStick.Button(9).OnTrue(m_Shooter.RunShooterManuallyCommand());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

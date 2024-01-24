@@ -1,33 +1,39 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 #pragma once
 
-#include <Constants.h>
-
-#include <frc2/command/SubsystemBase.h>
-#include <frc2/command/CommandPtr.h>
-#include <frc/smartdashboard/SmartDashboard.h>
+#include "Constants.h"
 
 #include <rev/CANSparkMax.h>
+#include <rev/CANSparkBase.h>
+#include <rev/SparkMaxRelativeEncoder.h>
 #include <rev/SparkPIDController.h>
-#include <rev/SparkRelativeEncoder.h>
 
-class Shooter : frc2::SubsystemBase {
+#include <frc/Preferences.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include <frc2/command/Command.h>
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/SubsystemBase.h>
+
+class Shooter : public frc2::SubsystemBase {
 public:
-Shooter();
-void Periodic() override;
-void RunShooterManually();
-void StopShooter();
-frc2::CommandPtr RunShooterManuallyCommand();
+  Shooter();
+
+  void Periodic() override;
+  /// @brief Set shooter wheels to a specific speed
+  /// @param speeds Speed of wheels (RPM)
+  void SetWheelSpeeds (double speeds);
 
 private:
+  rev::CANSparkMax m_leftMotor;
+  rev::CANSparkMax m_rightMotor;
 
-// First motor -> right side
-// Second motor -> left side
-rev::CANSparkMax m_motor1;
-rev::CANSparkMax m_motor2;
+  rev::SparkRelativeEncoder m_leftMotorEncoder;
+  rev::SparkRelativeEncoder m_rightMotorEncoder;
 
-rev::SparkPIDController m_motor1PIDController;
-rev::SparkPIDController m_motor2PIDController;
-
-rev::SparkRelativeEncoder m_motor1Encoder;
-rev::SparkRelativeEncoder m_motor2Encoder;
+  rev::SparkPIDController m_leftMotorPIDController;
+  rev::SparkPIDController m_rightMotorPIDController;
 };
