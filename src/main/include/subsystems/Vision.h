@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include <subsystems/Base.h>
+#include "subsystems/Base.h"
+#include "utils/PoseMeasurement.h"
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
@@ -27,20 +28,13 @@
 #include <string>
 #include <vector>
 
-/// @brief A AprilTag measurement result.
-struct PoseMeasurement {
-    frc::Pose3d pose;
 
-    units::millisecond_t timestamp;
-
-    units::meter_t distance;
-};
 
 /// @brief A wrapper for the Limelight NetworkTables API.
 class Vision : public frc2::SubsystemBase {
   public:
     /// @param table_name the NetworkTables table to use.
-    Vision(std::string_view table_name, Base *p_Base, frc::Transform3d cameraPose);
+    Vision(std::string_view table_name, Base& p_Base, frc::Transform3d cameraPose);
 
     void Periodic() override;
     // void SetPipeline(int pipeline);
@@ -59,7 +53,7 @@ class Vision : public frc2::SubsystemBase {
 
     /// @brief Get ID of AprilTag in view
     /// @return ID of the primary in-view AprilTag (0 if none).
-    int ViewTagID();
+    // int ViewTagID();
 
     /// @brief Update the base's pose estimation using vision data.
     /// @return Pose estimate of the robot.
@@ -79,5 +73,5 @@ class Vision : public frc2::SubsystemBase {
     photon::PhotonCamera m_Vision;
     frc::Transform3d robotToCam;
     photon::PhotonPoseEstimator m_PhotonPoseEstimator;
-    Base *m_pBase;
+    Base& m_pBase;
 };

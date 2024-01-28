@@ -6,6 +6,7 @@
 
 #include "Constants.h"
 #include "subsystems/Base.h"
+#include "subsystems/Vision.h"
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/InstantCommand.h>
@@ -66,9 +67,9 @@ class RobotContainer {
     void ConfigurePathfind();
     // The robot's subsystems are defined here...
     Base m_Base;
-    Vision m_VisionFront{VisionConstant::TableNameFront, &m_Base,
+    Vision m_VisionFront{VisionConstant::TableNameFront, m_Base,
                          VisionConstant::frontCameraTransform};
-    Vision m_VisionBack{VisionConstant::TableNameBack, &m_Base,
+    Vision m_VisionBack{VisionConstant::TableNameBack, m_Base,
                         VisionConstant::backCameraTransform};
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };

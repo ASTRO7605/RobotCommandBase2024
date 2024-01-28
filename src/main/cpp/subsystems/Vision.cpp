@@ -6,7 +6,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-Vision::Vision(std::string_view table_name, Base *p_Base, frc::Transform3d cameraPose)
+Vision::Vision(std::string_view table_name, Base& p_Base, frc::Transform3d cameraPose)
     : /*m_Vision{nt::NetworkTableInstance::GetDefault().GetTable(table_name)}*/
       m_Vision{table_name}, robotToCam{cameraPose},
       m_PhotonPoseEstimator{frc::AprilTagFieldLayout{"2024-crescendo"},
@@ -31,10 +31,10 @@ void Vision::Periodic() {
 
 // bool Vision::SeesValidTarget() { return m_Vision.GetLatestResult().HasTargets(); }
 
-int Vision::ViewTagID() {
-    // returns a double, but needs to be an int
-    // return static_cast<int>(m_Vision->GetNumber("tid", 0.0));
-}
+// int Vision::ViewTagID() {
+//     // returns a double, but needs to be an int
+//     // return static_cast<int>(m_Vision->GetNumber("tid", 0.0));
+// }
 
 // void Vision::SetPipeline(int pipeline) { m_Vision->PutNumber("pipeline", pipeline); }
 
@@ -78,8 +78,8 @@ void Vision::SendRobotPoseEstimate(std::optional<photon::EstimatedRobotPose> pos
                                units::meter_t{target_distance}};
 
     if (m_Vision.GetCameraName() == VisionConstant::TableNameBack) {
-        m_pBase->SetRobotPoseVisionEstimateBack(return_val);
+        m_pBase.SetRobotPoseVisionEstimateBack(return_val);
     } else {
-        m_pBase->SetRobotPoseVisionEstimateFront(return_val);
+        m_pBase.SetRobotPoseVisionEstimateFront(return_val);
     }
 }
