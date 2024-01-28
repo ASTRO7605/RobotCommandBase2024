@@ -10,6 +10,8 @@
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
+#include <frc/apriltag/AprilTagFields.h>
+
 
 namespace DriveConstant {
 constexpr double kDrivingGearRatio = 6.75;
@@ -93,6 +95,7 @@ namespace VisionConstant {
 constexpr int Pipeline = 0; // only one pipeline (AprilTags)
 constexpr std::string_view TableNameFront = "limelight-front";
 constexpr std::string_view TableNameBack = "limelight-back";
+constexpr double ambiguityThreshold = 0.2;
 
 enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 } // namespace VisionConstant
@@ -104,6 +107,8 @@ constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Front{0.5, 0.5,
                                                                        0.999};
 constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Back{0.5, 0.5,
                                                                       0.999};
+
+
 } // namespace PoseEstimationConstant
 
 namespace OIConstant {

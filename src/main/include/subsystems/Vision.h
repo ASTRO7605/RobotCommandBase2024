@@ -8,9 +8,12 @@
 #include <frc2/command/SubsystemBase.h>
 
 #include <frc/geometry/Pose3d.h>
+#include <frc/apriltag/AprilTagFields.h>
+
 
 #include <photon/PhotonCamera.h>
 #include <photon/PhotonUtils.h>
+#include <photon/PhotonPoseEstimator.h>
 
 #include "Constants.h"
 #include "networktables/NetworkTable.h"
@@ -47,11 +50,11 @@ class Vision : public frc2::SubsystemBase {
 
     /// @brief Check horizontal error.
     /// @return Horizontal offset from crosshair to target (deg), 0 if not in view.
-    double XError();
+    //double XError();
 
     /// @brief Check vertical error.
     /// @return Vertical offset from crosshair to target (deg), 0 if not in view.
-    double YError();
+    //double YError();
 
     /// @brief Get ID of AprilTag in view
     /// @return ID of the primary in-view AprilTag (0 if none).
@@ -61,6 +64,8 @@ class Vision : public frc2::SubsystemBase {
     /// @return Pose estimate of the robot.
     PoseMeasurement GetRobotPoseEstimate();
 
+    void SendRobotPoseEstimate(std::optional<photon::EstimatedRobotPose>, photon::MultiTargetPNPResult);
+
     /// @brief Get distance between camera and AprilTag in meters
     /// @return Distance in meters.
     double GetAprilTagDistanceMeters();
@@ -69,6 +74,8 @@ class Vision : public frc2::SubsystemBase {
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
     //std::shared_ptr<nt::NetworkTable> m_Vision;
-
+    frc::Transform3d robotToCam = frc::Transform3d(frc::Translation3d(0_m, 0_m, 0_m), frc::Rotation3d(0_deg, 0_deg, 0_deg));
     photon::PhotonCamera m_Vision;
+    photon::PhotonPoseEstimator m_PhotonPoseEstimator;
+
 };
