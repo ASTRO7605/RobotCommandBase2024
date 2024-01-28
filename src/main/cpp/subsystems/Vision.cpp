@@ -7,8 +7,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 Vision::Vision(std::string_view table_name)
-    : m_Vision{nt::NetworkTableInstance::GetDefault().GetTable(table_name)} {
-    SetPipeline(VisionConstant::Pipeline);
+    : /*m_Vision{nt::NetworkTableInstance::GetDefault().GetTable(table_name)}*/m_Vision{table_name} {
+    //SetPipeline(VisionConstant::Pipeline);
 }
 
 void Vision::Periodic() {}
@@ -17,14 +17,15 @@ double Vision::XError() { return m_Vision->GetNumber("tx", 0.0); }
 
 double Vision::YError() { return m_Vision->GetNumber("ty", 0.0); }
 
-bool Vision::SeesValidTarget() { return static_cast<bool>(m_Vision->GetNumber("tv", 0.0)); }
+bool Vision::SeesValidTarget() { return m_Vision.GetLatestResult().HasTargets(); }
 
 int Vision::ViewTagID() {
     // returns a double, but needs to be an int
-    return static_cast<int>(m_Vision->GetNumber("tid", 0.0));
+    //return static_cast<int>(m_Vision->GetNumber("tid", 0.0));
+    return m_Vision.GetLatestResult().GetBestTarget().GetFiducialId();
 }
 
-void Vision::SetPipeline(int pipeline) { m_Vision->PutNumber("pipeline", pipeline); }
+//void Vision::SetPipeline(int pipeline) { m_Vision->PutNumber("pipeline", pipeline); }
 
 PoseMeasurement Vision::GetRobotPoseEstimate() {
     // position in Pathweaver's coord system

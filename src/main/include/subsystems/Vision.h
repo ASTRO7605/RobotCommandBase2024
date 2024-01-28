@@ -9,6 +9,9 @@
 
 #include <frc/geometry/Pose3d.h>
 
+#include <photon/PhotonCamera.h>
+#include <photon/PhotonUtils.h>
+
 #include "Constants.h"
 #include "networktables/NetworkTable.h"
 #include "networktables/NetworkTableEntry.h"
@@ -36,7 +39,7 @@ class Vision : public frc2::SubsystemBase {
     Vision(std::string_view table_name);
 
     void Periodic() override;
-    void SetPipeline(int pipeline);
+    //void SetPipeline(int pipeline);
 
     /// @brief Check whether the Limelight sees any valid target.
     /// @return true if >= 1 target is in view, false otherwise.
@@ -65,5 +68,7 @@ class Vision : public frc2::SubsystemBase {
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
-    std::shared_ptr<nt::NetworkTable> m_Vision;
+    //std::shared_ptr<nt::NetworkTable> m_Vision;
+
+    photon::PhotonCamera m_Vision;
 };
