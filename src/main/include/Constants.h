@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <cstdint>
+#include <frc/geometry/Transform3d.h>
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <iostream>
 #include <numbers>
@@ -10,8 +11,6 @@
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
-#include <frc/apriltag/AprilTagFields.h>
-
 
 namespace DriveConstant {
 constexpr double kDrivingGearRatio = 6.75;
@@ -32,22 +31,17 @@ constexpr double currentLimit = 50; // Amperes
 // constexpr auto kv = 2.86 * 1_V * 1_s / 1_m;
 // constexpr auto ka = 0.321 * 1_V * 1_s * 1_s / 1_m;
 constexpr auto kMaxTeleopSpeed = 4.25_mps;
-constexpr units::radians_per_second_t kMaxTeleopAngularSpeed{std::numbers::pi *
-                                                             1.5};
+constexpr units::radians_per_second_t kMaxTeleopAngularSpeed{std::numbers::pi * 1.5};
 
 constexpr auto kMaxAutoSpeed = 4.25_mps;
 constexpr auto kMaxAutoAcceleration = 4.25_mps_sq;
-constexpr units::radians_per_second_t kMaxAutoAngularSpeed{std::numbers::pi *
-                                                           1.5};
-constexpr units::radians_per_second_squared_t kMaxAutoAngularAcceleration{
-    std::numbers::pi * 1.5};
+constexpr units::radians_per_second_t kMaxAutoAngularSpeed{std::numbers::pi * 1.5};
+constexpr units::radians_per_second_squared_t kMaxAutoAngularAcceleration{std::numbers::pi * 1.5};
 
-constexpr double kDirectionSlewRate =
-    1.5; // radians per second *valeurs à tester et changer
+constexpr double kDirectionSlewRate = 1.5;  // radians per second *valeurs à tester et changer
 constexpr double kMagnitudeSlewRate = 8.0;  // percent per second (1 = 100%)
 constexpr double kRotationalSlewRate = 8.0; // percent per second (1 = 100%)
-constexpr double kControllerMovementDeadband =
-    0.15; // valeur minimum qu'on recoit des controllers
+constexpr double kControllerMovementDeadband = 0.15; // valeur minimum qu'on recoit des controllers
 constexpr double kControllerRotationDeadband = 0.15;
 // constexpr auto kRamseteB = 2.0 * 1_rad * 1_rad / (1_m * 1_m);
 // constexpr auto kRamseteZeta = 0.7 / 1_rad;
@@ -70,12 +64,10 @@ constexpr double kIAutoMovementController = 0;
 constexpr double kDAutoMovementController = 0;
 constexpr double kPAutoThetaController = 3.25;
 
-extern const frc::TrapezoidProfile<units::radians>::Constraints
-    kThetaControllerConstraints;
+extern const frc::TrapezoidProfile<units::radians>::Constraints kThetaControllerConstraints;
 enum IdleMode { COAST = 0, BRAKE = 1 };
-constexpr double kVoltageCompensation = 10; // volts
-constexpr double DegreesToRad =
-    std::numbers::pi / 180; // degrees * conversion factor => rad
+constexpr double kVoltageCompensation = 10;             // volts
+constexpr double DegreesToRad = std::numbers::pi / 180; // degrees * conversion factor => rad
 constexpr int PowerDistributionHubID = 1;
 constexpr int FrontRightTurningID = 2;
 constexpr int FrontRightDrivingID = 3;
@@ -96,19 +88,17 @@ constexpr int Pipeline = 0; // only one pipeline (AprilTags)
 constexpr std::string_view TableNameFront = "limelight-front";
 constexpr std::string_view TableNameBack = "limelight-back";
 constexpr double ambiguityThreshold = 0.2;
+extern const frc::Transform3d frontCameraTransform;
+extern const frc::Transform3d backCameraTransform;
 
 enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 } // namespace VisionConstant
 namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
-constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.005};
+constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.001};
 constexpr std::array<double, 3> kVisionStdDevs{0.9, 0.9, 0.995};
-constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Front{0.5, 0.5,
-                                                                       0.999};
-constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Back{0.5, 0.5,
-                                                                      0.999};
-
-
+constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Front{2.0, 2.0, 0.999};
+constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Back{2.5, 2.5, 0.999};
 } // namespace PoseEstimationConstant
 
 namespace OIConstant {
@@ -134,4 +124,4 @@ constexpr double kPFlywheel = 0;
 constexpr double kIFlywheel = 0;
 constexpr double kDFlywheel = 0;
 
-}
+} // namespace ShooterConstant

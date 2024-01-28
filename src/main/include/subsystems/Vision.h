@@ -4,16 +4,17 @@
 
 #pragma once
 
+#include <subsystems/Base.h>
+
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
-#include <frc/geometry/Pose3d.h>
 #include <frc/apriltag/AprilTagFields.h>
-
+#include <frc/geometry/Pose3d.h>
 
 #include <photon/PhotonCamera.h>
-#include <photon/PhotonUtils.h>
 #include <photon/PhotonPoseEstimator.h>
+#include <photon/PhotonUtils.h>
 
 #include "Constants.h"
 #include "networktables/NetworkTable.h"
@@ -30,7 +31,7 @@
 struct PoseMeasurement {
     frc::Pose3d pose;
 
-    units::millisecond_t latency;
+    units::millisecond_t timestamp;
 
     units::meter_t distance;
 };
@@ -39,22 +40,22 @@ struct PoseMeasurement {
 class Vision : public frc2::SubsystemBase {
   public:
     /// @param table_name the NetworkTables table to use.
-    Vision(std::string_view table_name);
+    Vision(std::string_view table_name, Base *p_Base, frc::Transform3d cameraPose);
 
     void Periodic() override;
-    //void SetPipeline(int pipeline);
+    // void SetPipeline(int pipeline);
 
     /// @brief Check whether the Limelight sees any valid target.
     /// @return true if >= 1 target is in view, false otherwise.
-    bool SeesValidTarget();
+    // bool SeesValidTarget();
 
     /// @brief Check horizontal error.
     /// @return Horizontal offset from crosshair to target (deg), 0 if not in view.
-    //double XError();
+    // double XError();
 
     /// @brief Check vertical error.
     /// @return Vertical offset from crosshair to target (deg), 0 if not in view.
-    //double YError();
+    // double YError();
 
     /// @brief Get ID of AprilTag in view
     /// @return ID of the primary in-view AprilTag (0 if none).
@@ -64,7 +65,8 @@ class Vision : public frc2::SubsystemBase {
     /// @return Pose estimate of the robot.
     PoseMeasurement GetRobotPoseEstimate();
 
-    void SendRobotPoseEstimate(std::optional<photon::EstimatedRobotPose>, photon::MultiTargetPNPResult);
+    void SendRobotPoseEstimate(std::optional<photon::EstimatedRobotPose>,
+                               photon::MultiTargetPNPResult);
 
     /// @brief Get distance between camera and AprilTag in meters
     /// @return Distance in meters.
@@ -73,9 +75,9 @@ class Vision : public frc2::SubsystemBase {
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
-    //std::shared_ptr<nt::NetworkTable> m_Vision;
-    frc::Transform3d robotToCam = frc::Transform3d(frc::Translation3d(0_m, 0_m, 0_m), frc::Rotation3d(0_deg, 0_deg, 0_deg));
+    // std::shared_ptr<nt::NetworkTable> m_Vision;
     photon::PhotonCamera m_Vision;
+    frc::Transform3d robotToCam;
     photon::PhotonPoseEstimator m_PhotonPoseEstimator;
-
+    Base *m_pBase;
 };

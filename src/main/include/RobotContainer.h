@@ -66,5 +66,9 @@ class RobotContainer {
     void ConfigurePathfind();
     // The robot's subsystems are defined here...
     Base m_Base;
+    Vision m_VisionFront{VisionConstant::TableNameFront, &m_Base,
+                         VisionConstant::frontCameraTransform};
+    Vision m_VisionBack{VisionConstant::TableNameBack, &m_Base,
+                        VisionConstant::backCameraTransform};
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };
