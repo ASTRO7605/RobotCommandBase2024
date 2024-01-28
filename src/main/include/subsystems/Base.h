@@ -7,7 +7,7 @@
 #include "Constants.h"
 
 #include "subsystems/ModuleSwerve.h"
-//#include "subsystems/Vision.h"
+#include "subsystems/Vision.h"
 #include "utils/PoseMeasurement.h"
 
 #include "utils/SwerveUtils.h"
@@ -91,10 +91,10 @@ class Base : public frc2::SubsystemBase {
     };
 
     /// @brief Add a pose estimate from front vision to pose estimator.
-    void SetRobotPoseVisionEstimateFront(PoseMeasurement estimate);
+    void SetRobotPoseVisionEstimateFront();
 
     /// @brief Add a pose estimate from front vision to pose estimator.
-    void SetRobotPoseVisionEstimateBack(PoseMeasurement estimate);
+    void SetRobotPoseVisionEstimateBack();
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be
@@ -132,4 +132,9 @@ class Base : public frc2::SubsystemBase {
     frc::Field2d m_VisionFieldFront;
     frc::Field2d m_VisionFieldBack;
     frc::Field2d m_RobotField;
+
+    Vision m_VisionFront{VisionConstant::TableNameFront,
+                         VisionConstant::frontCameraTransform};
+    Vision m_VisionBack{VisionConstant::TableNameBack,
+                        VisionConstant::backCameraTransform};
 };

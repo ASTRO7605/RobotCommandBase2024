@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "subsystems/Base.h"
 #include "utils/PoseMeasurement.h"
 
 #include <frc2/command/CommandPtr.h>
@@ -34,14 +33,14 @@
 class Vision : public frc2::SubsystemBase {
   public:
     /// @param table_name the NetworkTables table to use.
-    Vision(std::string_view table_name, Base& p_Base, frc::Transform3d cameraPose);
+    Vision(std::string_view table_name, frc::Transform3d cameraPose);
 
     void Periodic() override;
     // void SetPipeline(int pipeline);
 
     /// @brief Check whether the Limelight sees any valid target.
     /// @return true if >= 1 target is in view, false otherwise.
-    // bool SeesValidTarget();
+    bool SeesValidTarget();
 
     /// @brief Check horizontal error.
     /// @return Horizontal offset from crosshair to target (deg), 0 if not in view.
@@ -57,10 +56,9 @@ class Vision : public frc2::SubsystemBase {
 
     /// @brief Update the base's pose estimation using vision data.
     /// @return Pose estimate of the robot.
-    PoseMeasurement GetRobotPoseEstimate();
+    //PoseMeasurement GetRobotPoseEstimate();
 
-    void SendRobotPoseEstimate(std::optional<photon::EstimatedRobotPose>,
-                               photon::MultiTargetPNPResult);
+    PoseMeasurement GetRobotPoseEstimate();
 
     /// @brief Get distance between camera and AprilTag in meters
     /// @return Distance in meters.
@@ -70,8 +68,8 @@ class Vision : public frc2::SubsystemBase {
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
     // std::shared_ptr<nt::NetworkTable> m_Vision;
-    photon::PhotonCamera m_Vision;
+    photon::PhotonCamera camera;
     frc::Transform3d robotToCam;
     photon::PhotonPoseEstimator m_PhotonPoseEstimator;
-    Base& m_pBase;
+    photon::MultiTargetPNPResult latestResult{};
 };

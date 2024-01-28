@@ -6,30 +6,39 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-Vision::Vision(std::string_view table_name, Base& p_Base, frc::Transform3d cameraPose)
+Vision::Vision(std::string_view table_name, frc::Transform3d cameraPose)
     : /*m_Vision{nt::NetworkTableInstance::GetDefault().GetTable(table_name)}*/
-      m_Vision{table_name}, robotToCam{cameraPose},
+      camera{table_name}, robotToCam{cameraPose},
       m_PhotonPoseEstimator{frc::AprilTagFieldLayout{"2024-crescendo"},
-                            photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam},
-      m_pBase{p_Base} {
+                            photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam}{
     // SetPipeline(VisionConstant::Pipeline);
+    m_PhotonPoseEstimator.SetMultiTagFallbackStrategy(photon::PoseStrategy::LOWEST_AMBIGUITY);
 }
 
 void Vision::Periodic() {
-    photon::MultiTargetPNPResult multiResult = m_Vision.GetLatestResult().MultiTagResult();
-    // photon::PhotonTrackedTarget singleResult = m_Vision.GetLatestResult().GetBestTarget();
-    if (((multiResult.result.isPresent) &&
-         (0 < multiResult.result.ambiguity) && (multiResult.result.ambiguity < VisionConstant::ambiguityThreshold)) /*|| ((!multiResult.result.isPresent) && (0 < singleResult.GetPoseAmbiguity()) && (singleResult.GetPoseAmbiguity() < VisionConstant::ambiguityThreshold))*/) {
-        auto result = m_PhotonPoseEstimator.Update();
-        SendRobotPoseEstimate(result, multiResult);
-    }
+    // photon::MultiTargetPNPResult multiResult = camera.GetLatestResult().MultiTagResult();
+    // // photon::PhotonTrackedTarget singleResult = m_Vision.GetLatestResult().GetBestTarget();
+    // if (((multiResult.result.isPresent) &&
+    //      (0 < multiResult.result.ambiguity) && (multiResult.result.ambiguity < VisionConstant::ambiguityThreshold)) /*|| ((!multiResult.result.isPresent) && (0 < singleResult.GetPoseAmbiguity()) && (singleResult.GetPoseAmbiguity() < VisionConstant::ambiguityThreshold))*/) {
+    //     auto result = m_PhotonPoseEstimator.Update();
+    //     SendRobotPoseEstimate(result, multiResult);
+    // }
+    latestResult = camera.GetLatestResult().MultiTagResult();
 }
 
 // double Vision::XError() { return m_Vision->GetNumber("tx", 0.0); }
 
 // double Vision::YError() { return m_Vision->GetNumber("ty", 0.0); }
 
-// bool Vision::SeesValidTarget() { return m_Vision.GetLatestResult().HasTargets(); }
+bool Vision::SeesValidTarget() {
+    if ((latestResult.result.isPresent) &&
+         (0 < latestResult.result.ambiguity) && (latestResult.result.ambiguity < VisionConstant::ambiguityThreshold)){
+            return true;
+    } else {
+        return false;
+    }
+    
+}
 
 // int Vision::ViewTagID() {
 //     // returns a double, but needs to be an int
@@ -66,20 +75,15 @@ void Vision::Periodic() {
 //     return return_val;
 // }
 
-void Vision::SendRobotPoseEstimate(std::optional<photon::EstimatedRobotPose> poseEstimate,
-                                   photon::MultiTargetPNPResult multiResult) {
-
+PoseMeasurement Vision::GetRobotPoseEstimate() {
+    auto poseEstimate = m_PhotonPoseEstimator.Update();
     double target_distance =
-        std::sqrt(multiResult.result.best.X().value() * multiResult.result.best.X().value() + // X
-                  multiResult.result.best.Y().value() * multiResult.result.best.Y().value() + // Y
-                  multiResult.result.best.Z().value() * multiResult.result.best.Z().value()   // Z
+        std::sqrt(latestResult.result.best.X().value() * latestResult.result.best.X().value() + // X
+                  latestResult.result.best.Y().value() * latestResult.result.best.Y().value() + // Y
+                  latestResult.result.best.Z().value() * latestResult.result.best.Z().value()   // Z
         );
     PoseMeasurement return_val{poseEstimate->estimatedPose, poseEstimate->timestamp,
                                units::meter_t{target_distance}};
-
-    if (m_Vision.GetCameraName() == VisionConstant::TableNameBack) {
-        m_pBase.SetRobotPoseVisionEstimateBack(return_val);
-    } else {
-        m_pBase.SetRobotPoseVisionEstimateFront(return_val);
-    }
+    return return_val;
+                               
 }

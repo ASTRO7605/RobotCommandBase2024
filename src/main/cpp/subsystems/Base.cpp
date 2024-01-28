@@ -97,6 +97,10 @@ void Base::Periodic() {
                             m_RearLeftModule.GetPosition(),
                             m_RearRightModule.GetPosition()}); // important to follow kinematics
                                                                // construction order
+    
+    SetRobotPoseVisionEstimateFront();
+    SetRobotPoseVisionEstimateBack();
+
     // for SmartDashboard
     m_RobotField.SetRobotPose(m_PoseEstimator.GetEstimatedPosition());
 }
@@ -228,7 +232,13 @@ frc::ChassisSpeeds Base::GetRobotRelativeSpeeds() {
         m_RearRightModule.GetState());
 }
 
-void Base::SetRobotPoseVisionEstimateFront(PoseMeasurement estimate) {
+void Base::SetRobotPoseVisionEstimateFront() {
+    if (!m_VisionFront.SeesValidTarget()) {
+        // hide robot if no target in view
+        m_VisionFieldFront.SetRobotPose(100_m, 100_m, 0_rad);
+        return;
+    }
+    PoseMeasurement estimate = m_VisionFront.GetRobotPoseEstimate();
 
     frc::Pose2d measurement2d{estimate.pose.ToPose2d()};
 
@@ -248,7 +258,14 @@ void Base::SetRobotPoseVisionEstimateFront(PoseMeasurement estimate) {
     m_VisionFieldFront.SetRobotPose(measurement2d);
 }
 
-void Base::SetRobotPoseVisionEstimateBack(PoseMeasurement estimate) {
+void Base::SetRobotPoseVisionEstimateBack() {
+    if (!m_VisionBack.SeesValidTarget()) {
+        // hide robot if no target in view
+        m_VisionFieldBack.SetRobotPose(100_m, 100_m, 0_rad);
+        return;
+    }
+
+    PoseMeasurement estimate = m_VisionBack.GetRobotPoseEstimate();
 
     frc::Pose2d measurement2d{estimate.pose.ToPose2d()};
 
