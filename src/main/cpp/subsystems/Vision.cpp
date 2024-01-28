@@ -71,7 +71,7 @@ void SendRobotPoseEstimate(photon::EstimatedRobotPose poseEstimate, photon::Mult
     PoseMeasurement return_val{
         poseEstimate.estimatedPose,
         poseEstimate.timestamp,
-        target_distance
+        units::meter_t{target_distance}
     };
 
 }
