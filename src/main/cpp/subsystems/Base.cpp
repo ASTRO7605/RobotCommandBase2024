@@ -97,7 +97,7 @@ void Base::Periodic() {
                             m_RearLeftModule.GetPosition(),
                             m_RearRightModule.GetPosition()}); // important to follow kinematics
                                                                // construction order
-    
+
     SetRobotPoseVisionEstimateFront();
     SetRobotPoseVisionEstimateBack();
 
@@ -238,21 +238,25 @@ void Base::SetRobotPoseVisionEstimateFront() {
         m_VisionFieldFront.SetRobotPose(100_m, 100_m, 0_rad);
         return;
     }
-    PoseMeasurement estimate = m_VisionFront.GetRobotPoseEstimate();
 
-    frc::Pose2d measurement2d{estimate.pose.ToPose2d()};
+    std::optional<PoseMeasurement> estimate = m_VisionFront.GetRobotPoseEstimate();
+    if (!estimate.has_value()) {
+        return;
+    }
+
+    frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
     auto std_devs = PoseEstimationConstant::kVisionStdDevs_XYPerMeterSquared_Front;
-    auto dst_sq = estimate.distance.value() * estimate.distance.value();
+    auto dst_sq = estimate->distance.value() * estimate->distance.value();
     std_devs[0] *= dst_sq; // scale based on distance
     std_devs[1] *= dst_sq;
 
-    frc::SmartDashboard::PutNumber("april_distance_front", estimate.distance.value());
+    frc::SmartDashboard::PutNumber("april_distance_front", estimate->distance.value());
 
     m_PoseEstimator.AddVisionMeasurement(
         measurement2d,
         // estimated original time of data capture (now - latency in ms)
-        (estimate.timestamp), std_devs);
+        (estimate->timestamp), std_devs);
 
     // Update SmartDashboard
     m_VisionFieldFront.SetRobotPose(measurement2d);
@@ -265,21 +269,24 @@ void Base::SetRobotPoseVisionEstimateBack() {
         return;
     }
 
-    PoseMeasurement estimate = m_VisionBack.GetRobotPoseEstimate();
+    std::optional<PoseMeasurement> estimate = m_VisionBack.GetRobotPoseEstimate();
+    if (!estimate.has_value()) {
+        return;
+    }
 
-    frc::Pose2d measurement2d{estimate.pose.ToPose2d()};
+    frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
     auto std_devs = PoseEstimationConstant::kVisionStdDevs_XYPerMeterSquared_Back;
-    auto dst_sq = estimate.distance.value() * estimate.distance.value();
+    auto dst_sq = estimate->distance.value() * estimate->distance.value();
     std_devs[0] *= dst_sq; // scale based on distance
     std_devs[1] *= dst_sq;
 
-    frc::SmartDashboard::PutNumber("april_distance_back", estimate.distance.value());
+    frc::SmartDashboard::PutNumber("april_distance_back", estimate->distance.value());
 
     m_PoseEstimator.AddVisionMeasurement(
         measurement2d,
         // estimated original time of data capture (now - latency in ms)
-        (estimate.timestamp), std_devs);
+        (estimate->timestamp), std_devs);
 
     // Update SmartDashboard
     m_VisionFieldBack.SetRobotPose(measurement2d);

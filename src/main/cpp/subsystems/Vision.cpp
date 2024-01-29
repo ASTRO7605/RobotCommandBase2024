@@ -8,37 +8,49 @@
 
 Vision::Vision(std::string_view table_name, frc::Transform3d cameraPose)
     : /*m_Vision{nt::NetworkTableInstance::GetDefault().GetTable(table_name)}*/
-      camera{table_name}, robotToCam{cameraPose},
-      m_PhotonPoseEstimator{frc::AprilTagFieldLayout{"2024-crescendo"},
-                            photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam}{
+      robotToCam{cameraPose},
+      m_PhotonPoseEstimator{frc::AprilTagFieldLayout{
+                                frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo)},
+                            photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR,
+                            photon::PhotonCamera{table_name}, robotToCam} {
     // SetPipeline(VisionConstant::Pipeline);
     m_PhotonPoseEstimator.SetMultiTagFallbackStrategy(photon::PoseStrategy::LOWEST_AMBIGUITY);
+    camera = (m_PhotonPoseEstimator.GetCamera());
 }
 
 void Vision::Periodic() {
     // photon::MultiTargetPNPResult multiResult = camera.GetLatestResult().MultiTagResult();
     // // photon::PhotonTrackedTarget singleResult = m_Vision.GetLatestResult().GetBestTarget();
     // if (((multiResult.result.isPresent) &&
-    //      (0 < multiResult.result.ambiguity) && (multiResult.result.ambiguity < VisionConstant::ambiguityThreshold)) /*|| ((!multiResult.result.isPresent) && (0 < singleResult.GetPoseAmbiguity()) && (singleResult.GetPoseAmbiguity() < VisionConstant::ambiguityThreshold))*/) {
+    //      (0 < multiResult.result.ambiguity) && (multiResult.result.ambiguity <
+    //      VisionConstant::ambiguityThreshold)) /*|| ((!multiResult.result.isPresent) && (0 <
+    //      singleResult.GetPoseAmbiguity()) && (singleResult.GetPoseAmbiguity() <
+    //      VisionConstant::ambiguityThreshold))*/) {
     //     auto result = m_PhotonPoseEstimator.Update();
     //     SendRobotPoseEstimate(result, multiResult);
     // }
-    latestResult = camera.GetLatestResult().MultiTagResult();
+    isLatestMultiResultValid = false;
+    isLatestSingleResultValid = false;
+    if (camera->GetLatestResult().HasTargets()) {
+        latestMultiResult = camera->GetLatestResult().MultiTagResult();
+        latestSingleResult = camera->GetLatestResult().GetBestTarget();
+        if (camera->GetLatestResult().MultiTagResult().result.isPresent) {
+            if (camera->GetLatestResult().MultiTagResult().result.ambiguity <
+                VisionConstant::ambiguityThreshold) {
+                isLatestMultiResultValid = true;
+            }
+        } else if (camera->GetLatestResult().GetBestTarget().poseAmbiguity <
+                   VisionConstant::ambiguityThreshold) {
+            isLatestSingleResultValid = true;
+        }
+    }
 }
 
 // double Vision::XError() { return m_Vision->GetNumber("tx", 0.0); }
 
 // double Vision::YError() { return m_Vision->GetNumber("ty", 0.0); }
 
-bool Vision::SeesValidTarget() {
-    if ((latestResult.result.isPresent) &&
-         (0 < latestResult.result.ambiguity) && (latestResult.result.ambiguity < VisionConstant::ambiguityThreshold)){
-            return true;
-    } else {
-        return false;
-    }
-    
-}
+bool Vision::SeesValidTarget() { return (isLatestMultiResultValid || isLatestSingleResultValid); }
 
 // int Vision::ViewTagID() {
 //     // returns a double, but needs to be an int
@@ -75,15 +87,35 @@ bool Vision::SeesValidTarget() {
 //     return return_val;
 // }
 
-PoseMeasurement Vision::GetRobotPoseEstimate() {
+std::optional<PoseMeasurement> Vision::GetRobotPoseEstimate() {
     auto poseEstimate = m_PhotonPoseEstimator.Update();
-    double target_distance =
-        std::sqrt(latestResult.result.best.X().value() * latestResult.result.best.X().value() + // X
-                  latestResult.result.best.Y().value() * latestResult.result.best.Y().value() + // Y
-                  latestResult.result.best.Z().value() * latestResult.result.best.Z().value()   // Z
-        );
+    frc::SmartDashboard::PutBoolean("photonvision pose estimate has value",
+                                    poseEstimate.has_value());
+    if (!poseEstimate.has_value())
+        return {};
+
+    if (isLatestMultiResultValid) {
+        target_distance = GetAprilTagDistanceMeters(latestMultiResult.result.best.X().value(),
+                                                    latestMultiResult.result.best.Y().value(),
+                                                    latestMultiResult.result.best.Z().value());
+    } else {
+        target_distance =
+            GetAprilTagDistanceMeters(latestSingleResult.bestCameraToTarget.X().value(),
+                                      latestSingleResult.bestCameraToTarget.Y().value(),
+                                      latestSingleResult.bestCameraToTarget.Z().value());
+    }
+    frc::SmartDashboard::PutNumber("Photonvision estimated pose X",
+                                   poseEstimate->estimatedPose.X().value());
+    frc::SmartDashboard::PutNumber("Photonvision estimated pose Y",
+                                   poseEstimate->estimatedPose.Y().value());
+    frc::SmartDashboard::PutNumber("Photonvision estimated pose Z",
+                                   poseEstimate->estimatedPose.Z().value());
+
     PoseMeasurement return_val{poseEstimate->estimatedPose, poseEstimate->timestamp,
                                units::meter_t{target_distance}};
     return return_val;
-                               
+}
+
+double Vision::GetAprilTagDistanceMeters(double XDistance, double YDistance, double ZDistance) {
+    return std::sqrt(XDistance * XDistance + YDistance * YDistance + ZDistance * ZDistance);
 }

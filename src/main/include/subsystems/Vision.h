@@ -9,6 +9,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
+#include <frc/Filesystem.h>
 #include <frc/apriltag/AprilTagFields.h>
 #include <frc/geometry/Pose3d.h>
 
@@ -22,14 +23,14 @@
 #include "networktables/NetworkTableInstance.h"
 #include "networktables/NetworkTableValue.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <wpi/fs.h>
 
+#include <optional>
 #include <span>
 #include <string>
 #include <vector>
 
-
-
-/// @brief A wrapper for the Limelight NetworkTables API.
+/// @brief A wrapper for the Photonvision API
 class Vision : public frc2::SubsystemBase {
   public:
     /// @param table_name the NetworkTables table to use.
@@ -56,20 +57,23 @@ class Vision : public frc2::SubsystemBase {
 
     /// @brief Update the base's pose estimation using vision data.
     /// @return Pose estimate of the robot.
-    //PoseMeasurement GetRobotPoseEstimate();
+    // PoseMeasurement GetRobotPoseEstimate();
 
-    PoseMeasurement GetRobotPoseEstimate();
+    std::optional<PoseMeasurement> GetRobotPoseEstimate();
 
-    /// @brief Get distance between camera and AprilTag in meters
-    /// @return Distance in meters.
-    double GetAprilTagDistanceMeters();
+    double GetAprilTagDistanceMeters(double XDistance, double YDistance, double ZDistance);
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
     // std::shared_ptr<nt::NetworkTable> m_Vision;
-    photon::PhotonCamera camera;
+    std::shared_ptr<photon::PhotonCamera> camera;
     frc::Transform3d robotToCam;
     photon::PhotonPoseEstimator m_PhotonPoseEstimator;
-    photon::MultiTargetPNPResult latestResult{};
+    bool isLatestSingleResultValid;
+    bool isLatestMultiResultValid;
+    photon::MultiTargetPNPResult latestMultiResult;
+    photon::PhotonTrackedTarget latestSingleResult;
+    fs::path deployDirectory{frc::filesystem::GetDeployDirectory()};
+    double target_distance{};
 };
