@@ -21,10 +21,10 @@
 //     m_rightMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
 //     m_leftMotorEncoder.SetPositionConversionFactor((1 / 42)); // 42 counts per revolution
-//     m_leftMotorEncoder.SetVelocityConversionFactor((1 / 42) / 60);
+//     m_leftMotorEncoder.SetVelocityConversionFactor((1 / 42)); // RPM ticks to RPM wheels
 
 //     m_rightMotorEncoder.SetPositionConversionFactor((1 / 42)); // 42 counts per revolution
-//     m_rightMotorEncoder.SetVelocityConversionFactor((1 / 42) / 60);
+//     m_rightMotorEncoder.SetVelocityConversionFactor((1 / 42)); // RPM ticks to RPM wheels
 
 //     m_leftMotorPIDController.SetP(frc::Preferences::GetDouble("kPFlywheel"));
 //     m_leftMotorPIDController.SetI(frc::Preferences::GetDouble("kIFlywheel"));
