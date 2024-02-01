@@ -19,6 +19,8 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
+#include <ctre/Phoenix.h>
+
 class Shooter : public frc2::SubsystemBase {
   public:
     Shooter();
@@ -31,14 +33,16 @@ class Shooter : public frc2::SubsystemBase {
     bool IsObjectInShooter();
 
   private:
-    rev::CANSparkMax m_leftMotor;
-    rev::CANSparkMax m_rightMotor;
+    rev::CANSparkMax m_LeftMotor;
+    rev::CANSparkMax m_RightMotor;
 
-    rev::SparkRelativeEncoder m_leftMotorEncoder;
-    rev::SparkRelativeEncoder m_rightMotorEncoder;
+    rev::SparkRelativeEncoder m_LeftMotorEncoder;
+    rev::SparkRelativeEncoder m_RightMotorEncoder;
 
-    rev::SparkPIDController m_leftMotorPIDController;
-    rev::SparkPIDController m_rightMotorPIDController;
+    rev::SparkPIDController m_LeftMotorPIDController;
+    rev::SparkPIDController m_RightMotorPIDController;
+
+    ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;
 
     std::shared_ptr<frc::DigitalInput> m_capteurInterieurShooter;
 };

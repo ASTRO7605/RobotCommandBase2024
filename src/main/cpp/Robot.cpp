@@ -16,9 +16,18 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutNumber("Gyro Rotation 2D", 0);
   frc::SmartDashboard::PutNumber("Gyro Radians", 0);
 
-  frc::Preferences::InitDouble("kPFlywheel", 0);
-  frc::Preferences::InitDouble("kIFlywheel", 0);
-  frc::Preferences::InitDouble("kDFlywheel", 0);
+  frc::Preferences::InitDouble("kPFlywheel", ShooterConstant::kPFlywheel);
+  frc::Preferences::InitDouble("kIFlywheel", ShooterConstant::kIFlywheel);
+  frc::Preferences::InitDouble("kDFlywheel", ShooterConstant::kDFlywheel);
+  frc::Preferences::InitDouble("kFFFlywheel", ShooterConstant::kFFFlywheel);
+  frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
+  frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);
+  frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
+  frc::Preferences::InitDouble("kFPositionAngleLanceur", ShooterConstant::kFPositionAngle);
+  frc::Preferences::InitDouble("kPVitesseAngleLanceur", ShooterConstant::kPVitesseAngle);
+  frc::Preferences::InitDouble("kIVitesseAngleLanceur", ShooterConstant::kIVitesseAngle);
+  frc::Preferences::InitDouble("kDVitesseAngleLanceur", ShooterConstant::kDVitesseAngle);
+  frc::Preferences::InitDouble("kFVitesseAngleLanceur", ShooterConstant::kFVitesseAngle);
 
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,

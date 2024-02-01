@@ -118,12 +118,27 @@ constexpr int CoPilot_RPush_Button = 10;
 } // namespace OIConstant
 
 namespace ShooterConstant {
-constexpr int leftMotorID = 14;
-constexpr int rightMotorID = 15;
+constexpr int leftMotorID = 16;
+constexpr int rightMotorID = 17;
+constexpr int angleMotorID = 18;
 constexpr int capteurID = 0;
 constexpr double kPFlywheel = 0;
 constexpr double kIFlywheel = 0;
 constexpr double kDFlywheel = 0;
-constexpr double conversionFactorWheels = 1.0 / 42.0; // ticks -> wheel rotations
-
+constexpr double kFFFlywheel = 0;
+constexpr double FConversionFactorWheels = 1.0 / 42.0; // ticks -> wheel rotations
+constexpr int currentLimitFlywheels = 50; //amperes
+constexpr int kTimeoutMs = 30;
+constexpr double kNominalOutputForward = 0;
+constexpr double kNominalOutputReverse = 0;
+constexpr double kPeakOutputForward = 1;
+constexpr double kPeakOutputReverse = -1;
+constexpr double kPPositionAngle = 0;
+constexpr double kIPositionAngle = 0;
+constexpr double kDPositionAngle = 0;
+constexpr double kFPositionAngle = 0;
+constexpr double kPVitesseAngle = 0;
+constexpr double kIVitesseAngle = 0;
+constexpr double kDVitesseAngle = 0;
+constexpr double kFVitesseAngle = 0;
 } // namespace ShooterConstant
