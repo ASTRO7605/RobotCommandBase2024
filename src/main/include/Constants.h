@@ -120,8 +120,10 @@ constexpr int CoPilot_RPush_Button = 10;
 namespace ShooterConstant {
 constexpr int leftMotorID = 14;
 constexpr int rightMotorID = 15;
+constexpr int capteurID = 0;
 constexpr double kPFlywheel = 0;
 constexpr double kIFlywheel = 0;
 constexpr double kDFlywheel = 0;
+constexpr double conversionFactorWheels = 1.0 / 42.0; // ticks -> wheel rotations
 
 } // namespace ShooterConstant

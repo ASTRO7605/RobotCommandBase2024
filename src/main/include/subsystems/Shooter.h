@@ -1,39 +1,44 @@
-// // Copyright (c) FIRST and other WPILib contributors.
-// // Open Source Software; you can modify and/or share it under the terms of
-// // the WPILib BSD license file in the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
-// #pragma once
+#pragma once
 
-// #include "Constants.h"
+#include "Constants.h"
 
-// #include <rev/CANSparkMax.h>
-// #include <rev/CANSparkBase.h>
-// #include <rev/SparkMaxRelativeEncoder.h>
-// #include <rev/SparkPIDController.h>
+#include <rev/CANSparkBase.h>
+#include <rev/CANSparkMax.h>
+#include <rev/SparkMaxRelativeEncoder.h>
+#include <rev/SparkPIDController.h>
 
-// #include <frc/Preferences.h>
-// #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DigitalInput.h>
+#include <frc/Preferences.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
-// #include <frc2/command/Command.h>
-// #include <frc2/command/CommandPtr.h>
-// #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/Command.h>
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/SubsystemBase.h>
 
-// class Shooter : public frc2::SubsystemBase {
-// public:
-//   Shooter();
+class Shooter : public frc2::SubsystemBase {
+  public:
+    Shooter();
 
-//   void Periodic() override;
-//   /// @brief Set shooter wheels to a specific speed
-//   /// @param speeds Speed of wheels (RPM)
-//   void SetWheelSpeeds (double speeds);
+    void Periodic() override;
+    /// @brief Set shooter wheels to a specific speed
+    /// @param speeds Speed of wheels (RPM)
+    void SetWheelSpeeds(double speeds);
 
-// private:
-//   rev::CANSparkMax m_leftMotor;
-//   rev::CANSparkMax m_rightMotor;
+    bool IsObjectInShooter();
 
-//   rev::SparkRelativeEncoder m_leftMotorEncoder;
-//   rev::SparkRelativeEncoder m_rightMotorEncoder;
+  private:
+    rev::CANSparkMax m_leftMotor;
+    rev::CANSparkMax m_rightMotor;
 
-//   rev::SparkPIDController m_leftMotorPIDController;
-//   rev::SparkPIDController m_rightMotorPIDController;
-// };
+    rev::SparkRelativeEncoder m_leftMotorEncoder;
+    rev::SparkRelativeEncoder m_rightMotorEncoder;
+
+    rev::SparkPIDController m_leftMotorPIDController;
+    rev::SparkPIDController m_rightMotorPIDController;
+
+    std::shared_ptr<frc::DigitalInput> m_capteurInterieurShooter;
+};
