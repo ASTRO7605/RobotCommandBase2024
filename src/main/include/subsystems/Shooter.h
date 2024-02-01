@@ -30,17 +30,25 @@ class Shooter : public frc2::SubsystemBase {
     /// @param speeds Speed of wheels (RPM)
     void SetWheelSpeeds(double speeds);
 
+    /// @brief Set shooter to a specific angle
+    /// @param angle Angle of the shooter (1/10 degree)
+    void SetShooterAngle(double angle);
+
+    /// @brief Set shooter angle to specific manual speed
+    /// @param speed speed in (1/10 degree) / s
+    void ManualShooterAngle(double speed);
+
     bool IsObjectInShooter();
 
   private:
-    rev::CANSparkMax m_LeftMotor;
-    rev::CANSparkMax m_RightMotor;
+    rev::CANSparkMax m_LeftFlywheelMotor;
+    rev::CANSparkMax m_RightFlywheelMotor;
 
     rev::SparkRelativeEncoder m_LeftMotorEncoder;
     rev::SparkRelativeEncoder m_RightMotorEncoder;
 
-    rev::SparkPIDController m_LeftMotorPIDController;
-    rev::SparkPIDController m_RightMotorPIDController;
+    rev::SparkPIDController m_LeftFlywheelMotorPIDController;
+    rev::SparkPIDController m_RightFlywheelMotorPIDController;
 
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;
 

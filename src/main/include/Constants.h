@@ -126,8 +126,11 @@ constexpr double kPFlywheel = 0;
 constexpr double kIFlywheel = 0;
 constexpr double kDFlywheel = 0;
 constexpr double kFFFlywheel = 0;
-constexpr double FConversionFactorWheels = 1.0 / 42.0; // ticks -> wheel rotations
-constexpr int currentLimitFlywheels = 50; //amperes
+constexpr double FConversionFactorWheels = 1.0 / 42.0;             // ticks * F -> wheel rotations
+constexpr double FConversionFactorPositionAngle = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
+constexpr double FConversionFactorVelocityAngle = 360.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+constexpr int currentLimitFlywheels = 50;                         // amperes
+constexpr double kVoltageCompensation = 10;                       // Volts
 constexpr int kTimeoutMs = 30;
 constexpr double kNominalOutputForward = 0;
 constexpr double kNominalOutputReverse = 0;
@@ -141,4 +144,13 @@ constexpr double kPVitesseAngle = 0;
 constexpr double kIVitesseAngle = 0;
 constexpr double kDVitesseAngle = 0;
 constexpr double kFVitesseAngle = 0;
+constexpr double kVitesseAngle = 0; // dixieme de degre par seconde
+constexpr double kMaxAF = 0;
+constexpr double FDegToRad = M_PI / 180;
+constexpr double kCdMOffset = 0;
 } // namespace ShooterConstant
+
+namespace IntakeConstant {
+constexpr int topMotorID = 14;
+constexpr int bottomMotorID = 15;
+}

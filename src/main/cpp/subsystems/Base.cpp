@@ -75,12 +75,9 @@ Base::Base()
 }
 
 void Base::Periodic() {
-    frc::SmartDashboard::PutNumber("Gyro Angle", m_Gyro.GetAngle());
     frc::SmartDashboard::PutNumber(
-        "Gyro Rotation 2D",
+        "Gyro Angle",
         m_Gyro.GetRotation2d().Degrees().value()); // test on smart dashboard
-
-    frc::SmartDashboard::PutNumber("Gyro Radians", m_Gyro.GetRotation2d().Radians().value());
 
     frc::SmartDashboard::PutNumber("RobotPoseX",
                                    m_PoseEstimator.GetEstimatedPosition().X().value());

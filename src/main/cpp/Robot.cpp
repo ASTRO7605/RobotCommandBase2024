@@ -7,27 +7,28 @@
 #include <wpi/MemoryBuffer.h>
 
 void Robot::RobotInit() {
-  // frc::CameraServer::StartAutomaticCapture();
+    // frc::CameraServer::StartAutomaticCapture();
 
-  // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
-  // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
-  // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
-  frc::SmartDashboard::PutNumber("Gyro Angle", 0);
-  frc::SmartDashboard::PutNumber("Gyro Rotation 2D", 0);
-  frc::SmartDashboard::PutNumber("Gyro Radians", 0);
+    // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
+    // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
+    // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
+    frc::SmartDashboard::PutNumber("Gyro Angle", 0);
+    frc::SmartDashboard::PutNumber("leftShooterMotorVelocity", 0);
+    frc::SmartDashboard::PutNumber("rightShooterMotorVelocity", 0);
 
-  frc::Preferences::InitDouble("kPFlywheel", ShooterConstant::kPFlywheel);
-  frc::Preferences::InitDouble("kIFlywheel", ShooterConstant::kIFlywheel);
-  frc::Preferences::InitDouble("kDFlywheel", ShooterConstant::kDFlywheel);
-  frc::Preferences::InitDouble("kFFFlywheel", ShooterConstant::kFFFlywheel);
-  frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
-  frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);
-  frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
-  frc::Preferences::InitDouble("kFPositionAngleLanceur", ShooterConstant::kFPositionAngle);
-  frc::Preferences::InitDouble("kPVitesseAngleLanceur", ShooterConstant::kPVitesseAngle);
-  frc::Preferences::InitDouble("kIVitesseAngleLanceur", ShooterConstant::kIVitesseAngle);
-  frc::Preferences::InitDouble("kDVitesseAngleLanceur", ShooterConstant::kDVitesseAngle);
-  frc::Preferences::InitDouble("kFVitesseAngleLanceur", ShooterConstant::kFVitesseAngle);
+    frc::Preferences::InitDouble("kPFlywheel", ShooterConstant::kPFlywheel);
+    frc::Preferences::InitDouble("kIFlywheel", ShooterConstant::kIFlywheel);
+    frc::Preferences::InitDouble("kDFlywheel", ShooterConstant::kDFlywheel);
+    frc::Preferences::InitDouble("kFFFlywheel", ShooterConstant::kFFFlywheel);
+    frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
+    frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);
+    frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
+    frc::Preferences::InitDouble("kFPositionAngleLanceur", ShooterConstant::kFPositionAngle);
+    frc::Preferences::InitDouble("kPVitesseAngleLanceur", ShooterConstant::kPVitesseAngle);
+    frc::Preferences::InitDouble("kIVitesseAngleLanceur", ShooterConstant::kIVitesseAngle);
+    frc::Preferences::InitDouble("kDVitesseAngleLanceur", ShooterConstant::kDVitesseAngle);
+    frc::Preferences::InitDouble("kFVitesseAngleLanceur", ShooterConstant::kFVitesseAngle);
+    frc::Preferences::InitDouble("kVitesseAngleLanceur", ShooterConstant::kVitesseAngle);
 
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,
@@ -51,17 +52,17 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  if (m_autonomousCommand.get() != nullptr) {
-    m_autonomousCommand.Schedule();
-  }
+    if (m_autonomousCommand.get() != nullptr) {
+        m_autonomousCommand.Schedule();
+    }
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
-  if (m_autonomousCommand.get() != nullptr) {
-    m_autonomousCommand.Cancel();
-  }
+    if (m_autonomousCommand.get() != nullptr) {
+        m_autonomousCommand.Cancel();
+    }
 }
 
 /**
