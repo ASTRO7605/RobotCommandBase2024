@@ -6,6 +6,7 @@
 
 #include "Constants.h"
 #include "subsystems/Base.h"
+#include "subsystems/Vision.h"
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/InstantCommand.h>

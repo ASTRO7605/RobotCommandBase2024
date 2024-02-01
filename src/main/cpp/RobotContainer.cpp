@@ -75,15 +75,14 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     // auto path = pathplanner::PathPlannerPath::fromPathFile("1m devant");
     // return pathplanner::AutoBuilder::followPath(path);
 
-    return pathplanner::AutoBuilder::buildAuto("Test Auto");
+    return pathplanner::AutoBuilder::buildAuto("amp side");
 }
 
 void RobotContainer::ConfigurePathfind() {
-    // auto path = pathplanner::PathPlannerPath::fromPathFile("AprilTag1m");
+    auto path = pathplanner::PathPlannerPath::fromPathFile("approach amp");
 
-    // pathplanner::PathConstraints constraints = pathplanner::PathConstraints(
-    //     1.0_mps, 1.0_mps_sq, 540_deg_per_s, 540_deg_per_s_sq);
+    pathplanner::PathConstraints constraints =
+        pathplanner::PathConstraints(2.0_mps, 2.0_mps_sq, 540_deg_per_s, 540_deg_per_s_sq);
 
-    // pathfindingCommand = pathplanner::AutoBuilder::pathfindThenFollowPath(
-    //     path, constraints, 0.1_m);
+    pathfindingCommand = pathplanner::AutoBuilder::pathfindThenFollowPath(path, constraints);
 }
