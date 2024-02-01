@@ -29,6 +29,7 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kDVitesseAngleLanceur", ShooterConstant::kDVitesseAngle);
     frc::Preferences::InitDouble("kFVitesseAngleLanceur", ShooterConstant::kFVitesseAngle);
     frc::Preferences::InitDouble("kVitesseAngleLanceur", ShooterConstant::kVitesseAngle);
+    frc::Preferences::InitDouble("kVoltageIntake", IntakeConstant::kVoltageIntake);
 
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,

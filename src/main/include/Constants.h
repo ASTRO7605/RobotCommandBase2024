@@ -121,7 +121,7 @@ namespace ShooterConstant {
 constexpr int leftMotorID = 16;
 constexpr int rightMotorID = 17;
 constexpr int angleMotorID = 18;
-constexpr int capteurID = 0;
+constexpr int capteurID = 1;
 constexpr double kPFlywheel = 0;
 constexpr double kIFlywheel = 0;
 constexpr double kDFlywheel = 0;
@@ -153,4 +153,8 @@ constexpr double kCdMOffset = 0;
 namespace IntakeConstant {
 constexpr int topMotorID = 14;
 constexpr int bottomMotorID = 15;
-}
+constexpr int capteurID = 0;
+constexpr double kVoltageCompensation = 10; // volts
+constexpr double kCurrentLimit = 50;        // amperes
+constexpr double kVoltageIntake = 2;        // volts
+} // namespace IntakeConstant

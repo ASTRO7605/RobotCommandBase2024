@@ -30,8 +30,8 @@ Shooter::Shooter()
     m_RightFlywheelMotor.SetInverted(false);
     m_MoteurAngle.SetInverted(false);
 
-    m_LeftFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    m_RightFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    m_LeftFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_RightFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     m_MoteurAngle.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 
     m_MoteurAngle.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0,
@@ -111,7 +111,7 @@ void Shooter::Periodic() {
     frc::SmartDashboard::PutNumber("angleShooterVelocity",
                                    m_MoteurAngle.GetSelectedSensorVelocity() *
                                        ShooterConstant::FConversionFactorVelocityAngle);
-    frc::SmartDashboard::PutBoolean("IsObjectInShooter", !m_capteurInterieurShooter.get());
+    frc::SmartDashboard::PutBoolean("IsObjectInShooter", IsObjectInShooter());
 }
 
 void Shooter::SetWheelSpeeds(double speeds) {
