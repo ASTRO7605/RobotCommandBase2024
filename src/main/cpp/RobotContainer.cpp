@@ -72,8 +72,8 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    auto path = pathplanner::PathPlannerPath::fromPathFile("1m devant");
-    return pathplanner::AutoBuilder::followPath(path);
+    // auto path = pathplanner::PathPlannerPath::fromPathFile("1m devant");
+    // return pathplanner::AutoBuilder::followPath(path);
 
     return pathplanner::AutoBuilder::buildAuto("amp side");
 }
