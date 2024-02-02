@@ -21,22 +21,14 @@
 
 #include <ctre/Phoenix.h>
 
-class Shooter : public frc2::SubsystemBase {
+class ShooterWheels : public frc2::SubsystemBase {
   public:
-    Shooter();
+    ShooterWheels();
 
     void Periodic() override;
     /// @brief Set shooter wheels to a specific speed
     /// @param speeds Speed of wheels (RPM)
     void SetWheelSpeeds(double speeds);
-
-    /// @brief Set shooter to a specific angle
-    /// @param angle Angle of the shooter (1/10 degree)
-    void SetShooterAngle(double angle);
-
-    /// @brief Set shooter angle to specific manual speed
-    /// @param speed speed in (1/10 degree) / s
-    void ManualShooterAngle(double speed);
 
     bool IsObjectInShooter();
 
@@ -49,8 +41,6 @@ class Shooter : public frc2::SubsystemBase {
 
     rev::SparkPIDController m_LeftFlywheelMotorPIDController;
     rev::SparkPIDController m_RightFlywheelMotorPIDController;
-
-    ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;
 
     std::shared_ptr<frc::DigitalInput> m_capteurInterieurShooter;
 };
