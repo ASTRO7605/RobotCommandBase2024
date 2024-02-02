@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Constants.h"
+#include <wpi/deprecated.h>
 
 #include <rev/CANSparkBase.h>
 #include <rev/CANSparkMax.h>
@@ -19,7 +20,9 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
+WPI_IGNORE_DEPRECATED
 #include <ctre/Phoenix.h>
+WPI_UNIGNORE_DEPRECATED
 
 class ShooterAngle : public frc2::SubsystemBase {
   public:

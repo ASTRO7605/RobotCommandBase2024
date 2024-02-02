@@ -64,6 +64,14 @@ void RobotContainer::ConfigureBindings() {
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
     // m_CoPilotController.LeftBumper().OnTrue(
     //     frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
+    m_CoPilotController.LeftBumper().OnTrue(
+        frc2::InstantCommand(
+            [this]() {
+                m_ShooterWheels.ManualToggleStartWheels(
+                    frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"));
+            },
+            {&m_ShooterWheels})
+            .ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

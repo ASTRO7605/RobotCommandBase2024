@@ -16,7 +16,10 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("leftShooterMotorVelocity", 0);
     frc::SmartDashboard::PutNumber("rightShooterMotorVelocity", 0);
 
-    frc::Preferences::InitDouble("flywheelSpeedsRPM", ShooterConstant::flywheelsSpeed);
+    frc::Preferences::InitDouble("flywheelSpeedsSpeakerRPM",
+                                 ShooterConstant::flywheelsSpeedSpeaker);
+    frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
+    frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
     frc::Preferences::InitDouble("kPFlywheel", ShooterConstant::kPFlywheel);
     frc::Preferences::InitDouble("kIFlywheel", ShooterConstant::kIFlywheel);
     frc::Preferences::InitDouble("kDFlywheel", ShooterConstant::kDFlywheel);

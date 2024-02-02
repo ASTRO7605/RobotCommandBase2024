@@ -6,6 +6,8 @@
 
 #include "Constants.h"
 #include "subsystems/Base.h"
+#include "subsystems/ShooterAngle.h"
+#include "subsystems/ShooterWheels.h"
 #include "subsystems/Vision.h"
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -67,5 +69,7 @@ class RobotContainer {
     void ConfigurePathfind();
     // The robot's subsystems are defined here...
     Base m_Base;
+    ShooterAngle m_ShooterAngle;
+    ShooterWheels m_ShooterWheels;
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };

@@ -6,9 +6,9 @@
 ShooterWheels::ShooterWheels()
     : m_LeftFlywheelMotor{ShooterConstant::leftMotorID, rev::CANSparkMax::MotorType::kBrushless},
       m_RightFlywheelMotor{ShooterConstant::rightMotorID, rev::CANSparkMax::MotorType::kBrushless},
-      m_LeftMotorEncoder{
+      m_LeftFlywheelMotorEncoder{
           m_LeftFlywheelMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
-      m_RightMotorEncoder{
+      m_RightFlywheelMotorEncoder{
           m_RightFlywheelMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_LeftFlywheelMotorPIDController{m_LeftFlywheelMotor.GetPIDController()},
       m_RightFlywheelMotorPIDController{m_RightFlywheelMotor.GetPIDController()} {
@@ -24,13 +24,15 @@ ShooterWheels::ShooterWheels()
     m_LeftFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     m_RightFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 
-    m_LeftMotorEncoder.SetPositionConversionFactor(
+    m_LeftFlywheelMotorEncoder.SetPositionConversionFactor(
         ShooterConstant::FConversionFactorWheels); // 42 counts per revolution
-    m_LeftMotorEncoder.SetVelocityConversionFactor(ShooterConstant::FConversionFactorWheels);
+    m_LeftFlywheelMotorEncoder.SetVelocityConversionFactor(
+        ShooterConstant::FConversionFactorWheels);
 
-    m_RightMotorEncoder.SetPositionConversionFactor(
+    m_RightFlywheelMotorEncoder.SetPositionConversionFactor(
         ShooterConstant::FConversionFactorWheels); // 42 counts per revolution
-    m_RightMotorEncoder.SetVelocityConversionFactor(ShooterConstant::FConversionFactorWheels);
+    m_RightFlywheelMotorEncoder.SetVelocityConversionFactor(
+        ShooterConstant::FConversionFactorWheels);
 
     m_LeftFlywheelMotorPIDController.SetP(frc::Preferences::GetDouble("kPFlywheel"));
     m_LeftFlywheelMotorPIDController.SetI(frc::Preferences::GetDouble("kIFlywheel"));
@@ -47,11 +49,15 @@ ShooterWheels::ShooterWheels()
 
     m_LeftFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels);
     m_RightFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels);
+
+    areWheelsRunning = false;
 }
 
 void ShooterWheels::Periodic() {
-    frc::SmartDashboard::PutNumber("leftShooterMotorVelocity", m_LeftMotorEncoder.GetVelocity());
-    frc::SmartDashboard::PutNumber("rightShooterMotorVelocity", m_RightMotorEncoder.GetVelocity());
+    frc::SmartDashboard::PutNumber("leftShooterMotorVelocity",
+                                   m_LeftFlywheelMotorEncoder.GetVelocity());
+    frc::SmartDashboard::PutNumber("rightShooterMotorVelocity",
+                                   m_RightFlywheelMotorEncoder.GetVelocity());
     frc::SmartDashboard::PutBoolean("IsObjectInShooter", IsObjectInShooter());
 }
 
@@ -64,3 +70,27 @@ void ShooterWheels::SetWheelSpeeds(double speeds) {
 bool ShooterWheels::IsObjectInShooter() {
     return !(m_capteurInterieurShooter->Get());
 } // si vrai, pas d'objet
+
+void ShooterWheels::StopWheels() {
+    m_LeftFlywheelMotor.StopMotor();
+    m_RightFlywheelMotor.StopMotor();
+    areWheelsRunning = false;
+}
+
+void ShooterWheels::ManualToggleStartWheels(double speeds) {
+    if (areWheelsRunning) {
+        StopWheels();
+    } else {
+        SetWheelSpeeds(speeds);
+        areWheelsRunning = true;
+    }
+}
+
+bool ShooterWheels::AreWheelsDoneAccelerating(double target) {
+    if ((fabs(m_LeftFlywheelMotorEncoder.GetVelocity() - target) <=
+         ShooterConstant::speedThreshold) &&
+        fabs((m_RightFlywheelMotorEncoder.GetVelocity() - target) <=
+             ShooterConstant::speedThreshold)) {
+        return true;
+    }
+}
