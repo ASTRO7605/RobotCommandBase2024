@@ -35,10 +35,13 @@ bool Intake::IsObjectInIntake() {
     return !(m_capteurInterieurIntake->Get());
 } // si vrai, pas d'objet
 
-void Intake::SetIntake(bool on) {
+void Intake::SetIntake(bool on, bool reversed) {
     double voltage{frc::Preferences::GetDouble("kVoltageIntake")};
-    if (!on) {
+    if (reversed) {
         voltage *= -1;
+    }
+    if (!on) {
+        voltage = 0;
     }
     m_TopMotor.SetVoltage(units::voltage::volt_t{voltage});
     m_BottomMotor.SetVoltage(units::voltage::volt_t{voltage});

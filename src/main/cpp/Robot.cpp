@@ -16,6 +16,7 @@ void Robot::RobotInit() {
     frc::SmartDashboard::PutNumber("leftShooterMotorVelocity", 0);
     frc::SmartDashboard::PutNumber("rightShooterMotorVelocity", 0);
 
+    frc::Preferences::InitDouble("flywheelSpeedsRPM", ShooterConstant::flywheelsSpeed);
     frc::Preferences::InitDouble("kPFlywheel", ShooterConstant::kPFlywheel);
     frc::Preferences::InitDouble("kIFlywheel", ShooterConstant::kIFlywheel);
     frc::Preferences::InitDouble("kDFlywheel", ShooterConstant::kDFlywheel);
@@ -28,7 +29,7 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kIVitesseAngleLanceur", ShooterConstant::kIVitesseAngle);
     frc::Preferences::InitDouble("kDVitesseAngleLanceur", ShooterConstant::kDVitesseAngle);
     frc::Preferences::InitDouble("kFVitesseAngleLanceur", ShooterConstant::kFVitesseAngle);
-    frc::Preferences::InitDouble("kVitesseAngleLanceur", ShooterConstant::kVitesseAngle);
+    frc::Preferences::InitDouble("kVitesseManualAngleLanceur", ShooterConstant::kVitesseAngle);
     frc::Preferences::InitDouble("kVoltageIntake", IntakeConstant::kVoltageIntake);
 
 } /** * This function is called every 20 ms, no matter the mode. Use * this for

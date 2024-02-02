@@ -1,20 +1,30 @@
 #include "commands/ShootNote.h"
 
-ShootNote::ShootNote(Shooter *p_Shooter) : m_pShooter{p_Shooter} {
+ShootNote::ShootNote(Shooter *p_Shooter, Intake *p_Intake)
+    : m_pShooter{p_Shooter}, m_pIntake{p_Intake} {
     AddRequirements({m_pShooter});
     hasNoteGoneThroughShooter = false;
+    noNote = !m_pIntake->IsObjectInIntake(); // check if empty
 }
 
-void ShootNote::Initialize() { m_pShooter->SetWheelSpeeds(50); }
+void ShootNote::Initialize() {
+    if (noNote) {
+        return;
+    }
+    m_pShooter->SetWheelSpeeds(frc::Preferences::GetDouble("flywheelSpeedsRPM"));
+}
 
 void ShootNote::Execute() {
-    if (!hasNoteGoneThroughShooter && m_pShooter->IsObjectInShooter()) {
+    if (noNote) {
+        return;
+    }
+    if (!hasNoteGoneThroughShooter && !m_pShooter->IsObjectInShooter()) {
         hasNoteGoneThroughShooter = true;
     }
 }
 
 bool ShootNote::IsFinished() {
-    if (hasNoteGoneThroughShooter && !m_pShooter->IsObjectInShooter()) {
+    if ((hasNoteGoneThroughShooter && !m_pShooter->IsObjectInShooter()) || noNote) {
         return true;
     }
     return false;

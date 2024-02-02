@@ -29,7 +29,8 @@ class Intake : public frc2::SubsystemBase {
 
     /// @brief Set intake motors on or off
     /// @param on true for on, false for off
-    void SetIntake(bool on);
+    /// @param reversed true to eject note
+    void SetIntake(bool on, bool reversed);
 
   private:
     rev::CANSparkMax m_TopMotor;

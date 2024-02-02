@@ -62,13 +62,8 @@ void RobotContainer::ConfigureBindings() {
     // bouton pouce
     m_ThrottleStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
-    m_CoPilotController.RightBumper().OnTrue(frc2::InstantCommand{
-        [this] {
-            m_Base.ResetOdometry(frc::Pose2d{/*3.05_m, 4.33_m, 180_deg*/ 0_m, 0_m, 0_deg});
-        },
-        {}}.ToPtr());
-    m_CoPilotController.LeftBumper().OnTrue(
-        frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
+    // m_CoPilotController.LeftBumper().OnTrue(
+    //     frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
