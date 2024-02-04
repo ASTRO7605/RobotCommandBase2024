@@ -5,9 +5,8 @@
 Intake::Intake()
     : m_TopMotor{IntakeConstant::topMotorID, rev::CANSparkMax::MotorType::kBrushless},
       m_BottomMotor{IntakeConstant::bottomMotorID, rev::CANSparkMax::MotorType::kBrushless},
-      m_TopMotorEncoder{m_TopMotor.GetEncoder(rev::SparkMaxRelativeEncoder::Type::kHallSensor)},
-      m_BottomMotorEncoder{
-          m_BottomMotor.GetEncoder(rev::SparkMaxRelativeEncoder::Type::kHallSensor)},
+      m_TopMotorEncoder{m_TopMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
+      m_BottomMotorEncoder{m_BottomMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_TopMotorPIDController{m_TopMotor.GetPIDController()},
       m_BottomMotorPIDController{m_BottomMotor.GetPIDController()} {
 

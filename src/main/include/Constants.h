@@ -166,3 +166,28 @@ constexpr double kVoltageCompensation = 10; // volts
 constexpr double kCurrentLimit = 50;        // amperes
 constexpr double kVoltageIntake = 2;        // volts
 } // namespace IntakeConstant
+
+namespace BarreConstant {
+constexpr int moteurPremierJointID = 19;
+constexpr int moteurDeuxiemeJointID = 20;
+constexpr int kTimeoutMs = 30;
+constexpr double kNominalOutputForward = 0;
+constexpr double kNominalOutputReverse = 0;
+constexpr double kPeakOutputForward = 1;
+constexpr double kPeakOutputReverse = -1;
+constexpr double kVoltageCompensation = 10;
+constexpr double kPeakCurrentLimit = 9;    // amperes
+constexpr double kPeakCurrentDuration = 0; // ms
+constexpr double kContinuousCurrent = 9;   // amperes
+constexpr double kMaxAF1erJoint = 0;
+constexpr double kMaxAF2eJoint = 0;
+constexpr double FDegToRad = M_PI / 180;
+constexpr double kCdMOffset1erJoint = 0;
+constexpr double kCdMOffset2eJoint = 0;
+constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
+constexpr double FConversionFactorVelocity1erJoint =
+    180.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+constexpr double FConversionFactorPosition2eJoint = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
+constexpr double FConversionFactorVelocity2eJoint =
+    360.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+} // namespace BarreConstant
