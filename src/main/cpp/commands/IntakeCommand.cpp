@@ -1,10 +1,11 @@
 #include "commands/IntakeCommand.h"
 
-IntakeCommand::IntakeCommand(Intake *p_Intake) : m_pIntake{p_Intake} {
+IntakeCommand::IntakeCommand(Intake *p_Intake, bool reversed)
+    : m_pIntake{p_Intake}, isReversed{reversed} {
     AddRequirements({m_pIntake});
 }
 
-void IntakeCommand::Initialize() { m_pIntake->SetIntake(true, false); }
+void IntakeCommand::Initialize() { m_pIntake->SetIntake(true, isReversed); }
 
 void IntakeCommand::Execute() {}
 

@@ -216,6 +216,13 @@ void Base::SetWheelsFacingSideways() {
         frc::SwerveModuleState{0_mps, frc::Rotation2d(SidewaysPosition)});
 }
 
+void Base::SetWheelsInXFormation() {
+    m_FrontRightModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(-45_deg)});
+    m_FrontLeftModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(45_deg)});
+    m_RearLeftModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(-45_deg)});
+    m_RearRightModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(45_deg)});
+}
+
 units::angle::degree_t Base::GetHeadingDegrees() { return m_Gyro.GetRotation2d().Degrees(); }
 
 frc::Pose2d Base::GetPose() {
@@ -230,63 +237,63 @@ frc::ChassisSpeeds Base::GetRobotRelativeSpeeds() {
 }
 
 void Base::SetRobotPoseVisionEstimateFront() {
-    if (!m_VisionFront.SeesValidTarget()) {
-        // hide robot if no target in view
-        m_VisionFieldFront.SetRobotPose(100_m, 100_m, 0_rad);
-        return;
-    }
+    // if (!m_VisionFront.SeesValidTarget()) {
+    //     // hide robot if no target in view
+    //     m_VisionFieldFront.SetRobotPose(100_m, 100_m, 0_rad);
+    //     return;
+    // }
 
-    std::optional<PoseMeasurement> estimate = m_VisionFront.GetRobotPoseEstimate();
-    if (!estimate.has_value()) {
-        return;
-    }
+    // std::optional<PoseMeasurement> estimate = m_VisionFront.GetRobotPoseEstimate();
+    // if (!estimate.has_value()) {
+    //     return;
+    // }
 
-    frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
+    // frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
-    auto std_devs = PoseEstimationConstant::kVisionStdDevs_XYPerMeterSquared_Front;
-    auto dst_sq = estimate->distance.value() * estimate->distance.value();
-    std_devs[0] *= dst_sq; // scale based on distance
-    std_devs[1] *= dst_sq;
+    // auto std_devs = PoseEstimationConstant::kVisionStdDevs_XYPerMeterSquared_Front;
+    // auto dst_sq = estimate->distance.value() * estimate->distance.value();
+    // std_devs[0] *= dst_sq; // scale based on distance
+    // std_devs[1] *= dst_sq;
 
-    frc::SmartDashboard::PutNumber("april_distance_front", estimate->distance.value());
+    // frc::SmartDashboard::PutNumber("april_distance_front", estimate->distance.value());
 
-    m_PoseEstimator.AddVisionMeasurement(
-        measurement2d,
-        // estimated original time of data capture (now - latency in ms)
-        (estimate->timestamp), std_devs);
+    // m_PoseEstimator.AddVisionMeasurement(
+    //     measurement2d,
+    //     // estimated original time of data capture (now - latency in ms)
+    //     (estimate->timestamp), std_devs);
 
-    // Update SmartDashboard
-    m_VisionFieldFront.SetRobotPose(measurement2d);
+    // // Update SmartDashboard
+    // m_VisionFieldFront.SetRobotPose(measurement2d);
 }
 
 void Base::SetRobotPoseVisionEstimateBack() {
-    if (!m_VisionBack.SeesValidTarget()) {
-        // hide robot if no target in view
-        m_VisionFieldBack.SetRobotPose(100_m, 100_m, 0_rad);
-        return;
-    }
+    // if (!m_VisionBack.SeesValidTarget()) {
+    //     // hide robot if no target in view
+    //     m_VisionFieldBack.SetRobotPose(100_m, 100_m, 0_rad);
+    //     return;
+    // }
 
-    std::optional<PoseMeasurement> estimate = m_VisionBack.GetRobotPoseEstimate();
-    if (!estimate.has_value()) {
-        return;
-    }
+    // std::optional<PoseMeasurement> estimate = m_VisionBack.GetRobotPoseEstimate();
+    // if (!estimate.has_value()) {
+    //     return;
+    // }
 
-    frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
+    // frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
-    auto std_devs = PoseEstimationConstant::kVisionStdDevs_XYPerMeterSquared_Back;
-    auto dst_sq = estimate->distance.value() * estimate->distance.value();
-    std_devs[0] *= dst_sq; // scale based on distance
-    std_devs[1] *= dst_sq;
+    // auto std_devs = PoseEstimationConstant::kVisionStdDevs_XYPerMeterSquared_Back;
+    // auto dst_sq = estimate->distance.value() * estimate->distance.value();
+    // std_devs[0] *= dst_sq; // scale based on distance
+    // std_devs[1] *= dst_sq;
 
-    frc::SmartDashboard::PutNumber("april_distance_back", estimate->distance.value());
+    // frc::SmartDashboard::PutNumber("april_distance_back", estimate->distance.value());
 
-    m_PoseEstimator.AddVisionMeasurement(
-        measurement2d,
-        // estimated original time of data capture (now - latency in ms)
-        (estimate->timestamp), std_devs);
+    // m_PoseEstimator.AddVisionMeasurement(
+    //     measurement2d,
+    //     // estimated original time of data capture (now - latency in ms)
+    //     (estimate->timestamp), std_devs);
 
-    // Update SmartDashboard
-    m_VisionFieldBack.SetRobotPose(measurement2d);
+    // // Update SmartDashboard
+    // m_VisionFieldBack.SetRobotPose(measurement2d);
 }
 void Base::ResetOdometry(frc::Pose2d desiredPose) {
     m_PoseEstimator.ResetPosition(GetHeadingDegrees(),

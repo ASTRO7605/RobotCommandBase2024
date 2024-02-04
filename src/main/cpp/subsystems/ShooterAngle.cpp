@@ -19,6 +19,14 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
 
     m_MoteurAngle.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0,
                                                ShooterConstant::kTimeoutMs);
+
+    double absoluteEncoderPosition{m_MoteurAngle.GetSelectedSensorPosition()};
+
+    m_MoteurAngle.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
+                                               ShooterConstant::kTimeoutMs);
+
+    m_MoteurAngle.SetSelectedSensorPosition(absoluteEncoderPosition);
+
     m_MoteurAngle.SetSensorPhase(false);
 
     m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
@@ -56,9 +64,10 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.ConfigVoltageCompSaturation(ShooterConstant::kVoltageCompensation);
     m_MoteurAngle.EnableVoltageCompensation(true);
 
-    // init de l'encodeur du moteur angle?
-    // motion magic?
-    // current limit?
+    m_MoteurAngle.ConfigPeakCurrentLimit(ShooterConstant::kPeakCurrentLimit);
+    m_MoteurAngle.ConfigPeakCurrentLimit(ShooterConstant::kPeakCurrentDuration);
+    m_MoteurAngle.ConfigContinuousCurrentLimit(ShooterConstant::kContinuousCurrent);
+    m_MoteurAngle.EnableCurrentLimit(true);
 }
 
 void ShooterAngle::Periodic() {
@@ -73,7 +82,7 @@ void ShooterAngle::Periodic() {
 void ShooterAngle::SetShooterAngle(double angle) {
     m_MoteurAngle.SelectProfileSlot(0, 0);
     m_MoteurAngle.Set(ControlMode::Position,
-                      angle * ShooterConstant::FConversionFactorPositionAngle,
+                      angle / ShooterConstant::FConversionFactorPositionAngle,
                       DemandType::DemandType_ArbitraryFeedForward,
                       computekAF(m_MoteurAngle.GetSelectedSensorPosition() *
                                  ShooterConstant::FConversionFactorPositionAngle));
@@ -82,8 +91,17 @@ void ShooterAngle::SetShooterAngle(double angle) {
 void ShooterAngle::ManualShooterAngle(double speed) {
     m_MoteurAngle.SelectProfileSlot(1, 0);
     m_MoteurAngle.Set(ControlMode::Velocity,
-                      speed * ShooterConstant::FConversionFactorVelocityAngle,
+                      speed / ShooterConstant::FConversionFactorVelocityAngle,
                       DemandType::DemandType_ArbitraryFeedForward,
                       computekAF(m_MoteurAngle.GetSelectedSensorPosition() *
                                  ShooterConstant::FConversionFactorPositionAngle));
+}
+
+bool ShooterAngle::IsShooterAtRightAngle(double target) {
+    if ((fabs((m_MoteurAngle.GetSelectedSensorPosition() *
+               ShooterConstant::FConversionFactorPositionAngle) -
+              target) <= ShooterConstant::angleThreshold)) {
+        return true;
+    }
+    return false;
 }

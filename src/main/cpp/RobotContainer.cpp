@@ -71,6 +71,24 @@ void RobotContainer::ConfigureBindings() {
                     frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"));
             },
             {&m_ShooterWheels})
+            .ToPtr()); // 1 b,c
+    m_TurnStick.Button(7).OnTrue(frc2::InstantCommand([this]() {
+                                     m_ShooterAngle.ManualShooterAngle(
+                                         frc::Preferences::GetDouble("kVitesseManualAngleLanceur"));
+                                 }).ToPtr());
+    m_TurnStick.Button(8).OnTrue(frc2::InstantCommand([this]() {
+                                     m_ShooterAngle.ManualShooterAngle(-frc::Preferences::GetDouble(
+                                         "kVitesseManualAngleLanceur"));
+                                 }).ToPtr());
+    m_TurnStick.Button(9).OnTrue(
+        frc2::InstantCommand([this]() { m_ShooterAngle.SetShooterAngle(150); }).ToPtr());
+    m_TurnStick.Button(10).OnTrue(
+        frc2::InstantCommand([this]() { m_ShooterAngle.SetShooterAngle(300); }).ToPtr());
+    m_CoPilotController.A().OnTrue(IntakeCommand(&m_Intake, false).ToPtr());
+    m_CoPilotController.B().OnTrue(IntakeCommand(&m_Intake, true).ToPtr());
+    m_CoPilotController.X().OnTrue(
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake,
+                  frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"), 450)
             .ToPtr());
 }
 

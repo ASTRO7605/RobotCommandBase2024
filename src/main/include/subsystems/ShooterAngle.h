@@ -34,9 +34,18 @@ class ShooterAngle : public frc2::SubsystemBase {
     /// @param angle Angle of the shooter (1/10 degree)
     void SetShooterAngle(double angle);
 
+    /// @brief Function that returns the current shooter angle
+    /// @return The angle of the shooter (1/10th degree)
+    double GetShooterAngle();
+
     /// @brief Set shooter angle to specific manual speed
     /// @param speed speed in (1/10 degree) / s
     void ManualShooterAngle(double speed);
+
+    /// @brief checks to see if shooter is at the target angle
+    /// @param target targeted angle, 1/10th of degree
+    /// @return true or false
+    bool IsShooterAtRightAngle(double target);
 
   private:
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;

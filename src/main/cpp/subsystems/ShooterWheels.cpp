@@ -93,4 +93,5 @@ bool ShooterWheels::AreWheelsDoneAccelerating(double target) {
              ShooterConstant::speedThreshold)) {
         return true;
     }
+    return false;
 }

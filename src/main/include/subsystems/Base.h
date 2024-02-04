@@ -58,6 +58,8 @@ class Base : public frc2::SubsystemBase {
 
     void SetWheelsFacingSideways();
 
+    void SetWheelsInXFormation();
+
     frc::Pose2d GetPose();
 
     frc::ChassisSpeeds GetRobotRelativeSpeeds();
@@ -133,6 +135,6 @@ class Base : public frc2::SubsystemBase {
     frc::Field2d m_VisionFieldBack;
     frc::Field2d m_RobotField;
 
-    Vision m_VisionFront{VisionConstant::TableNameFront, VisionConstant::frontCameraTransform};
-    Vision m_VisionBack{VisionConstant::TableNameBack, VisionConstant::backCameraTransform};
+    // Vision m_VisionFront{VisionConstant::TableNameFront, VisionConstant::frontCameraTransform};
+    // Vision m_VisionBack{VisionConstant::TableNameBack, VisionConstant::backCameraTransform};
 };

@@ -122,10 +122,10 @@ constexpr int leftMotorID = 16;
 constexpr int rightMotorID = 17;
 constexpr int angleMotorID = 18;
 constexpr int capteurID = 1;
-constexpr double flywheelsSpeedSpeaker = 0;  // RPM
-constexpr double flywheelsSpeedAmp = 0;  // RPM
-constexpr double flywheelsSpeedTrap = 0;  // RPM
-constexpr double speedThreshold = 50; // RPM
+constexpr double flywheelsSpeedSpeaker = 0; // RPM
+constexpr double flywheelsSpeedAmp = 0;     // RPM
+constexpr double flywheelsSpeedTrap = 0;    // RPM
+constexpr double speedThreshold = 50;       // RPM
 constexpr double kPFlywheel = 0;
 constexpr double kIFlywheel = 0;
 constexpr double kDFlywheel = 0;
@@ -148,10 +148,14 @@ constexpr double kPVitesseAngle = 0;
 constexpr double kIVitesseAngle = 0;
 constexpr double kDVitesseAngle = 0;
 constexpr double kFVitesseAngle = 0;
-constexpr double kVitesseAngle = 0; // dixieme de degre par seconde
+constexpr double kVitesseAngle = 0;  // dixieme de degre par seconde
+constexpr double angleThreshold = 5; // dixieme de degre
 constexpr double kMaxAF = 0;
 constexpr double FDegToRad = M_PI / 180;
 constexpr double kCdMOffset = 0;
+constexpr double kPeakCurrentLimit = 9;    // amperes
+constexpr double kPeakCurrentDuration = 0; // ms
+constexpr double kContinuousCurrent = 9;   // amperes
 } // namespace ShooterConstant
 
 namespace IntakeConstant {

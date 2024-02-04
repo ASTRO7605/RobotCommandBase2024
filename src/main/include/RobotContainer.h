@@ -5,10 +5,14 @@
 #pragma once
 
 #include "Constants.h"
+#include "commands/IntakeCommand.h"
+#include "commands/ShootNote.h"
 #include "subsystems/Base.h"
+#include "subsystems/Intake.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
 #include "subsystems/Vision.h"
+
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/InstantCommand.h>
@@ -71,5 +75,6 @@ class RobotContainer {
     Base m_Base;
     ShooterAngle m_ShooterAngle;
     ShooterWheels m_ShooterWheels;
+    Intake m_Intake;
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };
