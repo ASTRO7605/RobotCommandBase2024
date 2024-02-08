@@ -116,11 +116,11 @@ Barre::Barre()
     m_MoteurDeuxiemeJoint.Config_kF(1, frc::Preferences::GetDouble("kFVitesse2eJoint"),
                                     BarreConstant::kTimeoutMs);
 
-    m_MoteurPremierJoint.ConfigMotionCruiseVelocity(frc::Preferences::GetDouble("kVitesse1erJoint"));
-    m_MoteurPremierJoint.ConfigMotionAcceleration(frc::Preferences::GetDouble("kAcceleration1erJoint"));
+    m_MoteurPremierJoint.ConfigMotionCruiseVelocity(frc::Preferences::GetDouble("kVitesse1erJoint") / BarreConstant::FConversionFactorVelocity1erJoint);
+    m_MoteurPremierJoint.ConfigMotionAcceleration(frc::Preferences::GetDouble("kAcceleration1erJoint") / BarreConstant::FConversionFactorAcceleration1erJoint);
 
-    m_MoteurDeuxiemeJoint.ConfigMotionCruiseVelocity(frc::Preferences::GetDouble("kVitesse2eJoint"));
-    m_MoteurDeuxiemeJoint.ConfigMotionAcceleration(frc::Preferences::GetDouble("kAcceleration2eJoint"));
+    m_MoteurDeuxiemeJoint.ConfigMotionCruiseVelocity(frc::Preferences::GetDouble("kVitesse2eJoint") / BarreConstant::FConversionFactorVelocity2eJoint);
+    m_MoteurDeuxiemeJoint.ConfigMotionAcceleration(frc::Preferences::GetDouble("kAcceleration2eJoint") / BarreConstant::FConversionFactorAcceleration2eJoint);
 
     m_MoteurPremierJoint.ConfigVoltageCompSaturation(BarreConstant::kVoltageCompensation);
     m_MoteurPremierJoint.EnableVoltageCompensation(true);
@@ -153,4 +153,58 @@ void Barre::Periodic()
     frc::SmartDashboard::PutNumber("2eJointVelocity",
                                    m_MoteurDeuxiemeJoint.GetSelectedSensorVelocity() *
                                        BarreConstant::FConversionFactorVelocity2eJoint);
+}
+
+void Barre::Manual1erJoint(double speed) {
+    m_MoteurPremierJoint.SelectProfileSlot(1, 0);
+    m_MoteurPremierJoint.Set(ControlMode::Velocity,
+                      speed / BarreConstant::FConversionFactorVelocity1erJoint,
+                      DemandType::DemandType_ArbitraryFeedForward,
+                      computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
+                                 BarreConstant::FConversionFactorPosition1erJoint));
+}
+
+void Barre::Manual2eJoint(double speed) {
+    m_MoteurDeuxiemeJoint.SelectProfileSlot(1, 0);
+    m_MoteurDeuxiemeJoint.Set(ControlMode::Velocity,
+                      speed / BarreConstant::FConversionFactorVelocity2eJoint,
+                      DemandType::DemandType_ArbitraryFeedForward,
+                      computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
+                                 BarreConstant::FConversionFactorPosition2eJoint));
+}
+
+void Barre::Set1erJointAngle(double angle){
+    m_MoteurPremierJoint.SelectProfileSlot(0, 0);
+    m_MoteurPremierJoint.Set(ControlMode::MotionMagic,
+                      angle / BarreConstant::FConversionFactorPosition1erJoint,
+                      DemandType::DemandType_ArbitraryFeedForward,
+                      computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
+                                 BarreConstant::FConversionFactorPosition1erJoint));
+}
+
+void Barre::Set2eJointAngle(double angle){
+    m_MoteurDeuxiemeJoint.SelectProfileSlot(0, 0);
+    m_MoteurDeuxiemeJoint.Set(ControlMode::MotionMagic,
+                      angle / BarreConstant::FConversionFactorPosition2eJoint,
+                      DemandType::DemandType_ArbitraryFeedForward,
+                      computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
+                                 BarreConstant::FConversionFactorPosition2eJoint));
+}
+
+bool Barre::Is1erJointAtTargetAngle(double target) {
+    if ((fabs((m_MoteurPremierJoint.GetSelectedSensorPosition() *
+               BarreConstant::FConversionFactorPosition1erJoint) -
+              target) <= BarreConstant::angleThreshold)) {
+        return true;
+    }
+    return false;
+}
+
+bool Barre::Is2eJointAtTargetAngle(double target) {
+    if ((fabs((m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
+               BarreConstant::FConversionFactorPosition2eJoint) -
+              target) <= BarreConstant::angleThreshold)) {
+        return true;
+    }
+    return false;
 }

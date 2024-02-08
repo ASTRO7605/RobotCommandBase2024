@@ -97,7 +97,7 @@ void ShooterAngle::ManualShooterAngle(double speed) {
                                  ShooterConstant::FConversionFactorPositionAngle));
 }
 
-bool ShooterAngle::IsShooterAtRightAngle(double target) {
+bool ShooterAngle::IsShooterAtTargetAngle(double target) {
     if ((fabs((m_MoteurAngle.GetSelectedSensorPosition() *
                ShooterConstant::FConversionFactorPositionAngle) -
               target) <= ShooterConstant::angleThreshold)) {

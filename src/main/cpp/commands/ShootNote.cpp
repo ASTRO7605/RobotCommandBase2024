@@ -32,7 +32,7 @@ void ShootNote::Execute() {
         areWheelsReadyToShoot = true;
     }
     if (!isShooterAngledRight &&
-        m_pShooterAngle->IsShooterAtRightAngle(targetAngle)) { // is shooter at right angle
+        m_pShooterAngle->IsShooterAtTargetAngle(targetAngle)) { // is shooter at right angle
         isShooterAngledRight = true;
     }
     if (areWheelsReadyToShoot &&

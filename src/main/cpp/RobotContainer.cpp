@@ -71,7 +71,7 @@ void RobotContainer::ConfigureBindings() {
                     frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"));
             },
             {&m_ShooterWheels})
-            .ToPtr()); // 1 b,c
+            .ToPtr());
     m_TurnStick.Button(7).OnTrue(frc2::InstantCommand([this]() {
                                      m_ShooterAngle.ManualShooterAngle(
                                          frc::Preferences::GetDouble("kVitesseManualAngleLanceur"));

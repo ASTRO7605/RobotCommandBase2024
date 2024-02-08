@@ -45,7 +45,7 @@ class ShooterAngle : public frc2::SubsystemBase {
     /// @brief checks to see if shooter is at the target angle
     /// @param target targeted angle, 1/10th of degree
     /// @return true or false
-    bool IsShooterAtRightAngle(double target);
+    bool IsShooterAtTargetAngle(double target);
 
   private:
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;

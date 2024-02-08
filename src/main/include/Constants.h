@@ -212,4 +212,5 @@ constexpr double kVitesse1erJoint = 0;
 constexpr double kAcceleration1erJoint = 0;
 constexpr double kVitesse2eJoint = 0;
 constexpr double kAcceleration2eJoint = 0;
+constexpr double angleThreshold = 5; // 1/10th degree
 } // namespace BarreConstant
