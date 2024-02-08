@@ -20,20 +20,48 @@ void Robot::RobotInit() {
                                  ShooterConstant::flywheelsSpeedSpeaker);
     frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
     frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
+
     frc::Preferences::InitDouble("kPFlywheel", ShooterConstant::kPFlywheel);
     frc::Preferences::InitDouble("kIFlywheel", ShooterConstant::kIFlywheel);
     frc::Preferences::InitDouble("kDFlywheel", ShooterConstant::kDFlywheel);
     frc::Preferences::InitDouble("kFFFlywheel", ShooterConstant::kFFFlywheel);
+
     frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
     frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);
     frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
     frc::Preferences::InitDouble("kFPositionAngleLanceur", ShooterConstant::kFPositionAngle);
+
     frc::Preferences::InitDouble("kPVitesseAngleLanceur", ShooterConstant::kPVitesseAngle);
     frc::Preferences::InitDouble("kIVitesseAngleLanceur", ShooterConstant::kIVitesseAngle);
     frc::Preferences::InitDouble("kDVitesseAngleLanceur", ShooterConstant::kDVitesseAngle);
     frc::Preferences::InitDouble("kFVitesseAngleLanceur", ShooterConstant::kFVitesseAngle);
     frc::Preferences::InitDouble("kVitesseManualAngleLanceur", ShooterConstant::kVitesseAngle);
+
     frc::Preferences::InitDouble("kVoltageIntake", IntakeConstant::kVoltageIntake);
+
+    frc::Preferences::InitDouble("kPMotion1erJoint", BarreConstant::kPMotion1erJoint);
+    frc::Preferences::InitDouble("kIMotion1erJoint", BarreConstant::kIMotion1erJoint);
+    frc::Preferences::InitDouble("kDMotion1erJoint", BarreConstant::kDMotion1erJoint);
+    frc::Preferences::InitDouble("kFMotion1erJoint", BarreConstant::kFMotion1erJoint);
+    frc::Preferences::InitDouble("kPVitesse1erJoint", BarreConstant::kPVitesse1erJoint);
+    frc::Preferences::InitDouble("kIVitesse1erJoint", BarreConstant::kIVitesse1erJoint);
+    frc::Preferences::InitDouble("kDVitesse1erJoint", BarreConstant::kDVitesse1erJoint);
+    frc::Preferences::InitDouble("kFVitesse1erJoint", BarreConstant::kFVitesse1erJoint);
+
+    frc::Preferences::InitDouble("kPMotion2eJoint", BarreConstant::kPMotion2eJoint);
+    frc::Preferences::InitDouble("kIMotion2eJoint", BarreConstant::kIMotion2eJoint);
+    frc::Preferences::InitDouble("kDMotion2eJoint", BarreConstant::kDMotion2eJoint);
+    frc::Preferences::InitDouble("kFMotion2eJoint", BarreConstant::kFMotion2eJoint);
+    frc::Preferences::InitDouble("kPVitesse2eJoint", BarreConstant::kPVitesse2eJoint);
+    frc::Preferences::InitDouble("kIVitesse2eJoint", BarreConstant::kIVitesse2eJoint);
+    frc::Preferences::InitDouble("kDVitesse2eJoint", BarreConstant::kDVitesse2eJoint);
+    frc::Preferences::InitDouble("kFVitesse2eJoint", BarreConstant::kFVitesse2eJoint);
+
+    frc::Preferences::InitDouble("kVitesse1erJoint", BarreConstant::kVitesse1erJoint);
+    frc::Preferences::InitDouble("kAcceleration1erJoint", BarreConstant::kAcceleration1erJoint);
+
+    frc::Preferences::InitDouble("kVitesse2eJoint", BarreConstant::kVitesse2eJoint);
+    frc::Preferences::InitDouble("kAcceleration2eJoint", BarreConstant::kAcceleration2eJoint);
 
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,

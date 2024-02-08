@@ -187,7 +187,29 @@ constexpr double kCdMOffset2eJoint = 0;
 constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity1erJoint =
     180.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+constexpr double FConversionFactorAcceleration1erJoint = 180.0 /4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
 constexpr double FConversionFactorPosition2eJoint = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity2eJoint =
     360.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+constexpr double FConversionFactorAcceleration2eJoint = 360.0 /4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
+constexpr double kPMotion1erJoint = 0;
+constexpr double kIMotion1erJoint = 0;
+constexpr double kDMotion1erJoint = 0;
+constexpr double kFMotion1erJoint = 0;
+constexpr double kPVitesse1erJoint = 0;
+constexpr double kIVitesse1erJoint = 0;
+constexpr double kDVitesse1erJoint = 0;
+constexpr double kFVitesse1erJoint = 0;
+constexpr double kPMotion2eJoint = 0;
+constexpr double kIMotion2eJoint = 0;
+constexpr double kDMotion2eJoint = 0;
+constexpr double kFMotion2eJoint = 0;
+constexpr double kPVitesse2eJoint = 0;
+constexpr double kIVitesse2eJoint = 0;
+constexpr double kDVitesse2eJoint = 0;
+constexpr double kFVitesse2eJoint = 0;
+constexpr double kVitesse1erJoint = 0;
+constexpr double kAcceleration1erJoint = 0;
+constexpr double kVitesse2eJoint = 0;
+constexpr double kAcceleration2eJoint = 0;
 } // namespace BarreConstant
