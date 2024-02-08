@@ -37,16 +37,16 @@ Barre::Barre()
     m_MoteurDeuxiemeJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0,
                                                        BarreConstant::kTimeoutMs);
 
-    double absoluteEncoderMotionPremier{m_MoteurPremierJoint.GetSelectedSensorPosition()};
-    double absoluteEncoderMotionDeuxieme{m_MoteurDeuxiemeJoint.GetSelectedSensorPosition()};
+    double absoluteEncoderPositionPremier{m_MoteurPremierJoint.GetSelectedSensorPosition()};
+    double absoluteEncoderPositionDeuxieme{m_MoteurDeuxiemeJoint.GetSelectedSensorPosition()};
 
     m_MoteurPremierJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                       BarreConstant::kTimeoutMs);
     m_MoteurDeuxiemeJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                        BarreConstant::kTimeoutMs);
 
-    m_MoteurPremierJoint.SetSelectedSensorPosition(absoluteEncoderMotionPremier);
-    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(absoluteEncoderMotionDeuxieme);
+    m_MoteurPremierJoint.SetSelectedSensorPosition(absoluteEncoderPositionPremier);
+    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(absoluteEncoderPositionDeuxieme);
 
     m_MoteurPremierJoint.SetSensorPhase(false);
     m_MoteurDeuxiemeJoint.SetSensorPhase(false);
