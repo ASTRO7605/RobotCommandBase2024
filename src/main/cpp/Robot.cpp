@@ -7,7 +7,7 @@
 #include <wpi/MemoryBuffer.h>
 
 void Robot::RobotInit() {
-    // frc::CameraServer::StartAutomaticCapture();
+    frc::CameraServer::StartAutomaticCapture();
 
     // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);

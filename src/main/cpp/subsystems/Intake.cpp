@@ -15,8 +15,8 @@ Intake::Intake()
     m_TopMotor.RestoreFactoryDefaults();
     m_BottomMotor.RestoreFactoryDefaults();
 
-    m_TopMotor.SetInverted(false);
-    m_BottomMotor.SetInverted(false);
+    m_TopMotor.SetInverted(true);
+    m_BottomMotor.SetInverted(true);
 
     m_TopMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     m_BottomMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);

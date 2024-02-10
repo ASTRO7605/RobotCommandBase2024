@@ -17,7 +17,7 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
     m_DrivingMotor.RestoreFactoryDefaults();
 
     m_TurningMotor.SetInverted(true);
-    m_DrivingMotor.SetInverted(false);
+    m_DrivingMotor.SetInverted(true);
 
     m_TurningMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     m_DrivingMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
