@@ -61,8 +61,8 @@ Base::Base()
         this // reference to this subsystem to add requirements
     );
 
-    frc::SmartDashboard::PutData("VisionMeasurementFront", &m_VisionFieldFront);
-    frc::SmartDashboard::PutData("VisionMeasurementBack", &m_VisionFieldBack);
+    //frc::SmartDashboard::PutData("VisionMeasurementFront", &m_VisionFieldFront);
+    //frc::SmartDashboard::PutData("VisionMeasurementBack", &m_VisionFieldBack);
     frc::SmartDashboard::PutData("RobotMeasurement", &m_RobotField);
 
     m_PoseEstimator.ResetPosition(m_Gyro.GetRotation2d().Radians(),

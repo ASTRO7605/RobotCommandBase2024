@@ -12,9 +12,6 @@ void Robot::RobotInit() {
     // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
     // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
-    frc::SmartDashboard::PutNumber("Gyro Angle", 0);
-    frc::SmartDashboard::PutNumber("leftShooterMotorVelocity", 0);
-    frc::SmartDashboard::PutNumber("rightShooterMotorVelocity", 0);
 
     frc::Preferences::InitDouble("flywheelSpeedsSpeakerRPM",
                                  ShooterConstant::flywheelsSpeedSpeaker);

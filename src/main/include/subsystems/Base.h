@@ -131,8 +131,8 @@ class Base : public frc2::SubsystemBase {
     double m_prevTime = wpi::Now() * 1e-6;
 
     // Used for SmartDashboard display of pose estimation.
-    frc::Field2d m_VisionFieldFront;
-    frc::Field2d m_VisionFieldBack;
+    // frc::Field2d m_VisionFieldFront;
+    // frc::Field2d m_VisionFieldBack;
     frc::Field2d m_RobotField;
 
     // Vision m_VisionFront{VisionConstant::TableNameFront, VisionConstant::frontCameraTransform};

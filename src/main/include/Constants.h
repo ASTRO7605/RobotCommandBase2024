@@ -126,6 +126,7 @@ constexpr double flywheelsSpeedSpeaker = 0; // RPM
 constexpr double flywheelsSpeedAmp = 0;     // RPM
 constexpr double flywheelsSpeedTrap = 0;    // RPM
 constexpr double speedThreshold = 50;       // RPM
+constexpr auto timeThreshold = 0.3_s;
 constexpr double kPFlywheel = 0;
 constexpr double kIFlywheel = 0;
 constexpr double kDFlywheel = 0;

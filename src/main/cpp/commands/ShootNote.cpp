@@ -18,6 +18,8 @@ void ShootNote::Initialize() {
     areWheelsReadyToShoot = false;
     isShooterAngledRight = false;
     hasNoteGoneThroughShooter = false;
+    timer.Stop();
+    timer.Reset();
 }
 
 void ShootNote::Execute() {
@@ -44,11 +46,13 @@ void ShootNote::Execute() {
             ->IsObjectInShooter()) { // if seeing object for first time, note is in shooter
         hasNoteGoneThroughShooter = true;
     }
+    if (hasNoteGoneThroughShooter && !m_pShooterWheels->IsObjectInShooter()) { // if has seen object but doesn't anymore
+        timer.Start();
+    }
 }
 
 bool ShootNote::IsFinished() {
-    if ((hasNoteGoneThroughShooter && !m_pShooterWheels->IsObjectInShooter()) ||
-        noNote) { // if has seen object but doesn't anymore
+    if ((timer.Get() >= ShooterConstant::timeThreshold) || noNote){
         return true;
     }
     return false;

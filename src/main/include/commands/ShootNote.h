@@ -6,6 +6,7 @@
 #include "subsystems/ShooterWheels.h"
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/Timer.h>
 
 class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
   private:
@@ -19,6 +20,7 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     double targetAngle;
     bool areWheelsReadyToShoot;
     bool isShooterAngledRight;
+    frc::Timer timer;
 
   public:
     /// @brief
