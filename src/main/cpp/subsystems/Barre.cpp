@@ -32,21 +32,16 @@ Barre::Barre()
     m_MoteurPremierJoint.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
     m_MoteurDeuxiemeJoint.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 
-    m_MoteurPremierJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0,
-                                                      BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0,
-                                                       BarreConstant::kTimeoutMs);
-
-    double absoluteEncoderPositionPremier{m_MoteurPremierJoint.GetSelectedSensorPosition()};
-    double absoluteEncoderPositionDeuxieme{m_MoteurDeuxiemeJoint.GetSelectedSensorPosition()};
-
     m_MoteurPremierJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                       BarreConstant::kTimeoutMs);
     m_MoteurDeuxiemeJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                        BarreConstant::kTimeoutMs);
 
-    m_MoteurPremierJoint.SetSelectedSensorPosition(absoluteEncoderPositionPremier);
-    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(absoluteEncoderPositionDeuxieme);
+    double absoluteEncoderPositionPremier{m_MoteurPremierJoint.GetSensorCollection().GetPulseWidthPosition()};
+    double absoluteEncoderPositionDeuxieme{m_MoteurDeuxiemeJoint.GetSensorCollection().GetPulseWidthPosition()};
+
+    m_MoteurPremierJoint.SetSelectedSensorPosition(absoluteEncoderPositionPremier + (BarreConstant::absoluteEncoderOffset1erJoint / BarreConstant::FConversionFactorPosition1erJoint));
+    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(absoluteEncoderPositionDeuxieme + (BarreConstant::absoluteEncoderOffset2eJoint / BarreConstant::FConversionFactorPosition2eJoint));
 
     m_MoteurPremierJoint.SetSensorPhase(false);
     m_MoteurDeuxiemeJoint.SetSensorPhase(false);

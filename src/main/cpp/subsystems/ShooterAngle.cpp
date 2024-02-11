@@ -17,18 +17,13 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
 
     m_MoteurAngle.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 
-    // m_MoteurAngle.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Absolute, 0,
-    //                                            ShooterConstant::kTimeoutMs);
-
-    // double absoluteEncoderPosition{m_MoteurAngle.GetSelectedSensorPosition()};
-
     m_MoteurAngle.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                ShooterConstant::kTimeoutMs);
 
-    double absoluteEncoderPosition = m_MoteurAngle.GetSensorCollection().GetPulseWidthPosition();
+    double absoluteEncoderPosition {m_MoteurAngle.GetSensorCollection().GetPulseWidthPosition()};
 
     m_MoteurAngle.SetSelectedSensorPosition(
-        absoluteEncoderPosition - (2081.12 / ShooterConstant::FConversionFactorPositionAngle));
+        absoluteEncoderPosition + (ShooterConstant::absoluteEncoderOffset / ShooterConstant::FConversionFactorPositionAngle));
 
     m_MoteurAngle.SetSensorPhase(false);
 

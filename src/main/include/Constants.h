@@ -122,6 +122,7 @@ constexpr int leftMotorID = 16;
 constexpr int rightMotorID = 17;
 constexpr int angleMotorID = 18;
 constexpr int capteurID = 1;
+constexpr double absoluteEncoderOffset = -2018.12; // 1/10 degre
 constexpr double flywheelsSpeedSpeaker = 0; // RPM
 constexpr double flywheelsSpeedAmp = 0;     // RPM
 constexpr double flywheelsSpeedTrap = 0;    // RPM
@@ -185,6 +186,8 @@ constexpr double kMaxAF2eJoint = 0;
 constexpr double FDegToRad = M_PI / 180;
 constexpr double kCdMOffset1erJoint = 0;
 constexpr double kCdMOffset2eJoint = 0;
+constexpr double absoluteEncoderOffset1erJoint = 0; // 1/10 degre
+constexpr double absoluteEncoderOffset2eJoint = 0; // 1/10 degre
 constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity1erJoint =
     180.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
