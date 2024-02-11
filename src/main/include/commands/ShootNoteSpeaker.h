@@ -8,7 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc/Timer.h>
 
-class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
+class ShootNoteSpeaker : public frc2::CommandHelper<frc2::Command, ShootNoteSpeaker> {
   private:
     Base *m_pBase;
     ShooterAngle *m_pShooterAngle;
@@ -30,7 +30,7 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     /// @param p_Intake
     /// @param wheelSpeeds RPM
     /// @param shooterAngle angle of the shooter (1/10 degree)
-    explicit ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
+    explicit ShootNoteSpeaker(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
                        Intake *p_Intake, double wheelSpeeds, double shooterAngle);
     void Initialize() override;
     void Execute() override;

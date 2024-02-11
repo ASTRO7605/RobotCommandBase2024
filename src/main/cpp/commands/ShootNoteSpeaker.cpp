@@ -1,13 +1,13 @@
-#include "commands/ShootNote.h"
+#include "commands/ShootNoteSpeaker.h"
 
-ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
+ShootNoteSpeaker::ShootNoteSpeaker(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
                      Intake *p_Intake, double wheelSpeeds, double shooterAngle)
     : m_pBase{p_Base}, m_pShooterAngle{p_ShooterAngle}, m_pShooterWheels{p_ShooterWheels},
       m_pIntake{p_Intake}, targetSpeeds{wheelSpeeds}, targetAngle{shooterAngle} {
     AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake});
 }
 
-void ShootNote::Initialize() {
+void ShootNoteSpeaker::Initialize() {
     noNote = !m_pIntake->IsObjectInIntake(); // check if empty
     if (noNote) {
         return;
@@ -22,7 +22,7 @@ void ShootNote::Initialize() {
     timer.Reset();
 }
 
-void ShootNote::Execute() {
+void ShootNoteSpeaker::Execute() {
     frc::SmartDashboard::PutBoolean("areWheelsReadyToShoot", areWheelsReadyToShoot);
     frc::SmartDashboard::PutBoolean("isShooterAngledRight", isShooterAngledRight);
     frc::SmartDashboard::PutBoolean("hasNoteGoneThroughShooter", hasNoteGoneThroughShooter); // debug
@@ -51,14 +51,14 @@ void ShootNote::Execute() {
     }
 }
 
-bool ShootNote::IsFinished() {
+bool ShootNoteSpeaker::IsFinished() {
     if ((timer.Get() >= ShooterConstant::timeThreshold) || noNote){
         return true;
     }
     return false;
 }
 
-void ShootNote::End(bool interrupted) {
+void ShootNoteSpeaker::End(bool interrupted) {
     m_pShooterWheels->StopWheels();
     m_pIntake->SetIntake(false, false);
 }

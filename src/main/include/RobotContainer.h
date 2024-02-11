@@ -6,12 +6,14 @@
 
 #include "Constants.h"
 #include "commands/IntakeCommand.h"
-#include "commands/ShootNote.h"
+#include "commands/ShootNoteSpeaker.h"
+
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
 #include "subsystems/Vision.h"
+#include "subsystems/Barre.h"
 
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -73,6 +75,7 @@ class RobotContainer {
     void ConfigurePathfind();
     // The robot's subsystems are defined here...
     Base m_Base;
+    Barre m_Barre;
     ShooterAngle m_ShooterAngle;
     ShooterWheels m_ShooterWheels;
     Intake m_Intake;
