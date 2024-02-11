@@ -218,3 +218,24 @@ constexpr double kVitesse2eJoint = 0;
 constexpr double kAcceleration2eJoint = 0;
 constexpr double angleThreshold = 5; // 1/10th degree
 } // namespace BarreConstant
+
+namespace ClimberConstant {
+constexpr int leftHookMotorID = 21;
+constexpr int rightHookMotorID = 22;
+constexpr double FConversionFactorPosition = M_PI * 10 / 655.2; // ticks * F -> 0.1 pouce
+constexpr double FConversionFactorVelocity = FConversionFactorPosition / 60; // ticks / min * F -> 0.1 pouce / s
+constexpr double kPHooksPosition = 0;
+constexpr double kIHooksPosition = 0;
+constexpr double kDHooksPosition = 0;
+constexpr double kFFHooksPosition = 0;
+constexpr double kPHooksVelocity = 0;
+constexpr double kIHooksVelocity = 0;
+constexpr double kDHooksVelocity = 0;
+constexpr double kFFHooksVelocity = 0;
+constexpr double kAFHooks = 0; // motor output percent
+constexpr double kVoltageCompensation = 10; //volts
+constexpr double currentLimit = 50; //amperes,
+constexpr int positionPIDSlotID = 0;
+constexpr int velocityPIDSlotID = 1;
+constexpr double positionThreshold = 5; // 1/10 pouce
+}
