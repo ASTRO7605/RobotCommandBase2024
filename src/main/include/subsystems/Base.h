@@ -47,6 +47,8 @@ class Base : public frc2::SubsystemBase {
 
     void Periodic() override;
 
+    void SeedSwerveEncoders();
+
     void ResetEncoders();
 
     void Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,

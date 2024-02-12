@@ -118,7 +118,15 @@ constexpr int CoPilot_RPush_Button = 10;
 } // namespace OIConstant
 
 namespace ShooterConstant {
-enum ShooterState { init, complete };
+enum ShooterState {
+    init,
+    waitingForSubsystems,
+    moveNoteInShooter,
+    waitingForNoteToEnter,
+    waitingForNoteToExit,
+    waitingForEnd,
+    complete
+};
 constexpr int leftMotorID = 16;
 constexpr int rightMotorID = 17;
 constexpr int angleMotorID = 18;
@@ -128,20 +136,23 @@ constexpr double flywheelsSpeedSpeaker = 0;        // RPM
 constexpr double flywheelsSpeedAmp = 0;            // RPM
 constexpr double flywheelsSpeedTrap = 0;           // RPM
 constexpr double speedThreshold = 50;              // RPM
-constexpr auto timeThreshold = 0.3_s;
-constexpr double kPLeftFlywheel = 0;
-constexpr double kILeftFlywheel = 0;
-constexpr double kDLeftFlywheel = 0;
+constexpr auto timeThreshold = 0.1_s;
+constexpr double kPLeftFlywheel = 0.00025;
+constexpr double kILeftFlywheel = 0.000001;
+constexpr double kDLeftFlywheel = 0.01;
 constexpr double kFFLeftFlywheel = 0;
-constexpr double kPRightFlywheel = 0;
-constexpr double kIRightFlywheel = 0;
-constexpr double kDRightFlywheel = 0;
+constexpr double kPRightFlywheel = 0.00025;
+constexpr double kIRightFlywheel = 0.000001;
+constexpr double kDRightFlywheel = 0.01;
 constexpr double kFFRightFlywheel = 0;
 constexpr double FConversionFactorWheels = 1.0 / 42.0;             // ticks * F -> wheel rotations
 constexpr double FConversionFactorPositionAngle = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
-constexpr double FConversionFactorVelocityAngle = 360.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
-constexpr int currentLimitFlywheels = 50;                         // amperes
-constexpr double kVoltageCompensation = 10;                       // Volts
+constexpr double FConversionFactorVelocityAngle = // ticks/100ms * F -> 0.1 degres/s
+    36000.0 / 4096.0;
+constexpr double FConversionFactorAccelerationAngle = // ticks/100ms * F -> 0.1 degres/s^2
+    36000.0 / 4096.0;
+constexpr int currentLimitFlywheels = 50;   // amperes
+constexpr double kVoltageCompensation = 10; // Volts
 constexpr int kTimeoutMs = 30;
 constexpr double kNominalOutputForward = 0;
 constexpr double kNominalOutputReverse = 0;
@@ -155,14 +166,17 @@ constexpr double kPVitesseAngle = 0;
 constexpr double kIVitesseAngle = 0;
 constexpr double kDVitesseAngle = 0;
 constexpr double kFVitesseAngle = 0;
-constexpr double kVitesseAngle = 0;  // dixieme de degre par seconde
-constexpr double angleThreshold = 5; // dixieme de degre
-constexpr double kMaxAF = 0;
+constexpr double kVitesseAngle = 0;       // 1/10 degre par seconde
+constexpr double kAccelerationAngle = 0;  // 1/10 degre par seconde^2
+constexpr double kPercentOutputAngle = 0; // dixieme de degre par seconde pour mode manuel
+constexpr double angleThreshold = 5;      // dixieme de degre
+constexpr double kMaxAF = 0.0445;
 constexpr double FDegToRad = M_PI / 180;
-constexpr double kCdMOffset = 0;
 constexpr double kPeakCurrentLimit = 9;    // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
 constexpr double kContinuousCurrent = 9;   // amperes
+constexpr double kForwardSoftLimit = 740;  // 1/10 degre
+constexpr double kReverseSoftLimit = 200;  // 1/10 degre
 } // namespace ShooterConstant
 
 namespace IntakeConstant {
@@ -191,8 +205,8 @@ constexpr double kMaxAF2eJoint = 0;
 constexpr double FDegToRad = M_PI / 180;
 constexpr double kCdMOffset1erJoint = 0;
 constexpr double kCdMOffset2eJoint = 0;
-constexpr double absoluteEncoderOffset1erJoint = 0;                   // 1/10 degre
-constexpr double absoluteEncoderOffset2eJoint = 0;                    // 1/10 degre
+constexpr double absoluteEncoderOffset1erJoint = -940.1;              // 1/10 degre
+constexpr double absoluteEncoderOffset2eJoint = -3490.14;             // 1/10 degre
 constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity1erJoint =
     180.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s

@@ -3,8 +3,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 double computekAF(double angle) {
-    double val{ShooterConstant::kMaxAF *
-               cos(ShooterConstant::FDegToRad * (angle - ShooterConstant::kCdMOffset))};
+    double val{ShooterConstant::kMaxAF * cos(ShooterConstant::FDegToRad * (angle / 10))};
     frc::SmartDashboard::PutNumber("CurrentkAfValueShooter", val);
     return val;
 }
@@ -20,14 +19,17 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                ShooterConstant::kTimeoutMs);
 
-    double absoluteEncoderPosition {m_MoteurAngle.GetSensorCollection().GetPulseWidthPosition()};
+    int absoluteEncoderPosition{m_MoteurAngle.GetSensorCollection().GetPulseWidthPosition()};
 
     m_MoteurAngle.SetSelectedSensorPosition(
-        absoluteEncoderPosition + (ShooterConstant::absoluteEncoderOffset / ShooterConstant::FConversionFactorPositionAngle));
+        absoluteEncoderPosition +
+        (ShooterConstant::absoluteEncoderOffset / ShooterConstant::FConversionFactorPositionAngle));
 
     m_MoteurAngle.SetSensorPhase(false);
 
     m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
+                                       ShooterConstant::kTimeoutMs);
+    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
                                        ShooterConstant::kTimeoutMs);
 
     m_MoteurAngle.ConfigPeakOutputForward(ShooterConstant::kPeakOutputForward,
@@ -39,6 +41,13 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.ConfigNominalOutputReverse(ShooterConstant::kNominalOutputReverse,
                                              ShooterConstant::kTimeoutMs);
 
+    m_MoteurAngle.ConfigForwardSoftLimitThreshold(ShooterConstant::kForwardSoftLimit /
+                                                  ShooterConstant::FConversionFactorPositionAngle);
+    m_MoteurAngle.ConfigReverseSoftLimitThreshold(ShooterConstant::kReverseSoftLimit /
+                                                  ShooterConstant::FConversionFactorPositionAngle);
+    m_MoteurAngle.ConfigForwardSoftLimitEnable(true);
+    m_MoteurAngle.ConfigReverseSoftLimitEnable(true);
+
     m_MoteurAngle.SelectProfileSlot(0, 0); // position
     m_MoteurAngle.Config_kP(0, frc::Preferences::GetDouble("kPPositionAngleLanceur"),
                             ShooterConstant::kTimeoutMs);
@@ -49,15 +58,10 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.Config_kF(0, frc::Preferences::GetDouble("kFPositionAngleLanceur"),
                             ShooterConstant::kTimeoutMs);
 
-    m_MoteurAngle.SelectProfileSlot(1, 0); // vitesse
-    m_MoteurAngle.Config_kP(1, frc::Preferences::GetDouble("kPVitesseAngleLanceur"),
-                            ShooterConstant::kTimeoutMs);
-    m_MoteurAngle.Config_kI(1, frc::Preferences::GetDouble("kIVitesseAngleLanceur"),
-                            ShooterConstant::kTimeoutMs);
-    m_MoteurAngle.Config_kD(1, frc::Preferences::GetDouble("kDVitesseAngleLanceur"),
-                            ShooterConstant::kTimeoutMs);
-    m_MoteurAngle.Config_kF(1, frc::Preferences::GetDouble("kFVitesseAngleLanceur"),
-                            ShooterConstant::kTimeoutMs);
+    m_MoteurAngle.ConfigMotionAcceleration(frc::Preferences::GetDouble("kAccelerationAngle") /
+                                           ShooterConstant::FConversionFactorAccelerationAngle);
+    m_MoteurAngle.ConfigMotionCruiseVelocity(frc::Preferences::GetDouble("kVitesseAngle") /
+                                             ShooterConstant::FConversionFactorVelocityAngle);
 
     m_MoteurAngle.ConfigVoltageCompSaturation(ShooterConstant::kVoltageCompensation);
     m_MoteurAngle.EnableVoltageCompensation(true);
@@ -78,18 +82,16 @@ void ShooterAngle::Periodic() {
 }
 
 void ShooterAngle::SetShooterAngle(double angle) {
-    m_MoteurAngle.SelectProfileSlot(0, 0);
-    m_MoteurAngle.Set(ControlMode::Position,
+    m_MoteurAngle.Set(ControlMode::MotionMagic,
                       angle / ShooterConstant::FConversionFactorPositionAngle,
                       DemandType::DemandType_ArbitraryFeedForward,
                       computekAF(m_MoteurAngle.GetSelectedSensorPosition() *
                                  ShooterConstant::FConversionFactorPositionAngle));
 }
 
-void ShooterAngle::ManualShooterAngle(double speed) {
-    m_MoteurAngle.SelectProfileSlot(1, 0);
-    m_MoteurAngle.Set(ControlMode::Velocity,
-                      speed / ShooterConstant::FConversionFactorVelocityAngle,
+void ShooterAngle::ManualShooterAngle(double percent) {
+    frc::SmartDashboard::PutString("debug", "in manual shooter");
+    m_MoteurAngle.Set(ControlMode::PercentOutput, percent,
                       DemandType::DemandType_ArbitraryFeedForward,
                       computekAF(m_MoteurAngle.GetSelectedSensorPosition() *
                                  ShooterConstant::FConversionFactorPositionAngle));

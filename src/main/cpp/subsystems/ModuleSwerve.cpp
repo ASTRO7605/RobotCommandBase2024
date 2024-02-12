@@ -20,8 +20,8 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
     m_TurningMotor.SetInverted(true);
     m_DrivingMotor.SetInverted(true);
 
-    m_TurningMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    m_DrivingMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    m_TurningMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    m_DrivingMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
     m_DrivingEncoder.SetPositionConversionFactor(
         DriveConstant::kWheelCirconfM /
@@ -35,9 +35,6 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
         DriveConstant::kTurningGearRatio); // from motor rotations to radians
     m_TurningSparkMaxEncoder.SetVelocityConversionFactor(
         ((2 * std::numbers::pi) / DriveConstant::kTurningGearRatio) / 60); // radians/s
-    m_TurningSparkMaxEncoder.SetPosition(
-        units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}
-            .value()); // seed les spark max avec la valeur du CANcoder
 
     m_TurningPIDController.SetPositionPIDWrappingEnabled(
         true); // PID controller can go through 0 to get to setpoint
@@ -65,6 +62,12 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
     m_DesiredState.angle = frc::Rotation2d(
         units::radian_t{m_TurningCANcoder.GetAbsolutePosition()
                             .GetValue()}); // on dit aux swerves de garder leur position initiale
+}
+
+void ModuleSwerve::SeedSparkMaxEncoder() {
+    m_TurningSparkMaxEncoder.SetPosition(
+        units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}
+            .value()); // seed les spark max avec la valeur du CANcoder
 }
 
 frc::SwerveModuleState ModuleSwerve::GetState() {

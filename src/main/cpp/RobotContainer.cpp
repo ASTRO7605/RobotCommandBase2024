@@ -62,8 +62,8 @@ void RobotContainer::ConfigureBindings() {
     // bouton pouce
     m_ThrottleStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
-    m_CoPilotController.LeftBumper().OnTrue(
-        frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
+    // m_CoPilotController.LeftBumper().OnTrue(
+    //     frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
     m_CoPilotController.LeftBumper().OnTrue(
         frc2::InstantCommand(
             [this]() {
@@ -72,23 +72,30 @@ void RobotContainer::ConfigureBindings() {
             },
             {&m_ShooterWheels})
             .ToPtr());
-    m_TurnStick.Button(7).OnTrue(frc2::InstantCommand([this]() {
-                                     m_ShooterAngle.ManualShooterAngle(
-                                         frc::Preferences::GetDouble("kVitesseManualAngleLanceur"));
-                                 }).ToPtr());
-    m_TurnStick.Button(8).OnTrue(frc2::InstantCommand([this]() {
-                                     m_ShooterAngle.ManualShooterAngle(-frc::Preferences::GetDouble(
-                                         "kVitesseManualAngleLanceur"));
-                                 }).ToPtr());
-    m_TurnStick.Button(9).OnTrue(
-        frc2::InstantCommand([this]() { m_ShooterAngle.SetShooterAngle(650); }).ToPtr());
-    m_TurnStick.Button(10).OnTrue(
-        frc2::InstantCommand([this]() { m_ShooterAngle.SetShooterAngle(250); }).ToPtr());
+    m_TurnStick.Button(7).WhileTrue(
+        ShooterAngleManual(&m_ShooterAngle,
+                           frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+            .ToPtr());
+    m_TurnStick.Button(8).WhileTrue(
+        ShooterAngleManual(&m_ShooterAngle,
+                           -frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+            .ToPtr());
+
+    m_TurnStick.Button(9).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
+    m_TurnStick.Button(10).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 700).ToPtr());
+
+    // // m_TurnStick.Button(9).WhileTrue(ShooterAngleMaintain(&m_ShooterAngle, 650).ToPtr());
+    // // m_TurnStick.Button(10).WhileTrue(ShooterAngleMaintain(&m_ShooterAngle, 250).ToPtr());
+    // m_TurnStick.Button(9).OnTrue(
+    //     frc2::InstantCommand([this]() { m_ShooterAngle.SetShooterAngle(650); }).ToPtr());
+    // m_TurnStick.Button(10).OnTrue(
+    //     frc2::InstantCommand([this]() { m_ShooterAngle.SetShooterAngle(250); }).ToPtr());
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
     m_CoPilotController.B().WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
     m_CoPilotController.X().OnTrue(
         ShootNoteSpeaker(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake,
-                         frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"), 450)
+                         frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
+                         frc::Preferences::GetDouble("testAngleShooter"))
             .ToPtr());
 }
 
@@ -107,3 +114,5 @@ void RobotContainer::ConfigurePathfind() {
 
     pathfindingCommand = pathplanner::AutoBuilder::pathfindThenFollowPath(path, constraints);
 }
+
+void RobotContainer::SeedBaseSwerveEncoders() { m_Base.SeedSwerveEncoders(); }

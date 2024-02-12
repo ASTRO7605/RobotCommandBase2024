@@ -2,16 +2,14 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-double computekAF1erJoint(double angle)
-{
+double computekAF1erJoint(double angle) {
     double val{BarreConstant::kMaxAF1erJoint *
                cos(BarreConstant::FDegToRad * (angle - BarreConstant::kCdMOffset1erJoint))};
     frc::SmartDashboard::PutNumber("CurrentkAfValue1erJoint", val);
     return val;
 }
 
-double computekAF2eJoint(double angle)
-{
+double computekAF2eJoint(double angle) {
     double val{BarreConstant::kMaxAF2eJoint *
                cos(BarreConstant::FDegToRad * (angle - BarreConstant::kCdMOffset2eJoint))};
     frc::SmartDashboard::PutNumber("CurrentkAfValue2eJoint", val);
@@ -20,8 +18,7 @@ double computekAF2eJoint(double angle)
 
 Barre::Barre()
     : m_MoteurPremierJoint{BarreConstant::moteurPremierJointID},
-      m_MoteurDeuxiemeJoint{BarreConstant::moteurDeuxiemeJointID}
-{
+      m_MoteurDeuxiemeJoint{BarreConstant::moteurDeuxiemeJointID} {
 
     m_MoteurPremierJoint.ConfigFactoryDefault();
     m_MoteurDeuxiemeJoint.ConfigFactoryDefault();
@@ -37,21 +34,29 @@ Barre::Barre()
     m_MoteurDeuxiemeJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                        BarreConstant::kTimeoutMs);
 
-    double absoluteEncoderPositionPremier{m_MoteurPremierJoint.GetSensorCollection().GetPulseWidthPosition()};
-    double absoluteEncoderPositionDeuxieme{m_MoteurDeuxiemeJoint.GetSensorCollection().GetPulseWidthPosition()};
+    int absoluteEncoderPositionPremier{
+        m_MoteurPremierJoint.GetSensorCollection().GetPulseWidthPosition()};
+    int absoluteEncoderPositionDeuxieme{
+        m_MoteurDeuxiemeJoint.GetSensorCollection().GetPulseWidthPosition()};
 
-    m_MoteurPremierJoint.SetSelectedSensorPosition(absoluteEncoderPositionPremier + (BarreConstant::absoluteEncoderOffset1erJoint / BarreConstant::FConversionFactorPosition1erJoint));
-    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(absoluteEncoderPositionDeuxieme + (BarreConstant::absoluteEncoderOffset2eJoint / BarreConstant::FConversionFactorPosition2eJoint));
+    m_MoteurPremierJoint.SetSelectedSensorPosition(
+        absoluteEncoderPositionPremier + (BarreConstant::absoluteEncoderOffset1erJoint /
+                                          BarreConstant::FConversionFactorPosition1erJoint));
+    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(
+        absoluteEncoderPositionDeuxieme + (BarreConstant::absoluteEncoderOffset2eJoint /
+                                           BarreConstant::FConversionFactorPosition2eJoint));
 
     m_MoteurPremierJoint.SetSensorPhase(false);
     m_MoteurDeuxiemeJoint.SetSensorPhase(false);
 
     m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
                                               BarreConstant::kTimeoutMs);
-    m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10, BarreConstant::kTimeoutMs);
+    m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
+                                              BarreConstant::kTimeoutMs);
     m_MoteurDeuxiemeJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
                                                BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10, BarreConstant::kTimeoutMs);
+    m_MoteurDeuxiemeJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
+                                               BarreConstant::kTimeoutMs);
 
     m_MoteurPremierJoint.ConfigPeakOutputForward(BarreConstant::kPeakOutputForward,
                                                  BarreConstant::kTimeoutMs);
@@ -111,11 +116,19 @@ Barre::Barre()
     m_MoteurDeuxiemeJoint.Config_kF(1, frc::Preferences::GetDouble("kFVitesse2eJoint"),
                                     BarreConstant::kTimeoutMs);
 
-    m_MoteurPremierJoint.ConfigMotionCruiseVelocity(frc::Preferences::GetDouble("kVitesse1erJoint") / BarreConstant::FConversionFactorVelocity1erJoint);
-    m_MoteurPremierJoint.ConfigMotionAcceleration(frc::Preferences::GetDouble("kAcceleration1erJoint") / BarreConstant::FConversionFactorAcceleration1erJoint);
+    m_MoteurPremierJoint.ConfigMotionCruiseVelocity(
+        frc::Preferences::GetDouble("kVitesse1erJoint") /
+        BarreConstant::FConversionFactorVelocity1erJoint);
+    m_MoteurPremierJoint.ConfigMotionAcceleration(
+        frc::Preferences::GetDouble("kAcceleration1erJoint") /
+        BarreConstant::FConversionFactorAcceleration1erJoint);
 
-    m_MoteurDeuxiemeJoint.ConfigMotionCruiseVelocity(frc::Preferences::GetDouble("kVitesse2eJoint") / BarreConstant::FConversionFactorVelocity2eJoint);
-    m_MoteurDeuxiemeJoint.ConfigMotionAcceleration(frc::Preferences::GetDouble("kAcceleration2eJoint") / BarreConstant::FConversionFactorAcceleration2eJoint);
+    m_MoteurDeuxiemeJoint.ConfigMotionCruiseVelocity(
+        frc::Preferences::GetDouble("kVitesse2eJoint") /
+        BarreConstant::FConversionFactorVelocity2eJoint);
+    m_MoteurDeuxiemeJoint.ConfigMotionAcceleration(
+        frc::Preferences::GetDouble("kAcceleration2eJoint") /
+        BarreConstant::FConversionFactorAcceleration2eJoint);
 
     m_MoteurPremierJoint.ConfigVoltageCompSaturation(BarreConstant::kVoltageCompensation);
     m_MoteurPremierJoint.EnableVoltageCompensation(true);
@@ -134,8 +147,7 @@ Barre::Barre()
     m_MoteurDeuxiemeJoint.EnableCurrentLimit(true);
 }
 
-void Barre::Periodic()
-{
+void Barre::Periodic() {
     frc::SmartDashboard::PutNumber("1erJointPosition",
                                    m_MoteurPremierJoint.GetSelectedSensorPosition() *
                                        BarreConstant::FConversionFactorPosition1erJoint);
@@ -153,37 +165,37 @@ void Barre::Periodic()
 void Barre::Manual1erJoint(double speed) {
     m_MoteurPremierJoint.SelectProfileSlot(1, 0);
     m_MoteurPremierJoint.Set(ControlMode::Velocity,
-                      speed / BarreConstant::FConversionFactorVelocity1erJoint,
-                      DemandType::DemandType_ArbitraryFeedForward,
-                      computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
-                                 BarreConstant::FConversionFactorPosition1erJoint));
+                             speed / BarreConstant::FConversionFactorVelocity1erJoint,
+                             DemandType::DemandType_ArbitraryFeedForward,
+                             computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
+                                                BarreConstant::FConversionFactorPosition1erJoint));
 }
 
 void Barre::Manual2eJoint(double speed) {
     m_MoteurDeuxiemeJoint.SelectProfileSlot(1, 0);
     m_MoteurDeuxiemeJoint.Set(ControlMode::Velocity,
-                      speed / BarreConstant::FConversionFactorVelocity2eJoint,
-                      DemandType::DemandType_ArbitraryFeedForward,
-                      computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
-                                 BarreConstant::FConversionFactorPosition2eJoint));
+                              speed / BarreConstant::FConversionFactorVelocity2eJoint,
+                              DemandType::DemandType_ArbitraryFeedForward,
+                              computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
+                                                BarreConstant::FConversionFactorPosition2eJoint));
 }
 
-void Barre::Set1erJointAngle(double angle){
+void Barre::Set1erJointAngle(double angle) {
     m_MoteurPremierJoint.SelectProfileSlot(0, 0);
     m_MoteurPremierJoint.Set(ControlMode::MotionMagic,
-                      angle / BarreConstant::FConversionFactorPosition1erJoint,
-                      DemandType::DemandType_ArbitraryFeedForward,
-                      computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
-                                 BarreConstant::FConversionFactorPosition1erJoint));
+                             angle / BarreConstant::FConversionFactorPosition1erJoint,
+                             DemandType::DemandType_ArbitraryFeedForward,
+                             computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
+                                                BarreConstant::FConversionFactorPosition1erJoint));
 }
 
-void Barre::Set2eJointAngle(double angle){
+void Barre::Set2eJointAngle(double angle) {
     m_MoteurDeuxiemeJoint.SelectProfileSlot(0, 0);
     m_MoteurDeuxiemeJoint.Set(ControlMode::MotionMagic,
-                      angle / BarreConstant::FConversionFactorPosition2eJoint,
-                      DemandType::DemandType_ArbitraryFeedForward,
-                      computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
-                                 BarreConstant::FConversionFactorPosition2eJoint));
+                              angle / BarreConstant::FConversionFactorPosition2eJoint,
+                              DemandType::DemandType_ArbitraryFeedForward,
+                              computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
+                                                BarreConstant::FConversionFactorPosition2eJoint));
 }
 
 bool Barre::Is1erJointAtTargetAngle(double target) {

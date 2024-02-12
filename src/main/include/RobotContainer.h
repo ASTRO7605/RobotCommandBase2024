@@ -7,6 +7,8 @@
 #include "Constants.h"
 #include "commands/IntakeCommand.h"
 #include "commands/ShootNoteSpeaker.h"
+#include "commands/ShooterAngleManual.h"
+#include "commands/ShooterPositionTest.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
@@ -69,6 +71,8 @@ class RobotContainer {
     frc2::CommandXboxController m_CoPilotController;
 
     frc2::CommandPtr GetAutonomousCommand();
+
+    void SeedBaseSwerveEncoders();
 
   private:
     void ConfigureBindings();

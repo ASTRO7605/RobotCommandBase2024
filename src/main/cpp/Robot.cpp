@@ -8,6 +8,7 @@
 
 void Robot::RobotInit() {
     frc::CameraServer::StartAutomaticCapture();
+    m_Container.SeedBaseSwerveEncoders();
 
     // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
@@ -16,6 +17,7 @@ void Robot::RobotInit() {
                                  ShooterConstant::flywheelsSpeedSpeaker);
     frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
     frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
+    frc::Preferences::InitDouble("testAngleShooter", 0);
 
     frc::Preferences::InitDouble("kPLeftFlywheel", ShooterConstant::kPLeftFlywheel);
     frc::Preferences::InitDouble("kILeftFlywheel", ShooterConstant::kILeftFlywheel);
@@ -32,11 +34,11 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
     frc::Preferences::InitDouble("kFPositionAngleLanceur", ShooterConstant::kFPositionAngle);
 
-    frc::Preferences::InitDouble("kPVitesseAngleLanceur", ShooterConstant::kPVitesseAngle);
-    frc::Preferences::InitDouble("kIVitesseAngleLanceur", ShooterConstant::kIVitesseAngle);
-    frc::Preferences::InitDouble("kDVitesseAngleLanceur", ShooterConstant::kDVitesseAngle);
-    frc::Preferences::InitDouble("kFVitesseAngleLanceur", ShooterConstant::kFVitesseAngle);
-    frc::Preferences::InitDouble("kVitesseManualAngleLanceur", ShooterConstant::kVitesseAngle);
+    frc::Preferences::InitDouble("kVitesseAngle", ShooterConstant::kVitesseAngle);
+    frc::Preferences::InitDouble("kAccelerationAngle", ShooterConstant::kAccelerationAngle);
+
+    frc::Preferences::InitDouble("kPourcentageManualAngleLanceur",
+                                 ShooterConstant::kPercentOutputAngle);
 
     frc::Preferences::InitDouble("kVoltageIntake", IntakeConstant::kVoltageIntake);
 

@@ -38,9 +38,9 @@ class ShooterAngle : public frc2::SubsystemBase {
     /// @return The angle of the shooter (1/10th degree)
     double GetShooterAngle();
 
-    /// @brief Set shooter angle to specific manual speed
-    /// @param speed speed in (1/10 degree) / s
-    void ManualShooterAngle(double speed);
+    /// @brief Set shooter angle to specific manual percentage
+    /// @param percent percent of motor output
+    void ManualShooterAngle(double percent);
 
     /// @brief checks to see if shooter is at the target angle
     /// @param target targeted angle, 1/10th of degree

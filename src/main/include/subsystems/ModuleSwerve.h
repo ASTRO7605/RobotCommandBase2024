@@ -4,42 +4,41 @@
 
 #pragma once
 
+#include "Constants.h"
+#include <ctre/phoenix6/CANcoder.hpp>
+#include <frc/Preferences.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxPIDController.h>
 #include <rev/SparkMaxRelativeEncoder.h>
-#include <ctre/phoenix6/CANcoder.hpp>
-#include "Constants.h"
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/Preferences.h>
 
 class ModuleSwerve {
- public:
-	ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderID);
-	double GetCANcoderAbsolutePosition();
-	double GetCANcoderPosition();
-	double GetTurningSparkMaxPosition();
-	double GetDrivingPosition();
-	frc::SwerveModuleState GetState();
-	frc::SwerveModulePosition GetPosition();
-	void SetDesiredState(frc::SwerveModuleState);
-	void ResetEncoders();
-	double GetDrivingVelocity();
- private:
+  public:
+    ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderID);
+    void SeedSparkMaxEncoder();
+    double GetCANcoderAbsolutePosition();
+    double GetCANcoderPosition();
+    double GetTurningSparkMaxPosition();
+    double GetDrivingPosition();
+    frc::SwerveModuleState GetState();
+    frc::SwerveModulePosition GetPosition();
+    void SetDesiredState(frc::SwerveModuleState);
+    void ResetEncoders();
+    double GetDrivingVelocity();
 
-  	rev::CANSparkMax m_TurningMotor;
-	rev::CANSparkMax m_DrivingMotor;
+  private:
+    rev::CANSparkMax m_TurningMotor;
+    rev::CANSparkMax m_DrivingMotor;
 
-	ctre::phoenix6::hardware::CANcoder m_TurningCANcoder;
-	rev::SparkRelativeEncoder m_TurningSparkMaxEncoder;
-	rev::SparkRelativeEncoder m_DrivingEncoder;
+    ctre::phoenix6::hardware::CANcoder m_TurningCANcoder;
+    rev::SparkRelativeEncoder m_TurningSparkMaxEncoder;
+    rev::SparkRelativeEncoder m_DrivingEncoder;
 
-	rev::SparkPIDController m_TurningPIDController;
-	rev::SparkPIDController m_DrivingPIDController;
+    rev::SparkPIDController m_TurningPIDController;
+    rev::SparkPIDController m_DrivingPIDController;
 
-	frc::SwerveModuleState m_DesiredState;
-
-	
+    frc::SwerveModuleState m_DesiredState;
 };

@@ -61,8 +61,8 @@ Base::Base()
         this // reference to this subsystem to add requirements
     );
 
-    //frc::SmartDashboard::PutData("VisionMeasurementFront", &m_VisionFieldFront);
-    //frc::SmartDashboard::PutData("VisionMeasurementBack", &m_VisionFieldBack);
+    // frc::SmartDashboard::PutData("VisionMeasurementFront", &m_VisionFieldFront);
+    // frc::SmartDashboard::PutData("VisionMeasurementBack", &m_VisionFieldBack);
     frc::SmartDashboard::PutData("RobotMeasurement", &m_RobotField);
 
     m_PoseEstimator.ResetPosition(m_Gyro.GetRotation2d().Radians(),
@@ -107,6 +107,13 @@ void Base::ResetEncoders() {
     m_FrontLeftModule.ResetEncoders();
     m_RearLeftModule.ResetEncoders();
     m_RearRightModule.ResetEncoders();
+}
+
+void Base::SeedSwerveEncoders() {
+    m_FrontRightModule.SeedSparkMaxEncoder();
+    m_FrontLeftModule.SeedSparkMaxEncoder();
+    m_RearLeftModule.SeedSparkMaxEncoder();
+    m_RearRightModule.SeedSparkMaxEncoder();
 }
 
 void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
