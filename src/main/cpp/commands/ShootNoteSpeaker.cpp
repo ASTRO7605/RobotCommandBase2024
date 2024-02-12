@@ -1,7 +1,8 @@
 #include "commands/ShootNoteSpeaker.h"
 
-ShootNoteSpeaker::ShootNoteSpeaker(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
-                     Intake *p_Intake, double wheelSpeeds, double shooterAngle)
+ShootNoteSpeaker::ShootNoteSpeaker(Base *p_Base, ShooterAngle *p_ShooterAngle,
+                                   ShooterWheels *p_ShooterWheels, Intake *p_Intake,
+                                   double wheelSpeeds, double shooterAngle)
     : m_pBase{p_Base}, m_pShooterAngle{p_ShooterAngle}, m_pShooterWheels{p_ShooterWheels},
       m_pIntake{p_Intake}, targetSpeeds{wheelSpeeds}, targetAngle{shooterAngle} {
     AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake});
@@ -23,9 +24,6 @@ void ShootNoteSpeaker::Initialize() {
 }
 
 void ShootNoteSpeaker::Execute() {
-    frc::SmartDashboard::PutBoolean("areWheelsReadyToShoot", areWheelsReadyToShoot);
-    frc::SmartDashboard::PutBoolean("isShooterAngledRight", isShooterAngledRight);
-    frc::SmartDashboard::PutBoolean("hasNoteGoneThroughShooter", hasNoteGoneThroughShooter); // debug
     if (noNote) {
         return;
     }
@@ -46,13 +44,14 @@ void ShootNoteSpeaker::Execute() {
             ->IsObjectInShooter()) { // if seeing object for first time, note is in shooter
         hasNoteGoneThroughShooter = true;
     }
-    if (hasNoteGoneThroughShooter && !m_pShooterWheels->IsObjectInShooter()) { // if has seen object but doesn't anymore
+    if (hasNoteGoneThroughShooter &&
+        !m_pShooterWheels->IsObjectInShooter()) { // if has seen object but doesn't anymore
         timer.Start();
     }
 }
 
 bool ShootNoteSpeaker::IsFinished() {
-    if ((timer.Get() >= ShooterConstant::timeThreshold) || noNote){
+    if ((timer.Get() >= ShooterConstant::timeThreshold) || noNote) {
         return true;
     }
     return false;

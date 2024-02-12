@@ -8,12 +8,12 @@
 #include "commands/IntakeCommand.h"
 #include "commands/ShootNoteSpeaker.h"
 
+#include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
 #include "subsystems/Vision.h"
-#include "subsystems/Barre.h"
 
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>

@@ -88,7 +88,7 @@ void RobotContainer::ConfigureBindings() {
     m_CoPilotController.B().WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
     m_CoPilotController.X().OnTrue(
         ShootNoteSpeaker(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake,
-                  frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"), 450)
+                         frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"), 450)
             .ToPtr());
 }
 

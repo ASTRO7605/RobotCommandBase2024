@@ -13,6 +13,7 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
       m_TurningPIDController{m_TurningMotor.GetPIDController()},
       m_DrivingPIDController{m_DrivingMotor.GetPIDController()},
       m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()} {
+
     m_TurningMotor.RestoreFactoryDefaults();
     m_DrivingMotor.RestoreFactoryDefaults();
 

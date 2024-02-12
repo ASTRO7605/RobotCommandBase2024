@@ -12,16 +12,20 @@ void Robot::RobotInit() {
     // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
     // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
-
     frc::Preferences::InitDouble("flywheelSpeedsSpeakerRPM",
                                  ShooterConstant::flywheelsSpeedSpeaker);
     frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
     frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
 
-    frc::Preferences::InitDouble("kPFlywheel", ShooterConstant::kPFlywheel);
-    frc::Preferences::InitDouble("kIFlywheel", ShooterConstant::kIFlywheel);
-    frc::Preferences::InitDouble("kDFlywheel", ShooterConstant::kDFlywheel);
-    frc::Preferences::InitDouble("kFFFlywheel", ShooterConstant::kFFFlywheel);
+    frc::Preferences::InitDouble("kPLeftFlywheel", ShooterConstant::kPLeftFlywheel);
+    frc::Preferences::InitDouble("kILeftFlywheel", ShooterConstant::kILeftFlywheel);
+    frc::Preferences::InitDouble("kDLeftFlywheel", ShooterConstant::kDLeftFlywheel);
+    frc::Preferences::InitDouble("kFFLeftFlywheel", ShooterConstant::kFFLeftFlywheel);
+
+    frc::Preferences::InitDouble("kPRightFlywheel", ShooterConstant::kPRightFlywheel);
+    frc::Preferences::InitDouble("kIRightFlywheel", ShooterConstant::kIRightFlywheel);
+    frc::Preferences::InitDouble("kDRightFlywheel", ShooterConstant::kDRightFlywheel);
+    frc::Preferences::InitDouble("kFFRightFlywheel", ShooterConstant::kFFRightFlywheel);
 
     frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
     frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);

@@ -10,9 +10,9 @@ void IntakeCommand::Initialize() { m_pIntake->SetIntake(true, isReversed); }
 void IntakeCommand::Execute() {}
 
 bool IntakeCommand::IsFinished() {
-    if (m_pIntake->IsObjectInIntake() && !isReversed) {
-        return true;
-    }
+    // if (m_pIntake->IsObjectInIntake() && !isReversed) {
+    //     return true;
+    // }
     return false;
 }
 

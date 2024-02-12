@@ -118,20 +118,25 @@ constexpr int CoPilot_RPush_Button = 10;
 } // namespace OIConstant
 
 namespace ShooterConstant {
+enum ShooterState { init, complete };
 constexpr int leftMotorID = 16;
 constexpr int rightMotorID = 17;
 constexpr int angleMotorID = 18;
 constexpr int capteurID = 1;
-constexpr double absoluteEncoderOffset = -2018.12; // 1/10 degre
-constexpr double flywheelsSpeedSpeaker = 0; // RPM
-constexpr double flywheelsSpeedAmp = 0;     // RPM
-constexpr double flywheelsSpeedTrap = 0;    // RPM
-constexpr double speedThreshold = 50;       // RPM
+constexpr double absoluteEncoderOffset = -2078.12; // 1/10 degre
+constexpr double flywheelsSpeedSpeaker = 0;        // RPM
+constexpr double flywheelsSpeedAmp = 0;            // RPM
+constexpr double flywheelsSpeedTrap = 0;           // RPM
+constexpr double speedThreshold = 50;              // RPM
 constexpr auto timeThreshold = 0.3_s;
-constexpr double kPFlywheel = 0;
-constexpr double kIFlywheel = 0;
-constexpr double kDFlywheel = 0;
-constexpr double kFFFlywheel = 0;
+constexpr double kPLeftFlywheel = 0;
+constexpr double kILeftFlywheel = 0;
+constexpr double kDLeftFlywheel = 0;
+constexpr double kFFLeftFlywheel = 0;
+constexpr double kPRightFlywheel = 0;
+constexpr double kIRightFlywheel = 0;
+constexpr double kDRightFlywheel = 0;
+constexpr double kFFRightFlywheel = 0;
 constexpr double FConversionFactorWheels = 1.0 / 42.0;             // ticks * F -> wheel rotations
 constexpr double FConversionFactorPositionAngle = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocityAngle = 360.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
@@ -186,16 +191,18 @@ constexpr double kMaxAF2eJoint = 0;
 constexpr double FDegToRad = M_PI / 180;
 constexpr double kCdMOffset1erJoint = 0;
 constexpr double kCdMOffset2eJoint = 0;
-constexpr double absoluteEncoderOffset1erJoint = 0; // 1/10 degre
-constexpr double absoluteEncoderOffset2eJoint = 0; // 1/10 degre
+constexpr double absoluteEncoderOffset1erJoint = 0;                   // 1/10 degre
+constexpr double absoluteEncoderOffset2eJoint = 0;                    // 1/10 degre
 constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity1erJoint =
     180.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
-constexpr double FConversionFactorAcceleration1erJoint = 180.0 /4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
+constexpr double FConversionFactorAcceleration1erJoint =
+    180.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
 constexpr double FConversionFactorPosition2eJoint = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity2eJoint =
     360.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
-constexpr double FConversionFactorAcceleration2eJoint = 360.0 /4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
+constexpr double FConversionFactorAcceleration2eJoint =
+    360.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
 constexpr double kPMotion1erJoint = 0;
 constexpr double kIMotion1erJoint = 0;
 constexpr double kDMotion1erJoint = 0;
@@ -223,7 +230,8 @@ namespace ClimberConstant {
 constexpr int leftHookMotorID = 21;
 constexpr int rightHookMotorID = 22;
 constexpr double FConversionFactorPosition = M_PI * 10 / 655.2; // ticks * F -> 0.1 pouce
-constexpr double FConversionFactorVelocity = FConversionFactorPosition / 60; // ticks / min * F -> 0.1 pouce / s
+constexpr double FConversionFactorVelocity =
+    (FConversionFactorPosition * 42) / 60; // RPM * F -> 0.1 pouce / s
 constexpr double kPHooksPosition = 0;
 constexpr double kIHooksPosition = 0;
 constexpr double kDHooksPosition = 0;
@@ -232,10 +240,10 @@ constexpr double kPHooksVelocity = 0;
 constexpr double kIHooksVelocity = 0;
 constexpr double kDHooksVelocity = 0;
 constexpr double kFFHooksVelocity = 0;
-constexpr double kAFHooks = 0; // motor output percent
-constexpr double kVoltageCompensation = 10; //volts
-constexpr double currentLimit = 50; //amperes,
+constexpr double kAFHooks = 0;              // motor output voltage
+constexpr double kVoltageCompensation = 10; // volts
+constexpr double currentLimit = 50;         // amperes,
 constexpr int positionPIDSlotID = 0;
 constexpr int velocityPIDSlotID = 1;
 constexpr double positionThreshold = 5; // 1/10 pouce
-}
+} // namespace ClimberConstant

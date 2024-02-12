@@ -4,9 +4,9 @@
 #include "subsystems/Intake.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
+#include <frc/Timer.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc/Timer.h>
 
 class ShootNoteSpeaker : public frc2::CommandHelper<frc2::Command, ShootNoteSpeaker> {
   private:
@@ -21,6 +21,7 @@ class ShootNoteSpeaker : public frc2::CommandHelper<frc2::Command, ShootNoteSpea
     bool areWheelsReadyToShoot;
     bool isShooterAngledRight;
     frc::Timer timer;
+    ShooterConstant::ShooterState m_State;
 
   public:
     /// @brief
@@ -30,8 +31,9 @@ class ShootNoteSpeaker : public frc2::CommandHelper<frc2::Command, ShootNoteSpea
     /// @param p_Intake
     /// @param wheelSpeeds RPM
     /// @param shooterAngle angle of the shooter (1/10 degree)
-    explicit ShootNoteSpeaker(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
-                       Intake *p_Intake, double wheelSpeeds, double shooterAngle);
+    explicit ShootNoteSpeaker(Base *p_Base, ShooterAngle *p_ShooterAngle,
+                              ShooterWheels *p_ShooterWheels, Intake *p_Intake, double wheelSpeeds,
+                              double shooterAngle);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
