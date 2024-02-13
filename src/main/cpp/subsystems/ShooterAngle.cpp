@@ -19,12 +19,6 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                ShooterConstant::kTimeoutMs);
 
-    int absoluteEncoderPosition{m_MoteurAngle.GetSensorCollection().GetPulseWidthPosition()};
-
-    m_MoteurAngle.SetSelectedSensorPosition(
-        absoluteEncoderPosition +
-        (ShooterConstant::absoluteEncoderOffset / ShooterConstant::FConversionFactorPositionAngle));
-
     m_MoteurAngle.SetSensorPhase(false);
 
     m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
@@ -105,10 +99,17 @@ bool ShooterAngle::IsShooterAtTargetAngle(double target) {
     return false;
 }
 
-void ShooterAngle::KeepCurrentAngle(){
-    m_MoteurAngle.Set(ControlMode::MotionMagic,
-                      m_MoteurAngle.GetSelectedSensorPosition(),
+void ShooterAngle::KeepCurrentAngle() {
+    m_MoteurAngle.Set(ControlMode::MotionMagic, m_MoteurAngle.GetSelectedSensorPosition(),
                       DemandType::DemandType_ArbitraryFeedForward,
                       computekAF(m_MoteurAngle.GetSelectedSensorPosition() *
                                  ShooterConstant::FConversionFactorPositionAngle));
+}
+
+void ShooterAngle::SeedEncoder() {
+    int absoluteEncoderPosition{m_MoteurAngle.GetSensorCollection().GetPulseWidthPosition()};
+
+    m_MoteurAngle.SetSelectedSensorPosition(
+        absoluteEncoderPosition +
+        (ShooterConstant::absoluteEncoderOffset / ShooterConstant::FConversionFactorPositionAngle));
 }

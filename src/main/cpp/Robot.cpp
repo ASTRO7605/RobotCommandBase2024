@@ -9,6 +9,8 @@
 void Robot::RobotInit() {
     frc::CameraServer::StartAutomaticCapture();
 
+    m_Container.SeedEncoders();
+
     // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
     // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
@@ -46,8 +48,10 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kDMotion1erJoint", BarreConstant::kDMotion1erJoint);
     frc::Preferences::InitDouble("kFMotion1erJoint", BarreConstant::kFMotion1erJoint);
 
-    frc::Preferences::InitDouble("kPourcentageManual1erJoint", BarreConstant::kPourcentageManual1erJoint);
-    frc::Preferences::InitDouble("kPourcentageManual2eJoint", BarreConstant::kPourcentageManual2eJoint);
+    frc::Preferences::InitDouble("kPourcentageManual1erJoint",
+                                 BarreConstant::kPourcentageManual1erJoint);
+    frc::Preferences::InitDouble("kPourcentageManual2eJoint",
+                                 BarreConstant::kPourcentageManual2eJoint);
 
     frc::Preferences::InitDouble("kPMotion2eJoint", BarreConstant::kPMotion2eJoint);
     frc::Preferences::InitDouble("kIMotion2eJoint", BarreConstant::kIMotion2eJoint);
@@ -62,9 +66,11 @@ void Robot::RobotInit() {
 
     frc::Preferences::InitDouble("k1erJointAngleTrap", BarreConstant::k1erJointAngleTrap);
     frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
-    frc::Preferences::InitDouble("k2eJointAngleTrapApproach", BarreConstant::k2eJointAngleTrapApproach);
+    frc::Preferences::InitDouble("k2eJointAngleTrapApproach",
+                                 BarreConstant::k2eJointAngleTrapApproach);
     frc::Preferences::InitDouble("k2eJointAngleTrapFinal", BarreConstant::k2eJointAngleTrapFinal);
-    frc::Preferences::InitDouble("k2eJointAngleAmpApproach", BarreConstant::k2eJointAngleAmpApproach);
+    frc::Preferences::InitDouble("k2eJointAngleAmpApproach",
+                                 BarreConstant::k2eJointAngleAmpApproach);
     frc::Preferences::InitDouble("k2eJointAngleAmpFinal", BarreConstant::k2eJointAngleAmpFinal);
 
     frc::Preferences::InitDouble("kPHooksPosition", ClimberConstant::kPHooksPosition);
@@ -98,17 +104,16 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-    m_Container.SeedBaseSwerveEncoders();
+    m_Container.SeedEncoders();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();
     }
-    
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
-    m_Container.SeedBaseSwerveEncoders();
+    m_Container.SeedEncoders();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
     }

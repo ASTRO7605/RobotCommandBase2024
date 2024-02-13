@@ -54,6 +54,8 @@ class Barre : public frc2::SubsystemBase {
     /// @return true or false
     bool Is2eJointAtTargetAngle(double target);
 
+    void SeedEncoders();
+
     void Periodic() override;
 
   private:

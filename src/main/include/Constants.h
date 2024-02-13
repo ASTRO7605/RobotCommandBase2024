@@ -12,11 +12,7 @@
 #include <units/velocity.h>
 #include <units/voltage.h>
 
-enum ScoringPositions {
-    speaker,
-    amp,
-    trap
-};
+enum ScoringPositions { speaker, amp, trap };
 namespace DriveConstant {
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
@@ -167,10 +163,6 @@ constexpr double kPPositionAngle = 9.5;
 constexpr double kIPositionAngle = 0;
 constexpr double kDPositionAngle = 10.0;
 constexpr double kFPositionAngle = 4.5;
-constexpr double kPVitesseAngle = 0;
-constexpr double kIVitesseAngle = 0;
-constexpr double kDVitesseAngle = 0;
-constexpr double kFVitesseAngle = 0;
 constexpr double kVitesseAngle = 2000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
@@ -205,11 +197,8 @@ constexpr double kVoltageCompensation = 10;
 constexpr double kPeakCurrentLimit = 9;    // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
 constexpr double kContinuousCurrent = 9;   // amperes
-constexpr double kMaxAF1erJoint = 0;
-constexpr double kMaxAF2eJoint = 0;
+constexpr double kMaxAF1erJoint = 0.065;
 constexpr double FDegToRad = M_PI / 180;
-constexpr double kCdMOffset1erJoint = 0;
-constexpr double kCdMOffset2eJoint = 0;
 constexpr double absoluteEncoderOffset1erJoint = -940.1;              // 1/10 degre
 constexpr double absoluteEncoderOffset2eJoint = -3490.14;             // 1/10 degre
 constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
@@ -222,24 +211,24 @@ constexpr double FConversionFactorVelocity2eJoint =
     36000.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
 constexpr double FConversionFactorAcceleration2eJoint =
     36000.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
-constexpr double kPMotion1erJoint = 0;
+constexpr double kPMotion1erJoint = 1.75;
 constexpr double kIMotion1erJoint = 0;
-constexpr double kDMotion1erJoint = 0;
+constexpr double kDMotion1erJoint = 20;
 constexpr double kFMotion1erJoint = 0;
 constexpr double kPMotion2eJoint = 0;
 constexpr double kIMotion2eJoint = 0;
 constexpr double kDMotion2eJoint = 0;
 constexpr double kFMotion2eJoint = 0;
-constexpr double kVitesse1erJoint = 0;
-constexpr double kAcceleration1erJoint = 0;
+constexpr double kVitesse1erJoint = 2750;
+constexpr double kAcceleration1erJoint = 12000;
 constexpr double kVitesse2eJoint = 0;
 constexpr double kAcceleration2eJoint = 0;
-constexpr double angleThreshold = 5; // 1/10th degree
-constexpr double kForwardSoftLimit1erJoint = 0; // 1/10 degre
-constexpr double kReverseSoftLimit1erJoint = 0; // 1/10 degre
-constexpr double kForwardSoftLimit2eJoint = 0;  // 1/10 degre
-constexpr double kReverseSoftLimit2eJoint = 0;  // 1/10 degre
-constexpr double kPourcentageManual1erJoint = 0;
+constexpr double angleThreshold = 5;               // 1/10th degree
+constexpr double kForwardSoftLimit1erJoint = 1200; // 1/10 degre
+constexpr double kReverseSoftLimit1erJoint = 80;   // 1/10 degre
+constexpr double kForwardSoftLimit2eJoint = 0;     // 1/10 degre
+constexpr double kReverseSoftLimit2eJoint = 0;     // 1/10 degre
+constexpr double kPourcentageManual1erJoint = 0.15;
 constexpr double kPourcentageManual2eJoint = 0;
 constexpr double k1erJointAngleTrap = 0;
 constexpr double k1erJointAngleAmp = 0;

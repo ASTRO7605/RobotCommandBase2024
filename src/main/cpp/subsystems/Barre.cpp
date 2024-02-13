@@ -3,16 +3,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 double computekAF1erJoint(double angle) {
-    double val{BarreConstant::kMaxAF1erJoint *
-               cos(BarreConstant::FDegToRad * (angle / 10 - BarreConstant::kCdMOffset1erJoint))};
+    double val{BarreConstant::kMaxAF1erJoint * cos(BarreConstant::FDegToRad * ((angle) / 10))};
     frc::SmartDashboard::PutNumber("CurrentkAfValue1erJoint", val);
-    return val;
-}
-
-double computekAF2eJoint(double angle) {
-    double val{BarreConstant::kMaxAF2eJoint *
-               cos(BarreConstant::FDegToRad * (angle / 10 - BarreConstant::kCdMOffset2eJoint))};
-    frc::SmartDashboard::PutNumber("CurrentkAfValue2eJoint", val);
     return val;
 }
 
@@ -23,9 +15,6 @@ Barre::Barre()
     m_MoteurPremierJoint.ConfigFactoryDefault();
     m_MoteurDeuxiemeJoint.ConfigFactoryDefault();
 
-    m_MoteurPremierJoint.SetInverted(false);
-    m_MoteurDeuxiemeJoint.SetInverted(false);
-
     m_MoteurPremierJoint.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
     m_MoteurDeuxiemeJoint.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 
@@ -33,21 +22,11 @@ Barre::Barre()
                                                       BarreConstant::kTimeoutMs);
     m_MoteurDeuxiemeJoint.ConfigSelectedFeedbackSensor(FeedbackDevice::CTRE_MagEncoder_Relative, 0,
                                                        BarreConstant::kTimeoutMs);
-
-    int absoluteEncoderPositionPremier{
-        m_MoteurPremierJoint.GetSensorCollection().GetPulseWidthPosition()};
-    int absoluteEncoderPositionDeuxieme{
-        m_MoteurDeuxiemeJoint.GetSensorCollection().GetPulseWidthPosition()};
-
-    m_MoteurPremierJoint.SetSelectedSensorPosition(
-        absoluteEncoderPositionPremier + (BarreConstant::absoluteEncoderOffset1erJoint /
-                                          BarreConstant::FConversionFactorPosition1erJoint));
-    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(
-        absoluteEncoderPositionDeuxieme + (BarreConstant::absoluteEncoderOffset2eJoint /
-                                           BarreConstant::FConversionFactorPosition2eJoint));
-
-    m_MoteurPremierJoint.SetSensorPhase(false);
+    m_MoteurPremierJoint.SetSensorPhase(true);
     m_MoteurDeuxiemeJoint.SetSensorPhase(false);
+
+    m_MoteurPremierJoint.SetInverted(true);
+    m_MoteurDeuxiemeJoint.SetInverted(false);
 
     m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
                                               BarreConstant::kTimeoutMs);
@@ -125,6 +104,15 @@ Barre::Barre()
     m_MoteurDeuxiemeJoint.ConfigPeakCurrentLimit(BarreConstant::kPeakCurrentDuration);
     m_MoteurDeuxiemeJoint.ConfigContinuousCurrentLimit(BarreConstant::kContinuousCurrent);
     m_MoteurDeuxiemeJoint.EnableCurrentLimit(true);
+
+    m_MoteurPremierJoint.ConfigForwardSoftLimitThreshold(
+        BarreConstant::kForwardSoftLimit1erJoint /
+        BarreConstant::FConversionFactorPosition1erJoint);
+    m_MoteurPremierJoint.ConfigReverseSoftLimitThreshold(
+        BarreConstant::kReverseSoftLimit1erJoint /
+        BarreConstant::FConversionFactorPosition1erJoint);
+    m_MoteurPremierJoint.ConfigForwardSoftLimitEnable(true);
+    m_MoteurPremierJoint.ConfigReverseSoftLimitEnable(true);
 }
 
 void Barre::Periodic() {
@@ -143,29 +131,22 @@ void Barre::Periodic() {
 }
 
 void Barre::Manual1erJoint(double percent) {
-    m_MoteurPremierJoint.Set(ControlMode::PercentOutput,
-                             percent,
+    m_MoteurPremierJoint.Set(ControlMode::PercentOutput, percent,
                              DemandType::DemandType_ArbitraryFeedForward,
                              computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
                                                 BarreConstant::FConversionFactorPosition1erJoint));
     // m_MoteurPremierJoint.Set(ControlMode::Velocity,
     //                          percent / BarreConstant::FConversionFactorVelocity1erJoint,
     //                          DemandType::DemandType_ArbitraryFeedForward,
-    //                          computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
+    //                          computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition()
+    //                          *
     //                                             BarreConstant::FConversionFactorPosition1erJoint));
 }
 
 void Barre::Manual2eJoint(double percent) {
-    m_MoteurDeuxiemeJoint.Set(ControlMode::PercentOutput,
-                             percent,
-                             DemandType::DemandType_ArbitraryFeedForward,
-                             computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
-                                                BarreConstant::FConversionFactorPosition2eJoint));
+    m_MoteurDeuxiemeJoint.Set(ControlMode::PercentOutput, percent);
     // m_MoteurDeuxiemeJoint.Set(ControlMode::Velocity,
-    //                          percent / BarreConstant::FConversionFactorVelocity2eJoint,
-    //                          DemandType::DemandType_ArbitraryFeedForward,
-    //                          computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
-    //                                             BarreConstant::FConversionFactorPosition2eJoint));
+    //                          percent / BarreConstant::FConversionFactorVelocity2eJoint);
 }
 
 void Barre::Set1erJointAngle(double angle) {
@@ -178,10 +159,7 @@ void Barre::Set1erJointAngle(double angle) {
 
 void Barre::Set2eJointAngle(double angle) {
     m_MoteurDeuxiemeJoint.Set(ControlMode::MotionMagic,
-                              angle / BarreConstant::FConversionFactorPosition2eJoint,
-                              DemandType::DemandType_ArbitraryFeedForward,
-                              computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
-                                                BarreConstant::FConversionFactorPosition2eJoint));
+                              angle / BarreConstant::FConversionFactorPosition2eJoint);
 }
 
 bool Barre::Is1erJointAtTargetAngle(double target) {
@@ -200,4 +178,18 @@ bool Barre::Is2eJointAtTargetAngle(double target) {
         return true;
     }
     return false;
+}
+
+void Barre::SeedEncoders() {
+    int absoluteEncoderPositionPremier{
+        m_MoteurPremierJoint.GetSensorCollection().GetPulseWidthPosition()};
+    int absoluteEncoderPositionDeuxieme{
+        m_MoteurDeuxiemeJoint.GetSensorCollection().GetPulseWidthPosition()};
+
+    m_MoteurPremierJoint.SetSelectedSensorPosition(
+        absoluteEncoderPositionPremier + (BarreConstant::absoluteEncoderOffset1erJoint /
+                                          BarreConstant::FConversionFactorPosition1erJoint));
+    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(
+        absoluteEncoderPositionDeuxieme + (BarreConstant::absoluteEncoderOffset2eJoint /
+                                           BarreConstant ::FConversionFactorPosition2eJoint));
 }

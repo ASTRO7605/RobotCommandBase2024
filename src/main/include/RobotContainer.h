@@ -5,14 +5,14 @@
 #pragma once
 
 #include "Constants.h"
+#include "commands/DeuxiemeJointManual.h"
+#include "commands/DeuxiemeJointPositionTest.h"
 #include "commands/IntakeCommand.h"
+#include "commands/PremierJointManual.h"
+#include "commands/PremierJointPositionTest.h"
 #include "commands/ShootNote.h"
 #include "commands/ShooterAngleManual.h"
 #include "commands/ShooterPositionTest.h"
-#include "commands/PremierJointManual.h"
-#include "commands/PremierJointPositionTest.h"
-#include "commands/DeuxiemeJointManual.h"
-#include "commands/DeuxiemeJointPositionTest.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
@@ -76,7 +76,7 @@ class RobotContainer {
 
     frc2::CommandPtr GetAutonomousCommand();
 
-    void SeedBaseSwerveEncoders();
+    void SeedEncoders();
 
   private:
     void ConfigureBindings();

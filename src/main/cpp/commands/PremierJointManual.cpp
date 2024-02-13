@@ -7,8 +7,8 @@ PremierJointManual::PremierJointManual(Barre *p_Barre, double percent)
 
 void PremierJointManual::Initialize() {}
 
-void PremierJointManual::Execute() { 
-    m_pBarre->Manual1erJoint(percent); 
+void PremierJointManual::Execute() {
+    m_pBarre->Manual1erJoint(percent);
     // m_pBarre->Manual1erJoint(100 * percent);
 }
 

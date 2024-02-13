@@ -49,6 +49,8 @@ class ShooterAngle : public frc2::SubsystemBase {
 
     void KeepCurrentAngle();
 
+    void SeedEncoder();
+
   private:
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;
 };
