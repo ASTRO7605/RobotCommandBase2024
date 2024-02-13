@@ -12,6 +12,11 @@
 #include <units/velocity.h>
 #include <units/voltage.h>
 
+enum ScoringPositions {
+    speaker,
+    amp,
+    trap
+};
 namespace DriveConstant {
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
@@ -209,35 +214,40 @@ constexpr double absoluteEncoderOffset1erJoint = -940.1;              // 1/10 de
 constexpr double absoluteEncoderOffset2eJoint = -3490.14;             // 1/10 degre
 constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity1erJoint =
-    180.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+    18000.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
 constexpr double FConversionFactorAcceleration1erJoint =
-    180.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
+    18000.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
 constexpr double FConversionFactorPosition2eJoint = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity2eJoint =
-    360.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+    36000.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
 constexpr double FConversionFactorAcceleration2eJoint =
-    360.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
+    36000.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
 constexpr double kPMotion1erJoint = 0;
 constexpr double kIMotion1erJoint = 0;
 constexpr double kDMotion1erJoint = 0;
 constexpr double kFMotion1erJoint = 0;
-constexpr double kPVitesse1erJoint = 0;
-constexpr double kIVitesse1erJoint = 0;
-constexpr double kDVitesse1erJoint = 0;
-constexpr double kFVitesse1erJoint = 0;
 constexpr double kPMotion2eJoint = 0;
 constexpr double kIMotion2eJoint = 0;
 constexpr double kDMotion2eJoint = 0;
 constexpr double kFMotion2eJoint = 0;
-constexpr double kPVitesse2eJoint = 0;
-constexpr double kIVitesse2eJoint = 0;
-constexpr double kDVitesse2eJoint = 0;
-constexpr double kFVitesse2eJoint = 0;
 constexpr double kVitesse1erJoint = 0;
 constexpr double kAcceleration1erJoint = 0;
 constexpr double kVitesse2eJoint = 0;
 constexpr double kAcceleration2eJoint = 0;
 constexpr double angleThreshold = 5; // 1/10th degree
+constexpr double kForwardSoftLimit1erJoint = 0; // 1/10 degre
+constexpr double kReverseSoftLimit1erJoint = 0; // 1/10 degre
+constexpr double kForwardSoftLimit2eJoint = 0;  // 1/10 degre
+constexpr double kReverseSoftLimit2eJoint = 0;  // 1/10 degre
+constexpr double kPourcentageManual1erJoint = 0;
+constexpr double kPourcentageManual2eJoint = 0;
+constexpr double k1erJointAngleTrap = 0;
+constexpr double k1erJointAngleAmp = 0;
+constexpr double k2eJointAngleTrapApproach = 0;
+constexpr double k2eJointAngleTrapFinal = 0;
+constexpr double k2eJointAngleAmpApproach = 0;
+constexpr double k2eJointAngleAmpFinal = 0;
+
 } // namespace BarreConstant
 
 namespace ClimberConstant {

@@ -4,14 +4,14 @@
 // the WPILib BSD license file in the root directory of this project.
 double computekAF1erJoint(double angle) {
     double val{BarreConstant::kMaxAF1erJoint *
-               cos(BarreConstant::FDegToRad * (angle - BarreConstant::kCdMOffset1erJoint))};
+               cos(BarreConstant::FDegToRad * (angle / 10 - BarreConstant::kCdMOffset1erJoint))};
     frc::SmartDashboard::PutNumber("CurrentkAfValue1erJoint", val);
     return val;
 }
 
 double computekAF2eJoint(double angle) {
     double val{BarreConstant::kMaxAF2eJoint *
-               cos(BarreConstant::FDegToRad * (angle - BarreConstant::kCdMOffset2eJoint))};
+               cos(BarreConstant::FDegToRad * (angle / 10 - BarreConstant::kCdMOffset2eJoint))};
     frc::SmartDashboard::PutNumber("CurrentkAfValue2eJoint", val);
     return val;
 }
@@ -86,16 +86,6 @@ Barre::Barre()
     m_MoteurPremierJoint.Config_kF(0, frc::Preferences::GetDouble("kFMotion1erJoint"),
                                    BarreConstant::kTimeoutMs);
 
-    m_MoteurPremierJoint.SelectProfileSlot(1, 0); // vitesse
-    m_MoteurPremierJoint.Config_kP(1, frc::Preferences::GetDouble("kPVitesse1erJoint"),
-                                   BarreConstant::kTimeoutMs);
-    m_MoteurPremierJoint.Config_kI(1, frc::Preferences::GetDouble("kIVitesse1erJoint"),
-                                   BarreConstant::kTimeoutMs);
-    m_MoteurPremierJoint.Config_kD(1, frc::Preferences::GetDouble("kDVitesse1erJoint"),
-                                   BarreConstant::kTimeoutMs);
-    m_MoteurPremierJoint.Config_kF(1, frc::Preferences::GetDouble("kFVitesse1erJoint"),
-                                   BarreConstant::kTimeoutMs);
-
     m_MoteurDeuxiemeJoint.SelectProfileSlot(0, 0); // Motion
     m_MoteurDeuxiemeJoint.Config_kP(0, frc::Preferences::GetDouble("kPMotion2eJoint"),
                                     BarreConstant::kTimeoutMs);
@@ -104,16 +94,6 @@ Barre::Barre()
     m_MoteurDeuxiemeJoint.Config_kD(0, frc::Preferences::GetDouble("kDMotion2eJoint"),
                                     BarreConstant::kTimeoutMs);
     m_MoteurDeuxiemeJoint.Config_kF(0, frc::Preferences::GetDouble("kFMotion2eJoint"),
-                                    BarreConstant::kTimeoutMs);
-
-    m_MoteurDeuxiemeJoint.SelectProfileSlot(1, 0); // vitesse
-    m_MoteurDeuxiemeJoint.Config_kP(1, frc::Preferences::GetDouble("kPVitesse2eJoint"),
-                                    BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.Config_kI(1, frc::Preferences::GetDouble("kIVitesse2eJoint"),
-                                    BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.Config_kD(1, frc::Preferences::GetDouble("kDVitesse2eJoint"),
-                                    BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.Config_kF(1, frc::Preferences::GetDouble("kFVitesse2eJoint"),
                                     BarreConstant::kTimeoutMs);
 
     m_MoteurPremierJoint.ConfigMotionCruiseVelocity(
@@ -162,26 +142,33 @@ void Barre::Periodic() {
                                        BarreConstant::FConversionFactorVelocity2eJoint);
 }
 
-void Barre::Manual1erJoint(double speed) {
-    m_MoteurPremierJoint.SelectProfileSlot(1, 0);
-    m_MoteurPremierJoint.Set(ControlMode::Velocity,
-                             speed / BarreConstant::FConversionFactorVelocity1erJoint,
+void Barre::Manual1erJoint(double percent) {
+    m_MoteurPremierJoint.Set(ControlMode::PercentOutput,
+                             percent,
                              DemandType::DemandType_ArbitraryFeedForward,
                              computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
                                                 BarreConstant::FConversionFactorPosition1erJoint));
+    // m_MoteurPremierJoint.Set(ControlMode::Velocity,
+    //                          percent / BarreConstant::FConversionFactorVelocity1erJoint,
+    //                          DemandType::DemandType_ArbitraryFeedForward,
+    //                          computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
+    //                                             BarreConstant::FConversionFactorPosition1erJoint));
 }
 
-void Barre::Manual2eJoint(double speed) {
-    m_MoteurDeuxiemeJoint.SelectProfileSlot(1, 0);
-    m_MoteurDeuxiemeJoint.Set(ControlMode::Velocity,
-                              speed / BarreConstant::FConversionFactorVelocity2eJoint,
-                              DemandType::DemandType_ArbitraryFeedForward,
-                              computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
+void Barre::Manual2eJoint(double percent) {
+    m_MoteurDeuxiemeJoint.Set(ControlMode::PercentOutput,
+                             percent,
+                             DemandType::DemandType_ArbitraryFeedForward,
+                             computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
                                                 BarreConstant::FConversionFactorPosition2eJoint));
+    // m_MoteurDeuxiemeJoint.Set(ControlMode::Velocity,
+    //                          percent / BarreConstant::FConversionFactorVelocity2eJoint,
+    //                          DemandType::DemandType_ArbitraryFeedForward,
+    //                          computekAF2eJoint(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
+    //                                             BarreConstant::FConversionFactorPosition2eJoint));
 }
 
 void Barre::Set1erJointAngle(double angle) {
-    m_MoteurPremierJoint.SelectProfileSlot(0, 0);
     m_MoteurPremierJoint.Set(ControlMode::MotionMagic,
                              angle / BarreConstant::FConversionFactorPosition1erJoint,
                              DemandType::DemandType_ArbitraryFeedForward,
@@ -190,7 +177,6 @@ void Barre::Set1erJointAngle(double angle) {
 }
 
 void Barre::Set2eJointAngle(double angle) {
-    m_MoteurDeuxiemeJoint.SelectProfileSlot(0, 0);
     m_MoteurDeuxiemeJoint.Set(ControlMode::MotionMagic,
                               angle / BarreConstant::FConversionFactorPosition2eJoint,
                               DemandType::DemandType_ArbitraryFeedForward,

@@ -2,15 +2,15 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <subsystems/ShooterAngle.h>
+#include <subsystems/Barre.h>
 
-class ShooterAngleManual : public frc2::CommandHelper<frc2::Command, ShooterAngleManual> {
+class DeuxiemeJointManual : public frc2::CommandHelper<frc2::Command, DeuxiemeJointManual> {
   private:
-    ShooterAngle *m_pShooterAngle;
+    Barre *m_pBarre;
     double percent;
 
   public:
-    explicit ShooterAngleManual(ShooterAngle *p_ShooterAngle, double percent);
+    explicit DeuxiemeJointManual(Barre *p_Barre, double percent);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

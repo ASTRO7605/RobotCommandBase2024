@@ -80,22 +80,22 @@ void RobotContainer::ConfigureBindings() {
         ShooterAngleManual(&m_ShooterAngle,
                            -frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
             .ToPtr());
-
     m_TurnStick.Button(9).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
     m_TurnStick.Button(10).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 700).ToPtr());
-
-    // // m_TurnStick.Button(9).WhileTrue(ShooterAngleMaintain(&m_ShooterAngle, 650).ToPtr());
-    // // m_TurnStick.Button(10).WhileTrue(ShooterAngleMaintain(&m_ShooterAngle, 250).ToPtr());
-    // m_TurnStick.Button(9).OnTrue(
-    //     frc2::InstantCommand([this]() { m_ShooterAngle.SetShooterAngle(650); }).ToPtr());
-    // m_TurnStick.Button(10).OnTrue(
-    //     frc2::InstantCommand([this]() { m_ShooterAngle.SetShooterAngle(250); }).ToPtr());
+    m_ThrottleStick.Button(7).WhileTrue(PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint")).ToPtr());
+    m_ThrottleStick.Button(8).WhileTrue(PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint")).ToPtr());
+    m_ThrottleStick.Button(9).WhileTrue(PremierJointPositionTest(&m_Barre, 100).ToPtr());
+    m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1000).ToPtr());
+    // m_ThrottleStick.Button(9).WhileTrue(DeuxiemeJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual2eJoint")).ToPtr());
+    // m_ThrottleStick.Button(10).WhileTrue(DeuxiemeJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual2eJoint")).ToPtr());
+    // m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 0).ToPtr());
+    // m_ThrottleStick.Button(12).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 1800).ToPtr());
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
     m_CoPilotController.B().WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
     m_CoPilotController.X().OnTrue(
-        ShootNoteSpeaker(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake,
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
                          frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
-                         frc::Preferences::GetDouble("testAngleShooter"))
+                         frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)
             .ToPtr());
 }
 

@@ -28,13 +28,13 @@ class Barre : public frc2::SubsystemBase {
   public:
     Barre();
 
-    /// @brief Sets 1er joint to a manual speed
-    /// @param speeds Speed (1/10th degree)
-    void Manual1erJoint(double speed);
+    /// @brief Sets 1er joint to a manual percentage output
+    /// @param percent percent of motor output [-1,1]
+    void Manual1erJoint(double percent);
 
-    /// @brief Sets 2e joint to a manual speed
-    /// @param speeds Speed (1/10th degree)
-    void Manual2eJoint(double speed);
+    /// @brief Sets 2e joint to a manual percentage output
+    /// @param percent percent of motor output [-1,1]
+    void Manual2eJoint(double percent);
 
     /// @brief Set 1er joint to a specific angle
     /// @param angle Angle of 1er joint (1/10 degree)

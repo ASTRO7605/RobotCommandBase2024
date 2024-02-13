@@ -90,7 +90,6 @@ void ShooterAngle::SetShooterAngle(double angle) {
 }
 
 void ShooterAngle::ManualShooterAngle(double percent) {
-    frc::SmartDashboard::PutString("debug", "in manual shooter");
     m_MoteurAngle.Set(ControlMode::PercentOutput, percent,
                       DemandType::DemandType_ArbitraryFeedForward,
                       computekAF(m_MoteurAngle.GetSelectedSensorPosition() *
@@ -104,4 +103,12 @@ bool ShooterAngle::IsShooterAtTargetAngle(double target) {
         return true;
     }
     return false;
+}
+
+void ShooterAngle::KeepCurrentAngle(){
+    m_MoteurAngle.Set(ControlMode::MotionMagic,
+                      m_MoteurAngle.GetSelectedSensorPosition(),
+                      DemandType::DemandType_ArbitraryFeedForward,
+                      computekAF(m_MoteurAngle.GetSelectedSensorPosition() *
+                                 ShooterConstant::FConversionFactorPositionAngle));
 }

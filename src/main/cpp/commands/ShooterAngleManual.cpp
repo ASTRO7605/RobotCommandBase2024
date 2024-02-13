@@ -11,4 +11,4 @@ void ShooterAngleManual::Execute() { m_pShooterAngle->ManualShooterAngle(percent
 
 bool ShooterAngleManual::IsFinished() { return false; }
 
-void ShooterAngleManual::End(bool) { m_pShooterAngle->ManualShooterAngle(0); }
+void ShooterAngleManual::End(bool) { m_pShooterAngle->KeepCurrentAngle(); }
