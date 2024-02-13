@@ -60,6 +60,13 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kVitesse2eJoint", BarreConstant::kVitesse2eJoint);
     frc::Preferences::InitDouble("kAcceleration2eJoint", BarreConstant::kAcceleration2eJoint);
 
+    frc::Preferences::InitDouble("k1erJointAngleTrap", BarreConstant::k1erJointAngleTrap);
+    frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
+    frc::Preferences::InitDouble("k2eJointAngleTrapApproach", BarreConstant::k2eJointAngleTrapApproach);
+    frc::Preferences::InitDouble("k2eJointAngleTrapFinal", BarreConstant::k2eJointAngleTrapFinal);
+    frc::Preferences::InitDouble("k2eJointAngleAmpApproach", BarreConstant::k2eJointAngleAmpApproach);
+    frc::Preferences::InitDouble("k2eJointAngleAmpFinal", BarreConstant::k2eJointAngleAmpFinal);
+
     frc::Preferences::InitDouble("kPHooksPosition", ClimberConstant::kPHooksPosition);
     frc::Preferences::InitDouble("kIHooksPosition", ClimberConstant::kIHooksPosition);
     frc::Preferences::InitDouble("kDHooksPosition", ClimberConstant::kDHooksPosition);

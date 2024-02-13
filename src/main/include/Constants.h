@@ -12,6 +12,11 @@
 #include <units/velocity.h>
 #include <units/voltage.h>
 
+enum ScoringPositions {
+    speaker,
+    amp,
+    trap
+};
 namespace DriveConstant {
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
@@ -236,6 +241,13 @@ constexpr double kForwardSoftLimit2eJoint = 0;  // 1/10 degre
 constexpr double kReverseSoftLimit2eJoint = 0;  // 1/10 degre
 constexpr double kPourcentageManual1erJoint = 0;
 constexpr double kPourcentageManual2eJoint = 0;
+constexpr double k1erJointAngleTrap = 0;
+constexpr double k1erJointAngleAmp = 0;
+constexpr double k2eJointAngleTrapApproach = 0;
+constexpr double k2eJointAngleTrapFinal = 0;
+constexpr double k2eJointAngleAmpApproach = 0;
+constexpr double k2eJointAngleAmpFinal = 0;
+
 } // namespace BarreConstant
 
 namespace ClimberConstant {
