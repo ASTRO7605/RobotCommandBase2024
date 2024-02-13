@@ -56,9 +56,6 @@ void ShooterWheels::Periodic() {
                                    m_LeftFlywheelMotorEncoder.GetVelocity());
     frc::SmartDashboard::PutNumber("rightShooterMotorVelocity",
                                    m_RightFlywheelMotorEncoder.GetVelocity());
-    frc::SmartDashboard::PutNumber("voltageLeftShooterMotor", m_LeftFlywheelMotor.GetBusVoltage());
-    frc::SmartDashboard::PutNumber("voltageRightShooterMotor",
-                                   m_RightFlywheelMotor.GetBusVoltage());
     frc::SmartDashboard::PutBoolean("IsObjectInShooter", IsObjectInShooter());
 }
 
