@@ -11,4 +11,4 @@ void ShooterPositionTest::Execute() { m_pShooterAngle->SetShooterAngle(angle); }
 
 bool ShooterPositionTest::IsFinished() { return false; }
 
-void ShooterPositionTest::End(bool) { frc::SmartDashboard::PutString("debug", "out of test"); }
+void ShooterPositionTest::End(bool) {}

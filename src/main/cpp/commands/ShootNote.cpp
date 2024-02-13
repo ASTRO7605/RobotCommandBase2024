@@ -1,6 +1,6 @@
-#include "commands/ShootNoteSpeaker.h"
+#include "commands/ShootNote.h"
 
-ShootNoteSpeaker::ShootNoteSpeaker(Base *p_Base, ShooterAngle *p_ShooterAngle,
+ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle,
                                    ShooterWheels *p_ShooterWheels, Intake *p_Intake,
                                    double wheelSpeeds, double shooterAngle)
     : m_pBase{p_Base}, m_pShooterAngle{p_ShooterAngle}, m_pShooterWheels{p_ShooterWheels},
@@ -8,7 +8,7 @@ ShootNoteSpeaker::ShootNoteSpeaker(Base *p_Base, ShooterAngle *p_ShooterAngle,
     AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake, m_pBase});
 }
 
-void ShootNoteSpeaker::Initialize() {
+void ShootNote::Initialize() {
     if (!m_pIntake->IsObjectInIntake()) { // check if empty
         m_State = ShooterConstant::ShooterState::complete;
     } else {
@@ -16,18 +16,19 @@ void ShootNoteSpeaker::Initialize() {
     }
 }
 
-void ShootNoteSpeaker::Execute() {
+void ShootNote::Execute() {
+    if (m_State != ShooterConstant::ShooterState::complete){
+        m_pShooterAngle->SetShooterAngle(targetAngle); // to update kAF continuously
+    }
     switch (m_State) {
     case (ShooterConstant::ShooterState::init):
         m_pShooterWheels->SetWheelSpeeds(targetSpeeds);
-        m_pShooterAngle->SetShooterAngle(targetAngle);
         m_pBase->SetWheelsInXFormation();
         areWheelsReadyToShoot = false;
         isShooterAngledRight = false;
         hasNoteGoneThroughShooter = false;
         timer.Stop();
         timer.Reset();
-        frc::SmartDashboard::PutBoolean("ready to shoot", false);
         m_State = ShooterConstant::ShooterState::waitingForSubsystems;
         break;
     case (ShooterConstant::ShooterState::waitingForSubsystems):
@@ -67,29 +68,17 @@ void ShootNoteSpeaker::Execute() {
     case (ShooterConstant::ShooterState::complete):
         break;
     }
-    // if (areWheelsReadyToShoot &&
-    //     isShooterAngledRight) { // if both are true, move note into the shooter
-    //     m_pIntake->SetIntake(true, false);
-    // }
-    // if (!hasNoteGoneThroughShooter &&
-    //     m_pShooterWheels
-    //         ->IsObjectInShooter()) { // if seeing object for first time, note is in shooter
-    //     hasNoteGoneThroughShooter = true;
-    // }
-    // if (hasNoteGoneThroughShooter &&
-    //     !m_pShooterWheels->IsObjectInShooter()) { // if has seen object but doesn't anymore
-    //     timer.Start();
-    // }
 }
 
-bool ShootNoteSpeaker::IsFinished() {
+bool ShootNote::IsFinished() {
     if (m_State == ShooterConstant::ShooterState::complete) {
         return true;
     }
     return false;
 }
 
-void ShootNoteSpeaker::End(bool interrupted) {
+void ShootNote::End(bool interrupted) {
     m_pShooterWheels->StopWheels();
     m_pIntake->SetIntake(false, false);
-} // CONVERSION BARRE NE PAS OUBLIER
+    m_pShooterAngle->KeepCurrentAngle();
+}

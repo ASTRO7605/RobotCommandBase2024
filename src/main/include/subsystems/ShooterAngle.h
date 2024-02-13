@@ -39,13 +39,15 @@ class ShooterAngle : public frc2::SubsystemBase {
     double GetShooterAngle();
 
     /// @brief Set shooter angle to specific manual percentage
-    /// @param percent percent of motor output
+    /// @param percent percent of motor output [-1,1]
     void ManualShooterAngle(double percent);
 
     /// @brief checks to see if shooter is at the target angle
     /// @param target targeted angle, 1/10th of degree
     /// @return true or false
     bool IsShooterAtTargetAngle(double target);
+
+    void KeepCurrentAngle();
 
   private:
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;

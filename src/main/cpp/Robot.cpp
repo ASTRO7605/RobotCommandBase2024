@@ -8,7 +8,6 @@
 
 void Robot::RobotInit() {
     frc::CameraServer::StartAutomaticCapture();
-    m_Container.SeedBaseSwerveEncoders();
 
     // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
@@ -46,19 +45,14 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kIMotion1erJoint", BarreConstant::kIMotion1erJoint);
     frc::Preferences::InitDouble("kDMotion1erJoint", BarreConstant::kDMotion1erJoint);
     frc::Preferences::InitDouble("kFMotion1erJoint", BarreConstant::kFMotion1erJoint);
-    frc::Preferences::InitDouble("kPVitesse1erJoint", BarreConstant::kPVitesse1erJoint);
-    frc::Preferences::InitDouble("kIVitesse1erJoint", BarreConstant::kIVitesse1erJoint);
-    frc::Preferences::InitDouble("kDVitesse1erJoint", BarreConstant::kDVitesse1erJoint);
-    frc::Preferences::InitDouble("kFVitesse1erJoint", BarreConstant::kFVitesse1erJoint);
+
+    frc::Preferences::InitDouble("kPourcentageManual1erJoint", BarreConstant::kPourcentageManual1erJoint);
+    frc::Preferences::InitDouble("kPourcentageManual2eJoint", BarreConstant::kPourcentageManual2eJoint);
 
     frc::Preferences::InitDouble("kPMotion2eJoint", BarreConstant::kPMotion2eJoint);
     frc::Preferences::InitDouble("kIMotion2eJoint", BarreConstant::kIMotion2eJoint);
     frc::Preferences::InitDouble("kDMotion2eJoint", BarreConstant::kDMotion2eJoint);
     frc::Preferences::InitDouble("kFMotion2eJoint", BarreConstant::kFMotion2eJoint);
-    frc::Preferences::InitDouble("kPVitesse2eJoint", BarreConstant::kPVitesse2eJoint);
-    frc::Preferences::InitDouble("kIVitesse2eJoint", BarreConstant::kIVitesse2eJoint);
-    frc::Preferences::InitDouble("kDVitesse2eJoint", BarreConstant::kDVitesse2eJoint);
-    frc::Preferences::InitDouble("kFVitesse2eJoint", BarreConstant::kFVitesse2eJoint);
 
     frc::Preferences::InitDouble("kVitesse1erJoint", BarreConstant::kVitesse1erJoint);
     frc::Preferences::InitDouble("kAcceleration1erJoint", BarreConstant::kAcceleration1erJoint);
@@ -97,14 +91,17 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    m_Container.SeedBaseSwerveEncoders();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();
     }
+    
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
+    m_Container.SeedBaseSwerveEncoders();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
     }
