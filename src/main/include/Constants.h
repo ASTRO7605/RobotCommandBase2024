@@ -137,7 +137,7 @@ constexpr double flywheelsSpeedSpeaker = 4500;     // RPM
 constexpr double flywheelsSpeedAmp = 0;            // RPM
 constexpr double flywheelsSpeedTrap = 0;           // RPM
 constexpr double speedThreshold = 50;              // RPM
-constexpr auto timeThreshold = 0.1_s;
+constexpr auto timeThreshold = 0.2_s;
 constexpr double kPLeftFlywheel = 0.00025;
 constexpr double kILeftFlywheel = 0.000001;
 constexpr double kDLeftFlywheel = 0.01;
@@ -200,7 +200,7 @@ constexpr double kContinuousCurrent = 9;   // amperes
 constexpr double kMaxAF1erJoint = 0.065;
 constexpr double FDegToRad = M_PI / 180;
 constexpr double absoluteEncoderOffset1erJoint = -940.1;              // 1/10 degre
-constexpr double absoluteEncoderOffset2eJoint = -3490.14;             // 1/10 degre
+constexpr double absoluteEncoderOffset2eJoint = -2572.44;             // 1/10 degre
 constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
 constexpr double FConversionFactorVelocity1erJoint =
     18000.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
@@ -226,8 +226,8 @@ constexpr double kAcceleration2eJoint = 0;
 constexpr double angleThreshold = 5;               // 1/10th degree
 constexpr double kForwardSoftLimit1erJoint = 1200; // 1/10 degre
 constexpr double kReverseSoftLimit1erJoint = 80;   // 1/10 degre
-constexpr double kForwardSoftLimit2eJoint = 0;     // 1/10 degre
-constexpr double kReverseSoftLimit2eJoint = 0;     // 1/10 degre
+constexpr double kForwardSoftLimit2eJoint = 3500;  // 1/10 degre
+constexpr double kReverseSoftLimit2eJoint = 100;   // 1/10 degre
 constexpr double kPourcentageManual1erJoint = 0.15;
 constexpr double kPourcentageManual2eJoint = 0;
 constexpr double k1erJointAngleTrap = 0;
@@ -236,6 +236,8 @@ constexpr double k2eJointAngleTrapApproach = 0;
 constexpr double k2eJointAngleTrapFinal = 0;
 constexpr double k2eJointAngleAmpApproach = 0;
 constexpr double k2eJointAngleAmpFinal = 0;
+constexpr double k1erJointStartPosition = 0;
+constexpr double k2eJointStartPosition = 0;
 
 } // namespace BarreConstant
 

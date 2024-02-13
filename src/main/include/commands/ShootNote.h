@@ -1,13 +1,15 @@
 #pragma once
 
+#include "commands/RedescendreBarre.h"
+#include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
-#include "subsystems/Barre.h"
 #include <frc/Timer.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc2/command/CommandPtr.h>
 
 class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
   private:
@@ -27,6 +29,7 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     frc::Timer timer;
     ShooterConstant::ShooterState m_State;
     ScoringPositions scoringPlace;
+    frc2::CommandPtr m_RedescendreBarre;
 
   public:
     /// @brief
@@ -36,9 +39,9 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     /// @param p_Intake
     /// @param wheelSpeeds RPM
     /// @param shooterAngle angle of the shooter (1/10 degree)
-    explicit ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle,
-                              ShooterWheels *p_ShooterWheels, Intake *p_Intake, Barre *p_Barre, double wheelSpeeds,
-                              double shooterAngle, ScoringPositions scoringPlace);
+    explicit ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
+                       Intake *p_Intake, Barre *p_Barre, double wheelSpeeds, double shooterAngle,
+                       ScoringPositions scoringPlace);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

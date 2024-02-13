@@ -72,6 +72,8 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("k2eJointAngleAmpApproach",
                                  BarreConstant::k2eJointAngleAmpApproach);
     frc::Preferences::InitDouble("k2eJointAngleAmpFinal", BarreConstant::k2eJointAngleAmpFinal);
+    frc::Preferences::InitDouble("k1erJointStartPosition", BarreConstant::k1erJointStartPosition);
+    frc::Preferences::InitDouble("k2eJointStartPosition", BarreConstant::k2eJointStartPosition);
 
     frc::Preferences::InitDouble("kPHooksPosition", ClimberConstant::kPHooksPosition);
     frc::Preferences::InitDouble("kIHooksPosition", ClimberConstant::kIHooksPosition);
