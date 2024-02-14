@@ -17,7 +17,9 @@ void Robot::RobotInit() {
                                  ShooterConstant::flywheelsSpeedSpeaker);
     frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
     frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
+
     frc::Preferences::InitDouble("testAngleShooter", 0);
+    frc::Preferences::InitDouble("angleShooterAmp", ShooterConstant::kAngleShooterAmp);
 
     frc::Preferences::InitDouble("kPLeftFlywheel", ShooterConstant::kPLeftFlywheel);
     frc::Preferences::InitDouble("kILeftFlywheel", ShooterConstant::kILeftFlywheel);

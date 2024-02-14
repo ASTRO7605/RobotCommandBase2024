@@ -10,9 +10,11 @@
 #include "commands/IntakeCommand.h"
 #include "commands/PremierJointManual.h"
 #include "commands/PremierJointPositionTest.h"
+#include "commands/RedescendreBarre.h"
 #include "commands/ShootNote.h"
 #include "commands/ShooterAngleManual.h"
 #include "commands/ShooterPositionTest.h"
+#include "commands/TestAmp.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"

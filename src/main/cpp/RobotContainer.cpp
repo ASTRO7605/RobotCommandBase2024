@@ -90,22 +90,27 @@ void RobotContainer::ConfigureBindings() {
         DeuxiemeJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
             .ToPtr());
     m_TurnStick.Button(12).WhileTrue(
+
         DeuxiemeJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
             .ToPtr());
     m_ThrottleStick.Button(7).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
-    m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 700).ToPtr());
+    m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 600).ToPtr());
     m_ThrottleStick.Button(9).WhileTrue(PremierJointPositionTest(&m_Barre, 120).ToPtr());
-    // m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
-    m_ThrottleStick.Button(10).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
-    m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 1700).ToPtr());
+    m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
+    m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
     m_ThrottleStick.Button(12).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 2100).ToPtr());
 
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
-    m_CoPilotController.B().WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
+    m_CoPilotController.B().OnTrue(RedescendreBarre(&m_Barre).ToPtr());
     m_CoPilotController.X().OnTrue(
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
                   frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
                   frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)
+            .ToPtr());
+    m_CoPilotController.Y().OnTrue(
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                  frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
+                  frc::Preferences::GetDouble("angleShooterAmp"), ScoringPositions::amp)
             .ToPtr());
 }
 

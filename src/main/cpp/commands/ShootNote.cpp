@@ -45,7 +45,7 @@ void ShootNote::Execute() {
         if (m_pShooterAngle->IsShooterAtTargetAngle(targetAngle)) { // is shooter at right angle
             isShooterAngledRight = true;
         }
-        if (scoringPlace != ScoringPositions::speaker){
+        if (scoringPlace != ScoringPositions::speaker) {
             if (m_pBarre->Is1erJointAtTargetAngle(targetPremierJoint)) {
                 isPremierJointAngledRight = true;
             }
@@ -53,8 +53,9 @@ void ShootNote::Execute() {
                 isDeuxiemeJointAngledRight = true;
             }
         }
-        if (areWheelsReadyToShoot && isShooterAngledRight && ((isPremierJointAngledRight &&
-            isDeuxiemeJointAngledRight) || scoringPlace == ScoringPositions::speaker)) {
+        if (areWheelsReadyToShoot && isShooterAngledRight &&
+            ((isPremierJointAngledRight && isDeuxiemeJointAngledRight) ||
+             scoringPlace == ScoringPositions::speaker)) {
             m_State = ShooterConstant::ShooterState::moveNoteInShooter;
         }
         break;
@@ -64,26 +65,27 @@ void ShootNote::Execute() {
         break;
     case (ShooterConstant::ShooterState::waitingForNoteToEnter):
         if (m_pShooterWheels->IsObjectInShooter()) {
-            m_State = ShooterConstant::ShooterState::waitingForNoteToExit;
-        }
-        break;
-    case (ShooterConstant::ShooterState::waitingForNoteToExit):
-        if (!m_pShooterWheels->IsObjectInShooter()) {
-            timer.Restart();
             if (scoringPlace == ScoringPositions::amp) {
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpFinal");
             } else if (scoringPlace == ScoringPositions::trap) {
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapFinal");
             }
             isDeuxiemeJointAngledRight = false;
+            m_State = ShooterConstant::ShooterState::waitingForNoteToExit;
+        }
+        break;
+    case (ShooterConstant::ShooterState::waitingForNoteToExit):
+        if (!m_pShooterWheels->IsObjectInShooter()) {
+            timer.Restart();
             m_State = ShooterConstant::ShooterState::waitingForEnd;
         }
         break;
     case (ShooterConstant::ShooterState::waitingForEnd):
-        if (m_pBarre->Is2eJointAtTargetAngle(targetDeuxiemeJoint)){
+        if (m_pBarre->Is2eJointAtTargetAngle(targetDeuxiemeJoint)) {
             isDeuxiemeJointAngledRight = true;
         }
-        if (timer.Get() >= ShooterConstant::timeThreshold && (isDeuxiemeJointAngledRight || scoringPlace == ScoringPositions::speaker)) {
+        if (timer.Get() >= ShooterConstant::timeThreshold &&
+            (isDeuxiemeJointAngledRight || scoringPlace == ScoringPositions::speaker)) {
             m_State = ShooterConstant::ShooterState::complete;
         }
         break;
@@ -92,7 +94,7 @@ void ShootNote::Execute() {
     case (ShooterConstant::ShooterState::noNote):
         break;
     }
-    
+
     if (m_State != ShooterConstant::ShooterState::noNote) {
         m_pShooterAngle->SetShooterAngle(targetAngle); // to update kAF continuously
         if (scoringPlace != ScoringPositions::speaker) {
@@ -100,11 +102,11 @@ void ShootNote::Execute() {
             m_pBarre->Set2eJointAngle(targetDeuxiemeJoint); // to update kAF continuously
         }
     }
-    
 }
 
 bool ShootNote::IsFinished() {
-    if (m_State == ShooterConstant::ShooterState::complete || m_State == ShooterConstant::ShooterState::noNote) {
+    if (m_State == ShooterConstant::ShooterState::complete ||
+        m_State == ShooterConstant::ShooterState::noNote) {
         return true;
     }
     return false;
@@ -114,7 +116,8 @@ void ShootNote::End(bool interrupted) {
     m_pShooterWheels->StopWheels();
     m_pIntake->SetIntake(false, false);
     m_pShooterAngle->KeepCurrentAngle();
-    if ((scoringPlace != ScoringPositions::speaker) && (m_State != ShooterConstant::ShooterState::noNote)){
+    if ((scoringPlace != ScoringPositions::speaker) &&
+        (m_State != ShooterConstant::ShooterState::noNote)) {
         m_RedescendreBarre.Schedule();
     }
 }

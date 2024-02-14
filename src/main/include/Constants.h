@@ -135,7 +135,7 @@ constexpr int angleMotorID = 18;
 constexpr int capteurID = 1;
 constexpr double absoluteEncoderOffset = -2078.12; // 1/10 degre
 constexpr double flywheelsSpeedSpeaker = 4500;     // RPM
-constexpr double flywheelsSpeedAmp = 0;            // RPM
+constexpr double flywheelsSpeedAmp = 550;          // RPM
 constexpr double flywheelsSpeedTrap = 0;           // RPM
 constexpr double speedThreshold = 50;              // RPM
 constexpr auto timeThreshold = 0.2_s;
@@ -175,6 +175,7 @@ constexpr double kPeakCurrentDuration = 0; // ms
 constexpr double kContinuousCurrent = 9;   // amperes
 constexpr double kForwardSoftLimit = 740;  // 1/10 degre
 constexpr double kReverseSoftLimit = 200;  // 1/10 degre
+constexpr double kAngleShooterAmp = 600;
 } // namespace ShooterConstant
 
 namespace IntakeConstant {
