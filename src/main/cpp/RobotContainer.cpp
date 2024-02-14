@@ -57,11 +57,13 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
     // Configure your trigger bindings here
-    m_ThrottleStick.Button(8).OnTrue(
-        frc2::InstantCommand([this]() { m_Base.SwitchRobotDrivingMode(); }).ToPtr());
-    // bouton pouce
+    // m_ThrottleStick.Button(8).OnTrue(
+    //     frc2::InstantCommand([this]() { m_Base.SwitchRobotDrivingMode(); }).ToPtr());
+    // // bouton pouce
     m_ThrottleStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
+    m_TurnStick.Button(2).OnTrue(
+        frc2::InstantCommand([this]() { m_Base.SeedSwerveEncoders(); }).ToPtr());
     // m_CoPilotController.LeftBumper().OnTrue(
     //     frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
     m_CoPilotController.LeftBumper().OnTrue(
@@ -99,15 +101,16 @@ void RobotContainer::ConfigureBindings() {
     m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
     m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
     m_ThrottleStick.Button(12).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 2100).ToPtr());
-
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
-    m_CoPilotController.B().OnTrue(RedescendreBarre(&m_Barre).ToPtr());
+    (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
+        .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
+    m_CoPilotController.Y().OnTrue(RedescendreBarre(&m_Barre).ToPtr());
     m_CoPilotController.X().OnTrue(
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
                   frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
                   frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)
             .ToPtr());
-    m_CoPilotController.Y().OnTrue(
+    m_CoPilotController.B().OnTrue(
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
                   frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
                   frc::Preferences::GetDouble("angleShooterAmp"), ScoringPositions::amp)
@@ -136,3 +139,5 @@ void RobotContainer::SeedEncoders() {
     m_Barre.SeedEncoder2eJoint();
     m_ShooterAngle.SeedEncoder();
 }
+
+void RobotContainer::BringBarreDown() { RedescendreBarre(&m_Barre).Schedule(); }

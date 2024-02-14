@@ -29,6 +29,8 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
     m_DrivingEncoder.SetVelocityConversionFactor(
         (DriveConstant::kWheelCirconfM / DriveConstant::kDrivingGearRatio) / 60); // m/s
     m_DrivingEncoder.SetPosition(0);
+    m_TurningSparkMaxEncoder.SetPosition(
+        units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}.value());
 
     m_TurningSparkMaxEncoder.SetPositionConversionFactor(
         (2 * std::numbers::pi) /
@@ -112,3 +114,13 @@ double ModuleSwerve::GetTurningSparkMaxPosition() { return m_TurningSparkMaxEnco
 double ModuleSwerve::GetDrivingPosition() { return m_DrivingEncoder.GetPosition(); }
 
 double ModuleSwerve::GetDrivingVelocity() { return m_DrivingEncoder.GetVelocity(); }
+
+void ModuleSwerve::SetIdleMode(DriveConstant::IdleMode idleMode) {
+    if (idleMode == DriveConstant::IdleMode::Brake) {
+        m_DrivingMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+        m_TurningMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+    } else if (idleMode == DriveConstant::IdleMode::Coast) {
+        m_DrivingMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kCoast);
+        m_TurningMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kCoast);
+    }
+}

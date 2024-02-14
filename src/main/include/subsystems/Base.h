@@ -49,6 +49,8 @@ class Base : public frc2::SubsystemBase {
 
     void SeedSwerveEncoders();
 
+    void SetIdleMode(DriveConstant::IdleMode);
+
     void ResetEncoders();
 
     void Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,

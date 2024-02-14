@@ -14,6 +14,7 @@
 
 enum ScoringPositions { speaker, amp, trap };
 namespace DriveConstant {
+enum IdleMode {Coast, Brake};
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
 constexpr double kWheelDiameterM = 0.09689;
@@ -116,6 +117,7 @@ constexpr int CoPilot_Back_Button = 7;
 constexpr int CoPilot_Start_Button = 8;
 constexpr int CoPilot_LPush_Button = 9;
 constexpr int CoPilot_RPush_Button = 10;
+constexpr double axisThreshold = 0.5;
 } // namespace OIConstant
 
 namespace ShooterConstant {

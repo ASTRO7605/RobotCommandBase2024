@@ -28,6 +28,7 @@ class ModuleSwerve {
     void SetDesiredState(frc::SwerveModuleState);
     void ResetEncoders();
     double GetDrivingVelocity();
+    void SetIdleMode(DriveConstant::IdleMode);
 
   private:
     rev::CANSparkMax m_TurningMotor;

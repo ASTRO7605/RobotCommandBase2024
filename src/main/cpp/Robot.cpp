@@ -106,6 +106,7 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    m_Container.BringBarreDown();
     m_Container.SeedEncoders();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();
@@ -115,6 +116,7 @@ void Robot::AutonomousInit() {
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
+    m_Container.BringBarreDown();
     m_Container.SeedEncoders();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();

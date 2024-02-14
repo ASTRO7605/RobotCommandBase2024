@@ -79,6 +79,7 @@ class RobotContainer {
     frc2::CommandPtr GetAutonomousCommand();
 
     void SeedEncoders();
+    void BringBarreDown();
 
   private:
     void ConfigureBindings();
