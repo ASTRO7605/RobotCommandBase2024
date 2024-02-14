@@ -11,7 +11,7 @@ ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *
 
 void ShootNote::Initialize() {
     if (!m_pIntake->IsObjectInIntake()) { // check if empty
-        m_State = ShooterConstant::ShooterState::complete;
+        m_State = ShooterConstant::ShooterState::noNote;
     } else {
         m_State = ShooterConstant::ShooterState::init;
     }
@@ -32,7 +32,7 @@ void ShootNote::Execute() {
             targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleAmp");
             targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpApproach");
         } else if (scoringPlace == ScoringPositions::trap) {
-            targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleAmp");
+            targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleTrap");
             targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapApproach");
         }
         m_State = ShooterConstant::ShooterState::waitingForSubsystems;
@@ -45,14 +45,16 @@ void ShootNote::Execute() {
         if (m_pShooterAngle->IsShooterAtTargetAngle(targetAngle)) { // is shooter at right angle
             isShooterAngledRight = true;
         }
-        if (m_pBarre->Is1erJointAtTargetAngle(targetPremierJoint)) {
-            isPremierJointAngledRight = true;
+        if (scoringPlace != ScoringPositions::speaker){
+            if (m_pBarre->Is1erJointAtTargetAngle(targetPremierJoint)) {
+                isPremierJointAngledRight = true;
+            }
+            if (m_pBarre->Is2eJointAtTargetAngle(targetDeuxiemeJoint)) {
+                isDeuxiemeJointAngledRight = true;
+            }
         }
-        if (m_pBarre->Is2eJointAtTargetAngle(targetDeuxiemeJoint)) {
-            isDeuxiemeJointAngledRight = true;
-        }
-        if (areWheelsReadyToShoot && isShooterAngledRight && isPremierJointAngledRight &&
-            isDeuxiemeJointAngledRight) {
+        if (areWheelsReadyToShoot && isShooterAngledRight && ((isPremierJointAngledRight &&
+            isDeuxiemeJointAngledRight) || scoringPlace == ScoringPositions::speaker)) {
             m_State = ShooterConstant::ShooterState::moveNoteInShooter;
         }
         break;
@@ -73,28 +75,36 @@ void ShootNote::Execute() {
             } else if (scoringPlace == ScoringPositions::trap) {
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapFinal");
             }
+            isDeuxiemeJointAngledRight = false;
             m_State = ShooterConstant::ShooterState::waitingForEnd;
         }
         break;
     case (ShooterConstant::ShooterState::waitingForEnd):
-        if (timer.Get() >= ShooterConstant::timeThreshold) {
+        if (m_pBarre->Is2eJointAtTargetAngle(targetDeuxiemeJoint)){
+            isDeuxiemeJointAngledRight = true;
+        }
+        if (timer.Get() >= ShooterConstant::timeThreshold && (isDeuxiemeJointAngledRight || scoringPlace == ScoringPositions::speaker)) {
             m_State = ShooterConstant::ShooterState::complete;
         }
         break;
     case (ShooterConstant::ShooterState::complete):
         break;
+    case (ShooterConstant::ShooterState::noNote):
+        break;
     }
-    if (m_State != ShooterConstant::ShooterState::complete) {
+    
+    if (m_State != ShooterConstant::ShooterState::noNote) {
         m_pShooterAngle->SetShooterAngle(targetAngle); // to update kAF continuously
+        if (scoringPlace != ScoringPositions::speaker) {
+            m_pBarre->Set1erJointAngle(targetPremierJoint); // to update kAF continuously
+            m_pBarre->Set2eJointAngle(targetDeuxiemeJoint); // to update kAF continuously
+        }
     }
-    if (scoringPlace != ScoringPositions::speaker) {
-        m_pBarre->Set1erJointAngle(targetPremierJoint); // to update kAF continuously
-        m_pBarre->Set2eJointAngle(targetDeuxiemeJoint); // to update kAF continuously
-    }
+    
 }
 
 bool ShootNote::IsFinished() {
-    if (m_State == ShooterConstant::ShooterState::complete) {
+    if (m_State == ShooterConstant::ShooterState::complete || m_State == ShooterConstant::ShooterState::noNote) {
         return true;
     }
     return false;
@@ -104,5 +114,7 @@ void ShootNote::End(bool interrupted) {
     m_pShooterWheels->StopWheels();
     m_pIntake->SetIntake(false, false);
     m_pShooterAngle->KeepCurrentAngle();
-    m_RedescendreBarre.Schedule();
+    if ((scoringPlace != ScoringPositions::speaker) && (m_State != ShooterConstant::ShooterState::noNote)){
+        m_RedescendreBarre.Schedule();
+    }
 }

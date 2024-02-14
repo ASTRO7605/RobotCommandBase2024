@@ -139,18 +139,6 @@ void Barre::Periodic() {
     frc::SmartDashboard::PutNumber("2eJointVelocity",
                                    m_MoteurDeuxiemeJoint.GetSelectedSensorVelocity() *
                                        BarreConstant::FConversionFactorVelocity2eJoint);
-    // if ((m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
-    //      BarreConstant::FConversionFactorPosition2eJoint) >= 3600) { // pour assurer un
-    //      wraparound
-    //     m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(
-    //         std::fmod(m_MoteurDeuxiemeJoint.GetSelectedSensorPosition(),
-    //                   (3600 / BarreConstant::FConversionFactorPosition2eJoint)));
-    // }
-    // if ((m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() < 0)) {
-    //     m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(
-    //         (3600 / BarreConstant::FConversionFactorPosition2eJoint) -
-    //         m_MoteurDeuxiemeJoint.GetSelectedSensorPosition());
-    // }
 }
 
 void Barre::Manual1erJoint(double percent) {
@@ -216,6 +204,8 @@ void Barre::SeedEncoder1erJoint() {
 void Barre::SeedEncoder2eJoint() {
     int absoluteEncoderPositionDeuxieme{
         m_MoteurDeuxiemeJoint.GetSensorCollection().GetPulseWidthPosition()};
+
+    absoluteEncoderPositionDeuxieme = absoluteEncoderPositionDeuxieme % 4096;
 
     m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(
         absoluteEncoderPositionDeuxieme + (BarreConstant::absoluteEncoderOffset2eJoint /

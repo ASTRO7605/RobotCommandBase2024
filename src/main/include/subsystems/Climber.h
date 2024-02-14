@@ -26,22 +26,31 @@ class Climber : public frc2::SubsystemBase {
 
     void Periodic() override;
 
-    /// @brief Set climber to a specific position
-    /// @param position Position of the climber (1/10 inch)
-    void SetClimberPosition(double position);
+    /// @brief Set left hook to a specific position
+    /// @param position Position of the left hook (1/10 inch)
+    void SetLeftHookPosition(double position);
 
-    /// @brief Function that returns the current climber position
-    /// @return The angle of the shooter (1/10th inch)
-    double GetClimberPosition();
+    /// @brief Set right hook to a specific position
+    /// @param position Position of the right hook (1/10 inch)
+    void SetRightHookPosition(double position);
 
-    /// @brief Set climber angle to specific manual speed
-    /// @param speed speed in (1/10 inch) / s
-    void ManualClimber(double speed);
+    /// @brief Set left hook to specific motor output
+    /// @param percent output of motor
+    void ManualLeftHook(double percent);
 
-    /// @brief checks to see if climber is at the target position
+    /// @brief Set right hook to specific motor output
+    /// @param percent output of motor
+    void ManualRightHook(double percent);
+
+    /// @brief checks to see if left hook is at the target position
     /// @param target targeted position (1/10 inch)
     /// @return true or false
-    bool IsClimberAtTargetPosition(double target);
+    bool IsLeftHookAtTargetPosition(double target);
+
+    /// @brief checks to see if right hook is at the target position
+    /// @param target targeted position (1/10 inch)
+    /// @return true or false
+    bool IsRightHookAtTargetPosition(double target);
 
   private:
     rev::CANSparkMax m_LeftHookMotor;

@@ -7,11 +7,14 @@ RedescendreBarre::RedescendreBarre(Barre *p_Barre) : m_pBarre{p_Barre} {
 void RedescendreBarre::Initialize() {
     premierJointTarget = frc::Preferences::GetDouble("k1erJointStartPosition");
     deuxiemeJointTarget = frc::Preferences::GetDouble("k2eJointStartPosition");
+    m_Timer.Restart();
 }
 
 void RedescendreBarre::Execute() {
-    m_pBarre->Set1erJointAngle(premierJointTarget);
-    m_pBarre->Set2eJointAngle(deuxiemeJointTarget);
+    if (m_Timer.Get() >= BarreConstant::kTimerThreshold){
+        m_pBarre->Set1erJointAngle(premierJointTarget);
+        m_pBarre->Set2eJointAngle(deuxiemeJointTarget);
+    }
 }
 
 bool RedescendreBarre::IsFinished() {

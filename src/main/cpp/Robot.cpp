@@ -79,10 +79,9 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kIHooksPosition", ClimberConstant::kIHooksPosition);
     frc::Preferences::InitDouble("kDHooksPosition", ClimberConstant::kDHooksPosition);
     frc::Preferences::InitDouble("kFFHooksPosition", ClimberConstant::kFFHooksPosition);
-    frc::Preferences::InitDouble("kPHooksVelocity", ClimberConstant::kPHooksVelocity);
-    frc::Preferences::InitDouble("kIHooksVelocity", ClimberConstant::kIHooksVelocity);
-    frc::Preferences::InitDouble("kDHooksVelocity", ClimberConstant::kDHooksVelocity);
-    frc::Preferences::InitDouble("kFFHooksVelocity", ClimberConstant::kFFHooksVelocity);
+
+    frc::Preferences::InitDouble("kPourcentageLeftHook", ClimberConstant::kPourcentageLeftHook);
+    frc::Preferences::InitDouble("kPourcentageRightHook", ClimberConstant::kPourcentageRightHook);
 
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,

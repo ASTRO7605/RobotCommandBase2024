@@ -126,7 +126,8 @@ enum ShooterState {
     waitingForNoteToEnter,
     waitingForNoteToExit,
     waitingForEnd,
-    complete
+    complete,
+    noNote
 };
 constexpr int leftMotorID = 16;
 constexpr int rightMotorID = 17;
@@ -238,7 +239,7 @@ constexpr double k2eJointAngleAmpApproach = 0;
 constexpr double k2eJointAngleAmpFinal = 0;
 constexpr double k1erJointStartPosition = 0;
 constexpr double k2eJointStartPosition = 0;
-
+constexpr auto kTimerThreshold = 0.5_s;
 } // namespace BarreConstant
 
 namespace ClimberConstant {
@@ -261,4 +262,6 @@ constexpr double currentLimit = 50;         // amperes,
 constexpr int positionPIDSlotID = 0;
 constexpr int velocityPIDSlotID = 1;
 constexpr double positionThreshold = 5; // 1/10 pouce
+constexpr double kPourcentageLeftHook = 0;
+constexpr double kPourcentageRightHook = 0;
 } // namespace ClimberConstant

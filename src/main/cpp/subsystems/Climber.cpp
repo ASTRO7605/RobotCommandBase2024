@@ -80,30 +80,42 @@ void Climber::Periodic() {
     frc::SmartDashboard::PutNumber("rightHookVelocity", m_RightHookMotorEncoder.GetVelocity());
 }
 
-void Climber::SetClimberPosition(double position) {
+void Climber::SetLeftHookPosition(double position) {
     m_LeftHookMotorPIDController.SetReference(position, rev::CANSparkBase::ControlType::kPosition,
                                               ClimberConstant::positionPIDSlotID,
                                               ClimberConstant::kAFHooks);
+}
+
+void Climber::SetRightHookPosition(double position) {
     m_RightHookMotorPIDController.SetReference(position, rev::CANSparkBase::ControlType::kPosition,
                                                ClimberConstant::positionPIDSlotID,
                                                ClimberConstant::kAFHooks);
 }
 
-void Climber::ManualClimber(double speed) {
-    m_LeftHookMotorPIDController.SetReference(speed, rev::CANSparkBase::ControlType::kVelocity,
-                                              ClimberConstant::velocityPIDSlotID,
+void Climber::ManualLeftHook(double percent) {
+    m_LeftHookMotorPIDController.SetReference(percent, rev::CANSparkBase::ControlType::kDutyCycle,
+                                              ClimberConstant::positionPIDSlotID,
                                               ClimberConstant::kAFHooks);
-    m_RightHookMotorPIDController.SetReference(speed, rev::CANSparkBase::ControlType::kVelocity,
-                                               ClimberConstant::velocityPIDSlotID,
+}
+
+void Climber::ManualRightHook(double percent){
+    m_RightHookMotorPIDController.SetReference(percent, rev::CANSparkBase::ControlType::kDutyCycle,
+                                               ClimberConstant::positionPIDSlotID,
                                                ClimberConstant::kAFHooks);
 }
 
-bool Climber::IsClimberAtTargetPosition(double target) {
-    if ((fabs(m_LeftHookMotorEncoder.GetPosition() - target) <=
-         ClimberConstant::positionThreshold) &&
-        (fabs(m_RightHookMotorEncoder.GetPosition() - target) <=
-         ClimberConstant::positionThreshold)) {
+bool Climber::IsLeftHookAtTargetPosition(double target) {
+    if (fabs(m_LeftHookMotorEncoder.GetPosition() - target) <=
+         ClimberConstant::positionThreshold) {
         return true;
+    }
+    return false;
+}
+
+bool Climber::IsRightHookAtTargetPosition(double target){
+    if (fabs(m_RightHookMotorEncoder.GetPosition() - target) <=
+         ClimberConstant::positionThreshold) {
+            return true;
     }
     return false;
 }
