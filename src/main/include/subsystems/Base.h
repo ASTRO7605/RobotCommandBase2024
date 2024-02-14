@@ -47,6 +47,8 @@ class Base : public frc2::SubsystemBase {
 
     void Periodic() override;
 
+    void SeedSwerveEncoders();
+
     void ResetEncoders();
 
     void Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
@@ -57,6 +59,8 @@ class Base : public frc2::SubsystemBase {
     void SetWheelsFacingForward();
 
     void SetWheelsFacingSideways();
+
+    void SetWheelsInXFormation();
 
     frc::Pose2d GetPose();
 
@@ -129,10 +133,10 @@ class Base : public frc2::SubsystemBase {
     double m_prevTime = wpi::Now() * 1e-6;
 
     // Used for SmartDashboard display of pose estimation.
-    frc::Field2d m_VisionFieldFront;
-    frc::Field2d m_VisionFieldBack;
+    // frc::Field2d m_VisionFieldFront;
+    // frc::Field2d m_VisionFieldBack;
     frc::Field2d m_RobotField;
 
-    Vision m_VisionFront{VisionConstant::TableNameFront, VisionConstant::frontCameraTransform};
-    Vision m_VisionBack{VisionConstant::TableNameBack, VisionConstant::backCameraTransform};
+    // Vision m_VisionFront{VisionConstant::TableNameFront, VisionConstant::frontCameraTransform};
+    // Vision m_VisionBack{VisionConstant::TableNameBack, VisionConstant::backCameraTransform};
 };

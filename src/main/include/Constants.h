@@ -12,6 +12,7 @@
 #include <units/velocity.h>
 #include <units/voltage.h>
 
+enum ScoringPositions { speaker, amp, trap };
 namespace DriveConstant {
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
@@ -118,10 +119,150 @@ constexpr int CoPilot_RPush_Button = 10;
 } // namespace OIConstant
 
 namespace ShooterConstant {
-constexpr int leftMotorID = 14;
-constexpr int rightMotorID = 15;
-constexpr double kPFlywheel = 0;
-constexpr double kIFlywheel = 0;
-constexpr double kDFlywheel = 0;
-
+enum ShooterState {
+    init,
+    waitingForSubsystems,
+    moveNoteInShooter,
+    waitingForNoteToEnter,
+    waitingForNoteToExit,
+    waitingForEnd,
+    complete,
+    noNote
+};
+constexpr int leftMotorID = 16;
+constexpr int rightMotorID = 17;
+constexpr int angleMotorID = 18;
+constexpr int capteurID = 1;
+constexpr double absoluteEncoderOffset = -2078.12; // 1/10 degre
+constexpr double flywheelsSpeedSpeaker = 4500;     // RPM
+constexpr double flywheelsSpeedAmp = 550;          // RPM
+constexpr double flywheelsSpeedTrap = 0;           // RPM
+constexpr double speedThreshold = 50;              // RPM
+constexpr auto timeThreshold = 0.2_s;
+constexpr double kPLeftFlywheel = 0.00025;
+constexpr double kILeftFlywheel = 0.000001;
+constexpr double kDLeftFlywheel = 0.01;
+constexpr double kFFLeftFlywheel = 0;
+constexpr double kPRightFlywheel = 0.00025;
+constexpr double kIRightFlywheel = 0.000001;
+constexpr double kDRightFlywheel = 0.01;
+constexpr double kFFRightFlywheel = 0;
+constexpr double FConversionFactorWheels = 1.0 / 42.0;             // ticks * F -> wheel rotations
+constexpr double FConversionFactorPositionAngle = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
+constexpr double FConversionFactorVelocityAngle = // ticks/100ms * F -> 0.1 degres/s
+    36000.0 / 4096.0;
+constexpr double FConversionFactorAccelerationAngle = // ticks/100ms * F -> 0.1 degres/s^2
+    36000.0 / 4096.0;
+constexpr int currentLimitFlywheels = 50;   // amperes
+constexpr double kVoltageCompensation = 10; // Volts
+constexpr int kTimeoutMs = 30;
+constexpr double kNominalOutputForward = 0;
+constexpr double kNominalOutputReverse = 0;
+constexpr double kPeakOutputForward = 1;
+constexpr double kPeakOutputReverse = -1;
+constexpr double kPPositionAngle = 9;
+constexpr double kIPositionAngle = 0;
+constexpr double kDPositionAngle = 10.0;
+constexpr double kFPositionAngle = 4.5;
+constexpr double kVitesseAngle = 2000;      // 1/10 degre par seconde
+constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
+constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
+constexpr double angleThreshold = 5;        // dixieme de degre
+constexpr double kMaxAF = 0.0445;
+constexpr double FDegToRad = M_PI / 180;
+constexpr double kPeakCurrentLimit = 9;    // amperes
+constexpr double kPeakCurrentDuration = 0; // ms
+constexpr double kContinuousCurrent = 9;   // amperes
+constexpr double kForwardSoftLimit = 740;  // 1/10 degre
+constexpr double kReverseSoftLimit = 200;  // 1/10 degre
+constexpr double kAngleShooterAmp = 600;
 } // namespace ShooterConstant
+
+namespace IntakeConstant {
+constexpr int topMotorID = 14;
+constexpr int bottomMotorID = 15;
+constexpr int capteurID = 0;
+constexpr double kVoltageCompensation = 10; // volts
+constexpr double kCurrentLimit = 50;        // amperes
+constexpr double kVoltageIntake = 7.5;      // volts
+} // namespace IntakeConstant
+
+namespace BarreConstant {
+constexpr int moteurPremierJointID = 19;
+constexpr int moteurDeuxiemeJointID = 20;
+constexpr int kTimeoutMs = 30;
+constexpr double kNominalOutputForward = 0;
+constexpr double kNominalOutputReverse = 0;
+constexpr double kPeakOutputForward = 1;
+constexpr double kPeakOutputReverse = -1;
+constexpr double kVoltageCompensation = 10;
+constexpr double kPeakCurrentLimit = 9;    // amperes
+constexpr double kPeakCurrentDuration = 0; // ms
+constexpr double kContinuousCurrent = 9;   // amperes
+constexpr double kMaxAF1erJoint = 0.065;
+constexpr double FDegToRad = M_PI / 180;
+constexpr double absoluteEncoderOffset1erJoint = -940.1;              // 1/10 degre
+constexpr double absoluteEncoderOffset2eJoint = 806;                  // 1/10 degre
+constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
+constexpr double FConversionFactorVelocity1erJoint =
+    18000.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+constexpr double FConversionFactorAcceleration1erJoint =
+    18000.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
+constexpr double FConversionFactorPosition2eJoint = 3600.0 / 4096.0; // ticks * F -> 0.1 degres
+constexpr double FConversionFactorVelocity2eJoint =
+    36000.0 / 4096.0; // ticks/100ms * F -> 0.1 degres/s
+constexpr double FConversionFactorAcceleration2eJoint =
+    36000.0 / 4096.0; // ticks/100ms/s * F -> 0.1 degres/ s^2
+constexpr double kPMotion1erJoint = 1.75;
+constexpr double kIMotion1erJoint = 0;
+constexpr double kDMotion1erJoint = 20;
+constexpr double kFMotion1erJoint = 0;
+constexpr double kPMotion2eJoint = 4;
+constexpr double kIMotion2eJoint = 0;
+constexpr double kDMotion2eJoint = 50;
+constexpr double kFMotion2eJoint = 0;
+constexpr double kVitesse1erJoint = 2750;
+constexpr double kAcceleration1erJoint = 12000;
+constexpr double kVitesse2eJoint = 6250;
+constexpr double kAcceleration2eJoint = 150000;
+constexpr double angleThreshold = 15;              // 1/10th degree
+constexpr double kForwardSoftLimit1erJoint = 1200; // 1/10 degre
+constexpr double kReverseSoftLimit1erJoint = 80;   // 1/10 degre
+constexpr double kForwardSoftLimit2eJoint = 3500;  // 1/10 degre
+constexpr double kReverseSoftLimit2eJoint = 100;   // 1/10 degre
+constexpr double kPourcentageManual1erJoint = 0.15;
+constexpr double kPourcentageManual2eJoint = 0.16;
+constexpr double k1erJointAngleTrap = 0;
+constexpr double k1erJointAngleAmp = 0;
+constexpr double k2eJointAngleTrapApproach = 0;
+constexpr double k2eJointAngleTrapFinal = 0;
+constexpr double k2eJointAngleAmpApproach = 0;
+constexpr double k2eJointAngleAmpFinal = 0;
+constexpr double k1erJointStartPosition = 0;
+constexpr double k2eJointStartPosition = 0;
+constexpr auto kTimerThreshold = 0.5_s;
+} // namespace BarreConstant
+
+namespace ClimberConstant {
+constexpr int leftHookMotorID = 21;
+constexpr int rightHookMotorID = 22;
+constexpr double FConversionFactorPosition = M_PI * 10 / 655.2; // ticks * F -> 0.1 pouce
+constexpr double FConversionFactorVelocity =
+    (FConversionFactorPosition * 42) / 60; // RPM * F -> 0.1 pouce / s
+constexpr double kPHooksPosition = 0;
+constexpr double kIHooksPosition = 0;
+constexpr double kDHooksPosition = 0;
+constexpr double kFFHooksPosition = 0;
+constexpr double kPHooksVelocity = 0;
+constexpr double kIHooksVelocity = 0;
+constexpr double kDHooksVelocity = 0;
+constexpr double kFFHooksVelocity = 0;
+constexpr double kAFHooks = 0;              // motor output voltage
+constexpr double kVoltageCompensation = 10; // volts
+constexpr double currentLimit = 50;         // amperes,
+constexpr int positionPIDSlotID = 0;
+constexpr int velocityPIDSlotID = 1;
+constexpr double positionThreshold = 5; // 1/10 pouce
+constexpr double kPourcentageLeftHook = 0;
+constexpr double kPourcentageRightHook = 0;
+} // namespace ClimberConstant

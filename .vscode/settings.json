@@ -19,6 +19,15 @@
     "optional": "cpp",
     "system_error": "cpp",
     "*.tcc": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "new": "cpp",
+    "array": "cpp",
+    "memory": "cpp",
+    "future": "cpp",
+    "istream": "cpp",
+    "functional": "cpp",
+    "tuple": "cpp",
+    "utility": "cpp",
+    "variant": "cpp"
   }
 }

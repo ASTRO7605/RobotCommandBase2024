@@ -5,8 +5,24 @@
 #pragma once
 
 #include "Constants.h"
+#include "commands/DeuxiemeJointManual.h"
+#include "commands/DeuxiemeJointPositionTest.h"
+#include "commands/IntakeCommand.h"
+#include "commands/PremierJointManual.h"
+#include "commands/PremierJointPositionTest.h"
+#include "commands/RedescendreBarre.h"
+#include "commands/ShootNote.h"
+#include "commands/ShooterAngleManual.h"
+#include "commands/ShooterPositionTest.h"
+#include "commands/TestAmp.h"
+
+#include "subsystems/Barre.h"
 #include "subsystems/Base.h"
+#include "subsystems/Intake.h"
+#include "subsystems/ShooterAngle.h"
+#include "subsystems/ShooterWheels.h"
 #include "subsystems/Vision.h"
+
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/InstantCommand.h>
@@ -62,10 +78,16 @@ class RobotContainer {
 
     frc2::CommandPtr GetAutonomousCommand();
 
+    void SeedEncoders();
+
   private:
     void ConfigureBindings();
     void ConfigurePathfind();
     // The robot's subsystems are defined here...
     Base m_Base;
+    Barre m_Barre;
+    ShooterAngle m_ShooterAngle;
+    ShooterWheels m_ShooterWheels;
+    Intake m_Intake;
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };

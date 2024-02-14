@@ -62,13 +62,56 @@ void RobotContainer::ConfigureBindings() {
     // bouton pouce
     m_ThrottleStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
-    m_CoPilotController.RightBumper().OnTrue(frc2::InstantCommand{
-        [this] {
-            m_Base.ResetOdometry(frc::Pose2d{/*3.05_m, 4.33_m, 180_deg*/ 0_m, 0_m, 0_deg});
-        },
-        {}}.ToPtr());
+    // m_CoPilotController.LeftBumper().OnTrue(
+    //     frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
     m_CoPilotController.LeftBumper().OnTrue(
-        frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
+        frc2::InstantCommand(
+            [this]() {
+                m_ShooterWheels.ManualToggleStartWheels(
+                    frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"));
+            },
+            {&m_ShooterWheels})
+            .ToPtr());
+    m_TurnStick.Button(7).WhileTrue(
+        ShooterAngleManual(&m_ShooterAngle,
+                           frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+            .ToPtr());
+    m_TurnStick.Button(8).WhileTrue(
+        ShooterAngleManual(&m_ShooterAngle,
+                           -frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+            .ToPtr());
+    m_TurnStick.Button(9).WhileTrue(
+        PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
+            .ToPtr());
+    m_TurnStick.Button(10).WhileTrue(
+        PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
+            .ToPtr());
+    m_TurnStick.Button(11).WhileTrue(
+        DeuxiemeJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
+            .ToPtr());
+    m_TurnStick.Button(12).WhileTrue(
+
+        DeuxiemeJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
+            .ToPtr());
+    m_ThrottleStick.Button(7).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
+    m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 600).ToPtr());
+    m_ThrottleStick.Button(9).WhileTrue(PremierJointPositionTest(&m_Barre, 120).ToPtr());
+    m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
+    m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
+    m_ThrottleStick.Button(12).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 2100).ToPtr());
+
+    m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
+    m_CoPilotController.B().OnTrue(RedescendreBarre(&m_Barre).ToPtr());
+    m_CoPilotController.X().OnTrue(
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                  frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
+                  frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)
+            .ToPtr());
+    m_CoPilotController.Y().OnTrue(
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                  frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
+                  frc::Preferences::GetDouble("angleShooterAmp"), ScoringPositions::amp)
+            .ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -85,4 +128,11 @@ void RobotContainer::ConfigurePathfind() {
         pathplanner::PathConstraints(2.0_mps, 2.0_mps_sq, 540_deg_per_s, 540_deg_per_s_sq);
 
     pathfindingCommand = pathplanner::AutoBuilder::pathfindThenFollowPath(path, constraints);
+}
+
+void RobotContainer::SeedEncoders() {
+    m_Base.SeedSwerveEncoders();
+    m_Barre.SeedEncoder1erJoint();
+    m_Barre.SeedEncoder2eJoint();
+    m_ShooterAngle.SeedEncoder();
 }

@@ -7,18 +7,82 @@
 #include <wpi/MemoryBuffer.h>
 
 void Robot::RobotInit() {
-  // frc::CameraServer::StartAutomaticCapture();
+    frc::CameraServer::StartAutomaticCapture();
 
-  // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
-  // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
-  // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
-  frc::SmartDashboard::PutNumber("Gyro Angle", 0);
-  frc::SmartDashboard::PutNumber("Gyro Rotation 2D", 0);
-  frc::SmartDashboard::PutNumber("Gyro Radians", 0);
+    m_Container.SeedEncoders();
+    // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
+    // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
+    // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
+    frc::Preferences::InitDouble("flywheelSpeedsSpeakerRPM",
+                                 ShooterConstant::flywheelsSpeedSpeaker);
+    frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
+    frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
 
-  frc::Preferences::InitDouble("kPFlywheel", 0);
-  frc::Preferences::InitDouble("kIFlywheel", 0);
-  frc::Preferences::InitDouble("kDFlywheel", 0);
+    frc::Preferences::InitDouble("testAngleShooter", 0);
+    frc::Preferences::InitDouble("angleShooterAmp", ShooterConstant::kAngleShooterAmp);
+
+    frc::Preferences::InitDouble("kPLeftFlywheel", ShooterConstant::kPLeftFlywheel);
+    frc::Preferences::InitDouble("kILeftFlywheel", ShooterConstant::kILeftFlywheel);
+    frc::Preferences::InitDouble("kDLeftFlywheel", ShooterConstant::kDLeftFlywheel);
+    frc::Preferences::InitDouble("kFFLeftFlywheel", ShooterConstant::kFFLeftFlywheel);
+
+    frc::Preferences::InitDouble("kPRightFlywheel", ShooterConstant::kPRightFlywheel);
+    frc::Preferences::InitDouble("kIRightFlywheel", ShooterConstant::kIRightFlywheel);
+    frc::Preferences::InitDouble("kDRightFlywheel", ShooterConstant::kDRightFlywheel);
+    frc::Preferences::InitDouble("kFFRightFlywheel", ShooterConstant::kFFRightFlywheel);
+
+    frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
+    frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);
+    frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
+    frc::Preferences::InitDouble("kFPositionAngleLanceur", ShooterConstant::kFPositionAngle);
+
+    frc::Preferences::InitDouble("kVitesseAngle", ShooterConstant::kVitesseAngle);
+    frc::Preferences::InitDouble("kAccelerationAngle", ShooterConstant::kAccelerationAngle);
+
+    frc::Preferences::InitDouble("kPourcentageManualAngleLanceur",
+                                 ShooterConstant::kPercentOutputAngle);
+
+    frc::Preferences::InitDouble("kVoltageIntake", IntakeConstant::kVoltageIntake);
+
+    frc::Preferences::InitDouble("kPMotion1erJoint", BarreConstant::kPMotion1erJoint);
+    frc::Preferences::InitDouble("kIMotion1erJoint", BarreConstant::kIMotion1erJoint);
+    frc::Preferences::InitDouble("kDMotion1erJoint", BarreConstant::kDMotion1erJoint);
+    frc::Preferences::InitDouble("kFMotion1erJoint", BarreConstant::kFMotion1erJoint);
+
+    frc::Preferences::InitDouble("kPourcentageManual1erJoint",
+                                 BarreConstant::kPourcentageManual1erJoint);
+    frc::Preferences::InitDouble("kPourcentageManual2eJoint",
+                                 BarreConstant::kPourcentageManual2eJoint);
+
+    frc::Preferences::InitDouble("kPMotion2eJoint", BarreConstant::kPMotion2eJoint);
+    frc::Preferences::InitDouble("kIMotion2eJoint", BarreConstant::kIMotion2eJoint);
+    frc::Preferences::InitDouble("kDMotion2eJoint", BarreConstant::kDMotion2eJoint);
+    frc::Preferences::InitDouble("kFMotion2eJoint", BarreConstant::kFMotion2eJoint);
+
+    frc::Preferences::InitDouble("kVitesse1erJoint", BarreConstant::kVitesse1erJoint);
+    frc::Preferences::InitDouble("kAcceleration1erJoint", BarreConstant::kAcceleration1erJoint);
+
+    frc::Preferences::InitDouble("kVitesse2eJoint", BarreConstant::kVitesse2eJoint);
+    frc::Preferences::InitDouble("kAcceleration2eJoint", BarreConstant::kAcceleration2eJoint);
+
+    frc::Preferences::InitDouble("k1erJointAngleTrap", BarreConstant::k1erJointAngleTrap);
+    frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
+    frc::Preferences::InitDouble("k2eJointAngleTrapApproach",
+                                 BarreConstant::k2eJointAngleTrapApproach);
+    frc::Preferences::InitDouble("k2eJointAngleTrapFinal", BarreConstant::k2eJointAngleTrapFinal);
+    frc::Preferences::InitDouble("k2eJointAngleAmpApproach",
+                                 BarreConstant::k2eJointAngleAmpApproach);
+    frc::Preferences::InitDouble("k2eJointAngleAmpFinal", BarreConstant::k2eJointAngleAmpFinal);
+    frc::Preferences::InitDouble("k1erJointStartPosition", BarreConstant::k1erJointStartPosition);
+    frc::Preferences::InitDouble("k2eJointStartPosition", BarreConstant::k2eJointStartPosition);
+
+    frc::Preferences::InitDouble("kPHooksPosition", ClimberConstant::kPHooksPosition);
+    frc::Preferences::InitDouble("kIHooksPosition", ClimberConstant::kIHooksPosition);
+    frc::Preferences::InitDouble("kDHooksPosition", ClimberConstant::kDHooksPosition);
+    frc::Preferences::InitDouble("kFFHooksPosition", ClimberConstant::kFFHooksPosition);
+
+    frc::Preferences::InitDouble("kPourcentageLeftHook", ClimberConstant::kPourcentageLeftHook);
+    frc::Preferences::InitDouble("kPourcentageRightHook", ClimberConstant::kPourcentageRightHook);
 
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,
@@ -42,17 +106,19 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  if (m_autonomousCommand.get() != nullptr) {
-    m_autonomousCommand.Schedule();
-  }
+    m_Container.SeedEncoders();
+    if (m_autonomousCommand.get() != nullptr) {
+        m_autonomousCommand.Schedule();
+    }
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
-  if (m_autonomousCommand.get() != nullptr) {
-    m_autonomousCommand.Cancel();
-  }
+    m_Container.SeedEncoders();
+    if (m_autonomousCommand.get() != nullptr) {
+        m_autonomousCommand.Cancel();
+    }
 }
 
 /**
