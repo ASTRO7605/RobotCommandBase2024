@@ -195,19 +195,37 @@ void Barre::SeedEncoder1erJoint() {
 
     int absoluteEncoderPositionPremier{
         m_MoteurPremierJoint.GetSensorCollection().GetPulseWidthPosition()};
+    absoluteEncoderPositionPremier = absoluteEncoderPositionPremier % 4096;
 
-    m_MoteurPremierJoint.SetSelectedSensorPosition(
-        absoluteEncoderPositionPremier + (BarreConstant::absoluteEncoderOffset1erJoint /
-                                          BarreConstant::FConversionFactorPosition1erJoint));
+    if (absoluteEncoderPositionPremier < 0) {
+        absoluteEncoderPositionPremier = absoluteEncoderPositionPremier + 4096;
+    }
+
+    double relativeEncoderPositionPremier{absoluteEncoderPositionPremier +
+                                          (BarreConstant::absoluteEncoderOffset1erJoint /
+                                           BarreConstant ::FConversionFactorPosition1erJoint)};
+    if (relativeEncoderPositionPremier < 0) {
+        relativeEncoderPositionPremier = relativeEncoderPositionPremier + 4096;
+    }
+    relativeEncoderPositionPremier = static_cast<int>(relativeEncoderPositionPremier) % 4096;
+    m_MoteurPremierJoint.SetSelectedSensorPosition(relativeEncoderPositionPremier);
 }
 
 void Barre::SeedEncoder2eJoint() {
     int absoluteEncoderPositionDeuxieme{
-        m_MoteurDeuxiemeJoint.GetSensorCollection().GetPulseWidthPosition()};
-
+        -m_MoteurDeuxiemeJoint.GetSensorCollection().GetPulseWidthPosition()};
     absoluteEncoderPositionDeuxieme = absoluteEncoderPositionDeuxieme % 4096;
 
-    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(
-        absoluteEncoderPositionDeuxieme + (BarreConstant::absoluteEncoderOffset2eJoint /
-                                           BarreConstant ::FConversionFactorPosition2eJoint));
+    if (absoluteEncoderPositionDeuxieme < 0) {
+        absoluteEncoderPositionDeuxieme = absoluteEncoderPositionDeuxieme + 4096;
+    }
+
+    double relativeEncoderPositionDeuxieme{absoluteEncoderPositionDeuxieme +
+                                           (BarreConstant::absoluteEncoderOffset2eJoint /
+                                            BarreConstant ::FConversionFactorPosition2eJoint)};
+    if (relativeEncoderPositionDeuxieme < 0) {
+        relativeEncoderPositionDeuxieme = relativeEncoderPositionDeuxieme + 4096;
+    }
+    relativeEncoderPositionDeuxieme = static_cast<int>(relativeEncoderPositionDeuxieme) % 4096;
+    m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(relativeEncoderPositionDeuxieme);
 }

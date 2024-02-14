@@ -108,8 +108,18 @@ void ShooterAngle::KeepCurrentAngle() {
 
 void ShooterAngle::SeedEncoder() {
     int absoluteEncoderPosition{m_MoteurAngle.GetSensorCollection().GetPulseWidthPosition()};
+    absoluteEncoderPosition = absoluteEncoderPosition % 4096;
 
-    m_MoteurAngle.SetSelectedSensorPosition(
-        absoluteEncoderPosition +
-        (ShooterConstant::absoluteEncoderOffset / ShooterConstant::FConversionFactorPositionAngle));
+    if (absoluteEncoderPosition < 0) {
+        absoluteEncoderPosition = absoluteEncoderPosition + 4096;
+    }
+
+    double relativeEncoderPosition{absoluteEncoderPosition +
+                                   (ShooterConstant::absoluteEncoderOffset /
+                                    ShooterConstant ::FConversionFactorPositionAngle)};
+    if (relativeEncoderPosition < 0) {
+        relativeEncoderPosition = relativeEncoderPosition + 4096;
+    }
+    relativeEncoderPosition = static_cast<int>(relativeEncoderPosition) % 4096;
+    m_MoteurAngle.SetSelectedSensorPosition(relativeEncoderPosition);
 }

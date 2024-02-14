@@ -95,9 +95,10 @@ void RobotContainer::ConfigureBindings() {
     m_ThrottleStick.Button(7).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
     m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 700).ToPtr());
     m_ThrottleStick.Button(9).WhileTrue(PremierJointPositionTest(&m_Barre, 120).ToPtr());
-    m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
-    m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
-    m_ThrottleStick.Button(12).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 2000).ToPtr());
+    // m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
+    m_ThrottleStick.Button(10).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
+    m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 1700).ToPtr());
+    m_ThrottleStick.Button(12).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 2100).ToPtr());
 
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
     m_CoPilotController.B().WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
