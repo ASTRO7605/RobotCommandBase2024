@@ -14,7 +14,8 @@
 
 enum ScoringPositions { speaker, amp, trap };
 namespace DriveConstant {
-enum IdleMode {Coast, Brake};
+constexpr auto delayBeforeSeedEncoders = 0.2_s;
+enum IdleMode { Coast, Brake };
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
 constexpr double kWheelDiameterM = 0.09689;
@@ -161,7 +162,7 @@ constexpr double kNominalOutputForward = 0;
 constexpr double kNominalOutputReverse = 0;
 constexpr double kPeakOutputForward = 1;
 constexpr double kPeakOutputReverse = -1;
-constexpr double kPPositionAngle = 9;
+constexpr double kPPositionAngle = 8.75;
 constexpr double kIPositionAngle = 0;
 constexpr double kDPositionAngle = 10.0;
 constexpr double kFPositionAngle = 4.5;
@@ -170,7 +171,7 @@ constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
 constexpr double angleThreshold = 5;        // dixieme de degre
 constexpr double kMaxAF = 0.0445;
-constexpr double FDegToRad = M_PI / 180;
+constexpr double FDegToRad = std::numbers::pi / 180;
 constexpr double kPeakCurrentLimit = 9;    // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
 constexpr double kContinuousCurrent = 9;   // amperes
@@ -201,7 +202,7 @@ constexpr double kPeakCurrentLimit = 9;    // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
 constexpr double kContinuousCurrent = 9;   // amperes
 constexpr double kMaxAF1erJoint = 0.065;
-constexpr double FDegToRad = M_PI / 180;
+constexpr double FDegToRad = std::numbers::pi / 180;
 constexpr double absoluteEncoderOffset1erJoint = -940.1;              // 1/10 degre
 constexpr double absoluteEncoderOffset2eJoint = 806;                  // 1/10 degre
 constexpr double FConversionFactorPosition1erJoint = 1800.0 / 4096.0; // ticks * F -> 0.1 degres
@@ -233,35 +234,46 @@ constexpr double kForwardSoftLimit2eJoint = 3500;  // 1/10 degre
 constexpr double kReverseSoftLimit2eJoint = 100;   // 1/10 degre
 constexpr double kPourcentageManual1erJoint = 0.15;
 constexpr double kPourcentageManual2eJoint = 0.16;
-constexpr double k1erJointAngleTrap = 0;
-constexpr double k1erJointAngleAmp = 0;
-constexpr double k2eJointAngleTrapApproach = 0;
-constexpr double k2eJointAngleTrapFinal = 0;
+constexpr double k1erJointAngleTrapApproach = 0;
+constexpr double k1erJointAngleTrapFinal = 0;
+constexpr double k1erJointAngleAmp = 1000;
+constexpr double k2eJointAngleTrapApproach = 1600;
+constexpr double k2eJointAngleTrapFinal = 700;
 constexpr double k2eJointAngleAmpApproach = 0;
 constexpr double k2eJointAngleAmpFinal = 0;
-constexpr double k1erJointStartPosition = 0;
-constexpr double k2eJointStartPosition = 0;
+constexpr double k1erJointStartPosition = 80;
+constexpr double k2eJointStartPosition = 900;
 constexpr auto kTimerThreshold = 0.5_s;
 } // namespace BarreConstant
 
 namespace ClimberConstant {
 constexpr int leftHookMotorID = 21;
 constexpr int rightHookMotorID = 22;
-constexpr double FConversionFactorPosition = M_PI * 10 / 655.2; // ticks * F -> 0.1 pouce
+constexpr double FConversionFactorPosition =
+    (std::numbers::pi * 12.5) /
+    15.6; // ticks * F -> 0.1 pouce ***native neo units: tours de moteurs
 constexpr double FConversionFactorVelocity =
-    (FConversionFactorPosition * 42) / 60; // RPM * F -> 0.1 pouce / s
-constexpr double kPHooksPosition = 0;
+    (FConversionFactorPosition) / 60; // RPM * F -> 0.1 pouce / s
+constexpr double kPHooksPosition = 0.115;
 constexpr double kIHooksPosition = 0;
 constexpr double kDHooksPosition = 0;
 constexpr double kFFHooksPosition = 0;
-constexpr double kAFHooks = 0;              // motor output voltage
+constexpr double kAFHooks = -0.125;         // motor output voltage
 constexpr double kVoltageCompensation = 10; // volts
 constexpr double currentLimit = 50;         // amperes,
 constexpr int positionPIDSlotID = 0;
 constexpr int velocityPIDSlotID = 1;
 constexpr double positionThreshold = 5; // 1/10 pouce
-constexpr double kPourcentageHooks = 0;
-constexpr double kPourcentageInitHooks = 0;
-constexpr double kThresholdMotorStopped = 0.5;
+constexpr double kPourcentageHooks = 0.075;
+constexpr double kPourcentageInitHooks = -0.075;
+constexpr double kThresholdMotorStopped = 1;
 constexpr auto kTimeDelayForInit = 0.1_s;
+constexpr double FConversionTenthInchToMeter = 0.00254;
+constexpr double FConversionTenthInchPerSecondToMeterPerSecond = 0.00254;
+constexpr double FConversionTenthInchPerSecondSquaredToMeterPerSecondSquared = 0.00254;
+constexpr double kVitesseHooks = 100;      // 1/10 inch per second
+constexpr double kAccelerationHooks = 100; // 1/10 inch per second squared
+constexpr double kPositionInitReset = 0;
+constexpr double kPositionAfterInit = 10;
+constexpr double kForwardSoftLimit = 230;
 } // namespace ClimberConstant

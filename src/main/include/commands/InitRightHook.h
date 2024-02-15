@@ -1,18 +1,17 @@
 #pragma once
 
-#include "subsystems/LeftHook.h"
+#include "subsystems/RightHook.h"
 #include <frc/Timer.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc2/command/PrintCommand.h>
 
-class InitLeftHook : public frc2::CommandHelper<frc2::Command, InitLeftHook> {
+class InitRightHook : public frc2::CommandHelper<frc2::Command, InitRightHook> {
   private:
-    LeftHook *m_pLeftHook;
+    RightHook *m_pRightHook;
     frc::Timer m_Timer;
 
   public:
-    explicit InitLeftHook(LeftHook *p_LeftHook);
+    explicit InitRightHook(RightHook *p_RightHook);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

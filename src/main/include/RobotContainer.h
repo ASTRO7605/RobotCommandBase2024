@@ -7,26 +7,29 @@
 #include "Constants.h"
 #include "commands/DeuxiemeJointManual.h"
 #include "commands/DeuxiemeJointPositionTest.h"
+#include "commands/InitLeftHook.h"
+#include "commands/InitRightHook.h"
 #include "commands/IntakeCommand.h"
+#include "commands/LeftHookManual.h"
+#include "commands/LeftHookPositionTest.h"
 #include "commands/PremierJointManual.h"
 #include "commands/PremierJointPositionTest.h"
 #include "commands/RedescendreBarre.h"
+#include "commands/RightHookManual.h"
+#include "commands/RightHookPositionTest.h"
 #include "commands/ShootNote.h"
 #include "commands/ShooterAngleManual.h"
 #include "commands/ShooterPositionTest.h"
 #include "commands/TestAmp.h"
-#include "commands/LeftHookManual.h"
-#include "commands/RightHookManual.h"
-#include "commands/InitLeftHook.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
+#include "subsystems/LeftHook.h"
+#include "subsystems/RightHook.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
 #include "subsystems/Vision.h"
-#include "subsystems/LeftHook.h"
-#include "subsystems/RightHook.h"
 
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -85,6 +88,8 @@ class RobotContainer {
 
     void SeedEncoders();
     void BringBarreDown();
+    void SetInitHooksScheduled();
+    bool IsInitHooksDone();
     void SetIdleModeSwerve(DriveConstant::IdleMode);
 
   private:

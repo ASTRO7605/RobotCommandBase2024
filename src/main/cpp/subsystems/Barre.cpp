@@ -32,6 +32,9 @@ Barre::Barre()
     m_MoteurPremierJoint.SetInverted(true);
     m_MoteurDeuxiemeJoint.SetInverted(true);
 
+    SeedEncoder1erJoint();
+    SeedEncoder2eJoint();
+
     m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
                                               BarreConstant::kTimeoutMs);
     m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
@@ -240,5 +243,5 @@ void Barre::KeepCurrentAngle1erJoint() {
 
 void Barre::KeepCurrentAngle2eJoint() {
     m_MoteurDeuxiemeJoint.Set(ControlMode::MotionMagic,
-                             m_MoteurDeuxiemeJoint.GetSelectedSensorPosition());
+                              m_MoteurDeuxiemeJoint.GetSelectedSensorPosition());
 }

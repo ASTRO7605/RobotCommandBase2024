@@ -15,6 +15,7 @@
 #include <frc/DigitalInput.h>
 #include <frc/Preferences.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/trajectory/TrapezoidProfile.h>
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandPtr.h>
@@ -41,11 +42,21 @@ class LeftHook : public frc2::SubsystemBase {
 
     void KeepLeftHookPosition();
 
-	  bool IsLeftHookStopped();
+    bool IsLeftHookStopped();
 
     /// @brief Sets left hook encoder to a position
     /// @param newPosition Position to set the encoder to (1/10 inch)
     void SetLeftHookEncoderPosition(double newPosition);
+
+    frc::TrapezoidProfile<units::meters>::State GetLeftHookState();
+
+    bool IsInitDone();
+
+    void SetInitDone();
+
+    bool IsInitScheduled();
+
+    void SetInitScheduled();
 
   private:
     rev::CANSparkMax m_LeftHookMotor;
@@ -53,4 +64,7 @@ class LeftHook : public frc2::SubsystemBase {
     rev::SparkRelativeEncoder m_LeftHookMotorEncoder;
 
     rev::SparkPIDController m_LeftHookMotorPIDController;
+
+    bool isInitDone;
+    bool isInitScheduled;
 };

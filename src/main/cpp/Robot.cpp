@@ -65,7 +65,9 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kVitesse2eJoint", BarreConstant::kVitesse2eJoint);
     frc::Preferences::InitDouble("kAcceleration2eJoint", BarreConstant::kAcceleration2eJoint);
 
-    frc::Preferences::InitDouble("k1erJointAngleTrap", BarreConstant::k1erJointAngleTrap);
+    frc::Preferences::InitDouble("k1erJointAngleTrapApproach",
+                                 BarreConstant::k1erJointAngleTrapApproach);
+    frc::Preferences::InitDouble("k1erJointAngleTrapFinal", BarreConstant::k1erJointAngleTrapFinal);
     frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
     frc::Preferences::InitDouble("k2eJointAngleTrapApproach",
                                  BarreConstant::k2eJointAngleTrapApproach);
@@ -82,6 +84,10 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kFFHooksPosition", ClimberConstant::kFFHooksPosition);
 
     frc::Preferences::InitDouble("kPourcentageManualHooks", ClimberConstant::kPourcentageHooks);
+    frc::Preferences::InitDouble("kVitesseHooks", ClimberConstant::kVitesseHooks);
+    frc::Preferences::InitDouble("kAccelerationHooks", ClimberConstant::kAccelerationHooks);
+
+    hasInitHooksBeenScheduled = false;
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,
    * teleoperated and test. * <p> This runs after the mode specific periodic
@@ -95,9 +101,7 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {
-    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
-}
+void Robot::DisabledInit() { m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast); }
 
 void Robot::DisabledPeriodic() {}
 
@@ -107,19 +111,22 @@ void Robot::DisabledPeriodic() {}
  */
 void Robot::AutonomousInit() {
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
-    m_Container.BringBarreDown();
-    m_Container.SeedEncoders();
+    // m_Container.BringBarreDown();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();
     }
 }
 
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousPeriodic() {
+    if (!hasInitHooksBeenScheduled) {
+        m_Container.SetInitHooksScheduled();
+        hasInitHooksBeenScheduled = true;
+    }
+}
 
 void Robot::TeleopInit() {
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
-    m_Container.BringBarreDown();
-    m_Container.SeedEncoders();
+    // m_Container.BringBarreDown();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
     }
@@ -128,7 +135,12 @@ void Robot::TeleopInit() {
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+    if (!hasInitHooksBeenScheduled) {
+        m_Container.SetInitHooksScheduled();
+        hasInitHooksBeenScheduled = true;
+    }
+}
 
 /**
  * This function is called periodically during test mode.

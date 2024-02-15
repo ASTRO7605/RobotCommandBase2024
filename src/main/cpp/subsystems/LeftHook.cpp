@@ -30,6 +30,13 @@ LeftHook::LeftHook()
     m_LeftHookMotor.EnableVoltageCompensation(ClimberConstant::kVoltageCompensation);
 
     m_LeftHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit);
+
+    m_LeftHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
+                                 ClimberConstant::kForwardSoftLimit *
+                                     ClimberConstant::FConversionFactorPosition);
+
+    isInitDone = false;
+    isInitScheduled = false;
 }
 
 void LeftHook::Periodic() {
@@ -50,20 +57,40 @@ void LeftHook::ManualLeftHook(double percent) {
 }
 
 bool LeftHook::IsLeftHookAtTargetPosition(double target) {
-    if (fabs(m_LeftHookMotorEncoder.GetPosition() - target) <=
-         ClimberConstant::positionThreshold) {
+    if (fabs(m_LeftHookMotorEncoder.GetPosition() - target) <= ClimberConstant::positionThreshold) {
         return true;
     }
     return false;
 }
 
 bool LeftHook::IsLeftHookStopped() {
-    if (m_LeftHookMotorEncoder.GetVelocity() <= ClimberConstant::kThresholdMotorStopped){
+    if (fabs(m_LeftHookMotorEncoder.GetVelocity()) <= ClimberConstant::kThresholdMotorStopped) {
         return true;
     }
     return false;
 }
 
-void LeftHook::SetLeftHookEncoderPosition(double newPosition){
+void LeftHook::SetLeftHookEncoderPosition(double newPosition) {
     m_LeftHookMotorEncoder.SetPosition(newPosition);
 }
+
+frc::TrapezoidProfile<units::meters>::State LeftHook::GetLeftHookState() {
+    return (frc::TrapezoidProfile<units::meters>::State{
+        units::meter_t{m_LeftHookMotorEncoder.GetPosition() *
+                       ClimberConstant::FConversionTenthInchToMeter},
+        units::meters_per_second_t{
+            m_LeftHookMotorEncoder.GetVelocity() *
+            ClimberConstant::FConversionTenthInchPerSecondToMeterPerSecond}});
+}
+
+void LeftHook::KeepLeftHookPosition() {
+    m_LeftHookMotorEncoder.SetPosition(m_LeftHookMotorEncoder.GetPosition());
+}
+
+bool LeftHook::IsInitDone() { return isInitDone; }
+
+void LeftHook::SetInitDone() { isInitDone = true; }
+
+bool LeftHook::IsInitScheduled() { return isInitScheduled; }
+
+void LeftHook::SetInitScheduled() { isInitScheduled = true; }

@@ -65,6 +65,7 @@ Base::Base()
                                   frc::Pose2d{0_m, 0_m, 0_rad});
 
     m_DrivingInFieldRelative = true;
+    m_TimerEncoder.Restart();
 }
 
 void Base::Periodic() {
@@ -92,9 +93,14 @@ void Base::Periodic() {
 
     // for SmartDashboard
     m_RobotField.SetRobotPose(m_PoseEstimator.GetEstimatedPosition());
+    if (m_TimerEncoder.Get() >= DriveConstant::delayBeforeSeedEncoders) {
+        m_TimerEncoder.Stop();
+        m_TimerEncoder.Reset();
+        SeedSwerveEncoders();
+    }
 }
 
-void Base::SetIdleMode(DriveConstant::IdleMode idleMode){
+void Base::SetIdleMode(DriveConstant::IdleMode idleMode) {
     m_FrontRightModule.SetIdleMode(idleMode);
     m_FrontLeftModule.SetIdleMode(idleMode);
     m_RearLeftModule.SetIdleMode(idleMode);
@@ -230,9 +236,7 @@ void Base::SetWheelsInXFormation() {
 
 units::angle::degree_t Base::GetHeadingDegrees() { return m_Gyro.GetRotation2d().Degrees(); }
 
-frc::Pose2d Base::GetPose() {
-    return m_PoseEstimator.GetEstimatedPosition();
-}
+frc::Pose2d Base::GetPose() { return m_PoseEstimator.GetEstimatedPosition(); }
 
 frc::ChassisSpeeds Base::GetRobotRelativeSpeeds() {
     return kDriveKinematics.ToChassisSpeeds(

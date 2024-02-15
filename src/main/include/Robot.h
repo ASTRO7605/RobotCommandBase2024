@@ -43,4 +43,5 @@ class Robot : public frc::TimedRobot {
   RobotContainer m_Container;
   /* WARNING : Please, initialize an object before calling a member function */
   frc2::CommandPtr m_autonomousCommand {m_Container.GetAutonomousCommand()};
+  bool hasInitHooksBeenScheduled;
 };

@@ -7,10 +7,11 @@ RightHookManual::RightHookManual(RightHook *p_RightHook, double percent)
 
 void RightHookManual::Initialize() {}
 
-void RightHookManual::Execute() { 
-    m_pRightHook->ManualRightHook(percent); 
-}
+void RightHookManual::Execute() { m_pRightHook->ManualRightHook(percent); }
 
 bool RightHookManual::IsFinished() { return false; }
 
-void RightHookManual::End(bool) { m_pRightHook->ManualRightHook(0); }
+void RightHookManual::End(bool) {
+    m_pRightHook->ManualRightHook(0);
+    m_pRightHook->KeepRightHookPosition();
+}

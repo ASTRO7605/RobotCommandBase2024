@@ -27,20 +27,36 @@ class RightHook : public frc2::SubsystemBase {
 
     void Periodic() override;
 
-    /// @brief Set right hook to a specific position
-    /// @param position Position of the right hook (1/10 inch)
+    /// @brief Set left hook to a specific position
+    /// @param position Position of the left hook (1/10 inch)
     void SetRightHookPosition(double position);
 
-    /// @brief Set right hook to specific motor output
+    /// @brief Set left hook to specific motor output
     /// @param percent output of motor
     void ManualRightHook(double percent);
 
-    /// @brief checks to see if right hook is at the target position
+    /// @brief checks to see if left hook is at the target position
     /// @param target targeted position (1/10 inch)
     /// @return true or false
     bool IsRightHookAtTargetPosition(double target);
 
     void KeepRightHookPosition();
+
+    bool IsRightHookStopped();
+
+    /// @brief Sets left hook encoder to a position
+    /// @param newPosition Position to set the encoder to (1/10 inch)
+    void SetRightHookEncoderPosition(double newPosition);
+
+    frc::TrapezoidProfile<units::meters>::State GetRightHookState();
+
+    bool IsInitDone();
+
+    void SetInitDone();
+
+    bool IsInitScheduled();
+
+    void SetInitScheduled();
 
   private:
     rev::CANSparkMax m_RightHookMotor;
@@ -48,4 +64,7 @@ class RightHook : public frc2::SubsystemBase {
     rev::SparkRelativeEncoder m_RightHookMotorEncoder;
 
     rev::SparkPIDController m_RightHookMotorPIDController;
+
+    bool isInitDone;
+    bool isInitScheduled;
 };

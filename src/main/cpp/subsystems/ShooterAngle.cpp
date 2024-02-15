@@ -26,6 +26,8 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
                                        ShooterConstant::kTimeoutMs);
 
+    SeedEncoder();
+
     m_MoteurAngle.ConfigPeakOutputForward(ShooterConstant::kPeakOutputForward,
                                           ShooterConstant::kTimeoutMs);
     m_MoteurAngle.ConfigPeakOutputReverse(ShooterConstant::kPeakOutputReverse,

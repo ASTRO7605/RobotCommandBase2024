@@ -7,10 +7,11 @@ LeftHookManual::LeftHookManual(LeftHook *p_LeftHook, double percent)
 
 void LeftHookManual::Initialize() {}
 
-void LeftHookManual::Execute() { 
-    m_pLeftHook->ManualLeftHook(percent); 
-}
+void LeftHookManual::Execute() { m_pLeftHook->ManualLeftHook(percent); }
 
 bool LeftHookManual::IsFinished() { return false; }
 
-void LeftHookManual::End(bool) { m_pLeftHook->ManualLeftHook(0); }
+void LeftHookManual::End(bool) {
+    m_pLeftHook->ManualLeftHook(0);
+    m_pLeftHook->KeepLeftHookPosition();
+}
