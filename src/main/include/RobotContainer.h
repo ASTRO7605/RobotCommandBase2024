@@ -15,6 +15,8 @@
 #include "commands/ShooterAngleManual.h"
 #include "commands/ShooterPositionTest.h"
 #include "commands/TestAmp.h"
+#include "commands/LeftHookManual.h"
+#include "commands/RightHookManual.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
@@ -22,6 +24,8 @@
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
 #include "subsystems/Vision.h"
+#include "subsystems/LeftHook.h"
+#include "subsystems/RightHook.h"
 
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -80,6 +84,7 @@ class RobotContainer {
 
     void SeedEncoders();
     void BringBarreDown();
+    void SetIdleModeSwerve(DriveConstant::IdleMode);
 
   private:
     void ConfigureBindings();
@@ -90,5 +95,7 @@ class RobotContainer {
     ShooterAngle m_ShooterAngle;
     ShooterWheels m_ShooterWheels;
     Intake m_Intake;
+    LeftHook m_LeftHook;
+    RightHook m_RightHook;
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };

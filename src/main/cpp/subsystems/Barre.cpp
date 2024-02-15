@@ -229,3 +229,16 @@ void Barre::SeedEncoder2eJoint() {
     relativeEncoderPositionDeuxieme = static_cast<int>(relativeEncoderPositionDeuxieme) % 4096;
     m_MoteurDeuxiemeJoint.SetSelectedSensorPosition(relativeEncoderPositionDeuxieme);
 }
+
+void Barre::KeepCurrentAngle1erJoint() {
+    m_MoteurPremierJoint.Set(ControlMode::MotionMagic,
+                             m_MoteurPremierJoint.GetSelectedSensorPosition(),
+                             DemandType::DemandType_ArbitraryFeedForward,
+                             computekAF1erJoint(m_MoteurPremierJoint.GetSelectedSensorPosition() *
+                                                BarreConstant::FConversionFactorPosition1erJoint));
+}
+
+void Barre::KeepCurrentAngle2eJoint() {
+    m_MoteurDeuxiemeJoint.Set(ControlMode::MotionMagic,
+                             m_MoteurDeuxiemeJoint.GetSelectedSensorPosition());
+}

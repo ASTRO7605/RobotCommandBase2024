@@ -81,9 +81,7 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kDHooksPosition", ClimberConstant::kDHooksPosition);
     frc::Preferences::InitDouble("kFFHooksPosition", ClimberConstant::kFFHooksPosition);
 
-    frc::Preferences::InitDouble("kPourcentageLeftHook", ClimberConstant::kPourcentageLeftHook);
-    frc::Preferences::InitDouble("kPourcentageRightHook", ClimberConstant::kPourcentageRightHook);
-
+    frc::Preferences::InitDouble("kPourcentageManualHooks", ClimberConstant::kPourcentageHooks);
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,
    * teleoperated and test. * <p> This runs after the mode specific periodic
@@ -97,7 +95,9 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {}
+void Robot::DisabledInit() {
+    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
+}
 
 void Robot::DisabledPeriodic() {}
 
@@ -106,6 +106,7 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
     m_Container.BringBarreDown();
     m_Container.SeedEncoders();
     if (m_autonomousCommand.get() != nullptr) {
@@ -116,6 +117,7 @@ void Robot::AutonomousInit() {
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
+    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
     m_Container.BringBarreDown();
     m_Container.SeedEncoders();
     if (m_autonomousCommand.get() != nullptr) {

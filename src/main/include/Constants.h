@@ -67,7 +67,6 @@ constexpr double kDAutoMovementController = 0;
 constexpr double kPAutoThetaController = 3.25;
 
 extern const frc::TrapezoidProfile<units::radians>::Constraints kThetaControllerConstraints;
-enum IdleMode { COAST = 0, BRAKE = 1 };
 constexpr double kVoltageCompensation = 10;             // volts
 constexpr double DegreesToRad = std::numbers::pi / 180; // degrees * conversion factor => rad
 constexpr int PowerDistributionHubID = 1;
@@ -265,6 +264,5 @@ constexpr double currentLimit = 50;         // amperes,
 constexpr int positionPIDSlotID = 0;
 constexpr int velocityPIDSlotID = 1;
 constexpr double positionThreshold = 5; // 1/10 pouce
-constexpr double kPourcentageLeftHook = 0;
-constexpr double kPourcentageRightHook = 0;
+constexpr double kPourcentageHooks = 0;
 } // namespace ClimberConstant

@@ -1,16 +1,16 @@
 #include "commands/LeftHookManual.h"
 
-LeftHookManual::LeftHookManual(Climber *p_Climber, double percent)
-    : m_pClimber{p_Climber}, percent{percent} {
-    AddRequirements({m_pClimber});
+LeftHookManual::LeftHookManual(LeftHook *p_LeftHook, double percent)
+    : m_pLeftHook{p_LeftHook}, percent{percent} {
+    AddRequirements({m_pLeftHook});
 }
 
 void LeftHookManual::Initialize() {}
 
 void LeftHookManual::Execute() { 
-    m_pClimber->ManualLeftHook(percent); 
+    m_pLeftHook->ManualLeftHook(percent); 
 }
 
 bool LeftHookManual::IsFinished() { return false; }
 
-void LeftHookManual::End(bool) { m_pClimber->ManualLeftHook(0); }
+void LeftHookManual::End(bool) { m_pLeftHook->ManualLeftHook(0); }

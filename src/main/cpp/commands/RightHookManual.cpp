@@ -1,16 +1,16 @@
 #include "commands/RightHookManual.h"
 
-RightHookManual::RightHookManual(Climber *p_Climber, double percent)
-    : m_pClimber{p_Climber}, percent{percent} {
-    AddRequirements({m_pClimber});
+RightHookManual::RightHookManual(RightHook *p_RightHook, double percent)
+    : m_pRightHook{p_RightHook}, percent{percent} {
+    AddRequirements({m_pRightHook});
 }
 
 void RightHookManual::Initialize() {}
 
 void RightHookManual::Execute() { 
-    m_pClimber->ManualRightHook(percent); 
+    m_pRightHook->ManualRightHook(percent); 
 }
 
 bool RightHookManual::IsFinished() { return false; }
 
-void RightHookManual::End(bool) { m_pClimber->ManualRightHook(0); }
+void RightHookManual::End(bool) { m_pRightHook->ManualRightHook(0); }

@@ -74,14 +74,16 @@ void RobotContainer::ConfigureBindings() {
             },
             {&m_ShooterWheels})
             .ToPtr());
-    m_TurnStick.Button(7).WhileTrue(
-        ShooterAngleManual(&m_ShooterAngle,
-                           frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
-            .ToPtr());
-    m_TurnStick.Button(8).WhileTrue(
-        ShooterAngleManual(&m_ShooterAngle,
-                           -frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
-            .ToPtr());
+    // m_TurnStick.Button(7).WhileTrue(
+    //     ShooterAngleManual(&m_ShooterAngle,
+    //                        frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+    //         .ToPtr());
+    // m_TurnStick.Button(8).WhileTrue(
+    //     ShooterAngleManual(&m_ShooterAngle,
+    //                        -frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+    //         .ToPtr());
+    m_TurnStick.Button(7).WhileTrue(LeftHookManual(&m_LeftHook, frc::Preferences::GetDouble("kPourcentageManualHooks")).ToPtr());
+    m_TurnStick.Button(8).WhileTrue(LeftHookManual(&m_LeftHook, -frc::Preferences::GetDouble("kPourcentageManualHooks")).ToPtr());
     m_TurnStick.Button(9).WhileTrue(
         PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
             .ToPtr());
@@ -92,11 +94,10 @@ void RobotContainer::ConfigureBindings() {
         DeuxiemeJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
             .ToPtr());
     m_TurnStick.Button(12).WhileTrue(
-
         DeuxiemeJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
             .ToPtr());
-    m_ThrottleStick.Button(7).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
-    m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 600).ToPtr());
+    // m_ThrottleStick.Button(7).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
+    // m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 600).ToPtr());
     m_ThrottleStick.Button(9).WhileTrue(PremierJointPositionTest(&m_Barre, 120).ToPtr());
     m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
     m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
@@ -141,3 +142,7 @@ void RobotContainer::SeedEncoders() {
 }
 
 void RobotContainer::BringBarreDown() { RedescendreBarre(&m_Barre).Schedule(); }
+
+void RobotContainer::SetIdleModeSwerve(DriveConstant::IdleMode idleMode){
+    m_Base.SetIdleMode(idleMode);
+}
