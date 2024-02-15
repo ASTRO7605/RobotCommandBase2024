@@ -41,6 +41,12 @@ class LeftHook : public frc2::SubsystemBase {
 
     void KeepLeftHookPosition();
 
+	  bool IsLeftHookStopped();
+
+    /// @brief Sets left hook encoder to a position
+    /// @param newPosition Position to set the encoder to (1/10 inch)
+    void SetLeftHookEncoderPosition(double newPosition);
+
   private:
     rev::CANSparkMax m_LeftHookMotor;
 

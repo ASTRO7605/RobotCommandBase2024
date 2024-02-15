@@ -98,6 +98,7 @@ void RobotContainer::ConfigureBindings() {
             .ToPtr());
     // m_ThrottleStick.Button(7).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
     // m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 600).ToPtr());
+    m_ThrottleStick.Button(7).OnTrue(InitLeftHook(&m_LeftHook).ToPtr());
     m_ThrottleStick.Button(9).WhileTrue(PremierJointPositionTest(&m_Barre, 120).ToPtr());
     m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
     m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
@@ -105,7 +106,7 @@ void RobotContainer::ConfigureBindings() {
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
     (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
-    m_CoPilotController.Y().OnTrue(RedescendreBarre(&m_Barre).ToPtr());
+    m_CoPilotController.Y().OnTrue(RedescendreBarre(&m_Barre, false).ToPtr());
     m_CoPilotController.X().OnTrue(
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
                   frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
@@ -141,7 +142,7 @@ void RobotContainer::SeedEncoders() {
     m_ShooterAngle.SeedEncoder();
 }
 
-void RobotContainer::BringBarreDown() { RedescendreBarre(&m_Barre).Schedule(); }
+void RobotContainer::BringBarreDown() { RedescendreBarre(&m_Barre, false).Schedule(); }
 
 void RobotContainer::SetIdleModeSwerve(DriveConstant::IdleMode idleMode){
     m_Base.SetIdleMode(idleMode);

@@ -1,6 +1,6 @@
 #include "commands/RedescendreBarre.h"
 
-RedescendreBarre::RedescendreBarre(Barre *p_Barre) : m_pBarre{p_Barre} {
+RedescendreBarre::RedescendreBarre(Barre *p_Barre, bool needForTimer) : m_pBarre{p_Barre}, needForTimer{needForTimer} {
     AddRequirements({m_pBarre});
 }
 
@@ -11,7 +11,7 @@ void RedescendreBarre::Initialize() {
 }
 
 void RedescendreBarre::Execute() {
-    if (m_Timer.Get() >= BarreConstant::kTimerThreshold){
+    if (m_Timer.Get() >= BarreConstant::kTimerThreshold || !needForTimer){
         m_pBarre->Set1erJointAngle(premierJointTarget);
         m_pBarre->Set2eJointAngle(deuxiemeJointTarget);
     }

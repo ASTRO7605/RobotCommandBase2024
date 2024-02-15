@@ -26,7 +26,7 @@ LeftHook::LeftHook()
                                       ClimberConstant::positionPIDSlotID);
     m_LeftHookMotorPIDController.SetFF(frc::Preferences::GetDouble("kFFHooksPosition"),
                                        ClimberConstant::positionPIDSlotID);
-                                       
+
     m_LeftHookMotor.EnableVoltageCompensation(ClimberConstant::kVoltageCompensation);
 
     m_LeftHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit);
@@ -55,4 +55,15 @@ bool LeftHook::IsLeftHookAtTargetPosition(double target) {
         return true;
     }
     return false;
+}
+
+bool LeftHook::IsLeftHookStopped() {
+    if (m_LeftHookMotorEncoder.GetVelocity() <= ClimberConstant::kThresholdMotorStopped){
+        return true;
+    }
+    return false;
+}
+
+void LeftHook::SetLeftHookEncoderPosition(double newPosition){
+    m_LeftHookMotorEncoder.SetPosition(newPosition);
 }

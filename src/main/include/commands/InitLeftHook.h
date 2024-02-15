@@ -2,15 +2,16 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/Intake.h"
+#include <frc/Timer.h>
+#include "subsystems/LeftHook.h"
 
-class IntakeCommand : public frc2::CommandHelper<frc2::Command, IntakeCommand> {
+class InitLeftHook : public frc2::CommandHelper<frc2::Command, InitLeftHook> {
   private:
-    Intake *m_pIntake;
-    bool isReversed;
+    LeftHook *m_pLeftHook;
+    frc::Timer m_Timer;
 
   public:
-    explicit IntakeCommand(Intake *p_Intake, bool reversed);
+    explicit InitLeftHook(LeftHook *p_LeftHook);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

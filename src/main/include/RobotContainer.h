@@ -17,6 +17,7 @@
 #include "commands/TestAmp.h"
 #include "commands/LeftHookManual.h"
 #include "commands/RightHookManual.h"
+#include "commands/InitLeftHook.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"

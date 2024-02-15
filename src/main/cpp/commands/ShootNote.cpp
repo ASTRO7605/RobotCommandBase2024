@@ -5,7 +5,7 @@ ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *
                      ScoringPositions scoringPlace)
     : m_pBase{p_Base}, m_pShooterAngle{p_ShooterAngle}, m_pShooterWheels{p_ShooterWheels},
       m_pIntake{p_Intake}, m_pBarre{p_Barre}, targetSpeeds{wheelSpeeds}, targetAngle{shooterAngle},
-      scoringPlace{scoringPlace}, m_RedescendreBarre{RedescendreBarre(m_pBarre)} {
+      scoringPlace{scoringPlace}, m_RedescendreBarre{RedescendreBarre(m_pBarre, true)} {
     AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake, m_pBase});
 }
 

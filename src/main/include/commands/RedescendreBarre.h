@@ -10,10 +10,11 @@ class RedescendreBarre : public frc2::CommandHelper<frc2::Command, RedescendreBa
     Barre *m_pBarre;
     double premierJointTarget;
     double deuxiemeJointTarget;
+    bool needForTimer;
     frc::Timer m_Timer;
 
   public:
-    explicit RedescendreBarre(Barre *p_Barre);
+    explicit RedescendreBarre(Barre *p_Barre, bool needForTimer);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

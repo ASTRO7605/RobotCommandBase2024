@@ -1,7 +1,7 @@
 #include "commands/TestAmp.h"
 
 TestAmp::TestAmp(Barre *p_Barre, Intake *p_Intake)
-    : m_pBarre{p_Barre}, m_pIntake{p_Intake}, m_RedescendreBarre{RedescendreBarre(m_pBarre)} {
+    : m_pBarre{p_Barre}, m_pIntake{p_Intake}, m_RedescendreBarre{RedescendreBarre(m_pBarre, true)} {
     AddRequirements({m_pBarre});
 }
 
