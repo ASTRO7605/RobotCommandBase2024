@@ -19,7 +19,8 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     Intake *m_pIntake;
     Barre *m_pBarre;
     double targetSpeeds;
-    double targetAngle;
+    double currentTargetAngle;
+    double finalTargetAngle;
     double targetPremierJoint;
     double targetDeuxiemeJoint;
     bool areWheelsReadyToShoot;

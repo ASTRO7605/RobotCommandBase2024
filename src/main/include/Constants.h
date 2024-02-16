@@ -178,6 +178,8 @@ constexpr double kContinuousCurrent = 9;   // amperes
 constexpr double kForwardSoftLimit = 740;  // 1/10 degre
 constexpr double kReverseSoftLimit = 200;  // 1/10 degre
 constexpr double kAngleShooterAmp = 600;
+constexpr double kAngleShooterTrap = 0;
+constexpr double kIntermediateAngleShooter = 450;
 } // namespace ShooterConstant
 
 namespace IntakeConstant {

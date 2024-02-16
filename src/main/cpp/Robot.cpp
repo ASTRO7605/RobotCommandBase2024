@@ -20,6 +20,7 @@ void Robot::RobotInit() {
 
     frc::Preferences::InitDouble("testAngleShooter", 0);
     frc::Preferences::InitDouble("angleShooterAmp", ShooterConstant::kAngleShooterAmp);
+    frc::Preferences::InitDouble("angleShooterTrap", ShooterConstant::kAngleShooterTrap);
 
     frc::Preferences::InitDouble("kPLeftFlywheel", ShooterConstant::kPLeftFlywheel);
     frc::Preferences::InitDouble("kILeftFlywheel", ShooterConstant::kILeftFlywheel);
@@ -111,7 +112,6 @@ void Robot::DisabledPeriodic() {}
  */
 void Robot::AutonomousInit() {
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
-    // m_Container.BringBarreDown();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();
     }
@@ -126,7 +126,6 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
-    // m_Container.BringBarreDown();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
     }

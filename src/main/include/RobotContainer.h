@@ -5,15 +5,14 @@
 #pragma once
 
 #include "Constants.h"
+#include "commands/BarrePositionTest.h"
 #include "commands/DeuxiemeJointManual.h"
-#include "commands/DeuxiemeJointPositionTest.h"
 #include "commands/InitLeftHook.h"
 #include "commands/InitRightHook.h"
 #include "commands/IntakeCommand.h"
 #include "commands/LeftHookManual.h"
 #include "commands/LeftHookPositionTest.h"
 #include "commands/PremierJointManual.h"
-#include "commands/PremierJointPositionTest.h"
 #include "commands/RedescendreBarre.h"
 #include "commands/RightHookManual.h"
 #include "commands/RightHookPositionTest.h"
