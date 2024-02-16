@@ -11,13 +11,15 @@
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxPIDController.h>
 #include <rev/SparkMaxRelativeEncoder.h>
 
-class ModuleSwerve {
+class ModuleSwerve : public frc2::SubsystemBase {
   public:
     ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderID);
+    void Periodic() override;
     void SeedSparkMaxEncoder();
     double GetCANcoderAbsolutePosition();
     double GetCANcoderPosition();

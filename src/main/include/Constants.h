@@ -14,7 +14,7 @@
 
 enum ScoringPositions { speaker, amp, trap };
 namespace DriveConstant {
-constexpr auto delayBeforeSeedEncoders = 0.2_s;
+constexpr auto delayBeforeSeedEncoders = 2.5_s;
 enum IdleMode { Coast, Brake };
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
@@ -124,12 +124,13 @@ namespace ShooterConstant {
 enum ShooterState {
     init,
     waitingForSubsystems,
+    waitingForDeuxiemeJointTrap,
     moveNoteInShooter,
     waitingForNoteToEnter,
     waitingForNoteToExit,
     waitingForEnd,
     complete,
-    noNote
+    noNote,
 };
 constexpr int leftMotorID = 16;
 constexpr int rightMotorID = 17;
@@ -139,7 +140,7 @@ constexpr double absoluteEncoderOffset = -2078.12; // 1/10 degre
 constexpr double flywheelsSpeedSpeaker = 4500;     // RPM
 constexpr double flywheelsSpeedAmp = 550;          // RPM
 constexpr double flywheelsSpeedTrap = 0;           // RPM
-constexpr double speedThreshold = 50;              // RPM
+constexpr double speedThreshold = 75;              // RPM
 constexpr auto timeThreshold = 0.2_s;
 constexpr double kPLeftFlywheel = 0.00025;
 constexpr double kILeftFlywheel = 0.000001;
@@ -180,6 +181,7 @@ constexpr double kReverseSoftLimit = 200;  // 1/10 degre
 constexpr double kAngleShooterAmp = 600;
 constexpr double kAngleShooterTrap = 0;
 constexpr double kIntermediateAngleShooter = 450;
+constexpr double kRPMDifferenceSpin = 500;
 } // namespace ShooterConstant
 
 namespace IntakeConstant {
@@ -188,7 +190,8 @@ constexpr int bottomMotorID = 15;
 constexpr int capteurID = 0;
 constexpr double kVoltageCompensation = 10; // volts
 constexpr double kCurrentLimit = 50;        // amperes
-constexpr double kVoltageIntake = 7.5;      // volts
+constexpr double kVoltageIntakeShot = 9;    // volts
+constexpr double kVoltageIntakeCommand = 4;
 } // namespace IntakeConstant
 
 namespace BarreConstant {
@@ -236,13 +239,12 @@ constexpr double kForwardSoftLimit2eJoint = 3500;  // 1/10 degre
 constexpr double kReverseSoftLimit2eJoint = 100;   // 1/10 degre
 constexpr double kPourcentageManual1erJoint = 0.15;
 constexpr double kPourcentageManual2eJoint = 0.16;
-constexpr double k1erJointAngleTrapApproach = 0;
-constexpr double k1erJointAngleTrapFinal = 0;
-constexpr double k1erJointAngleAmp = 1000;
-constexpr double k2eJointAngleTrapApproach = 1600;
-constexpr double k2eJointAngleTrapFinal = 700;
-constexpr double k2eJointAngleAmpApproach = 0;
-constexpr double k2eJointAngleAmpFinal = 0;
+constexpr double k1erJointAngleTrapApproach = 350;
+constexpr double k1erJointAngleTrapFinal = 1110;
+constexpr double k1erJointAngleAmp = 1030;
+constexpr double k2eJointAngleTrap = 2700;
+constexpr double k2eJointAngleAmpApproach = 700;
+constexpr double k2eJointAngleAmpFinal = 1600;
 constexpr double k1erJointStartPosition = 80;
 constexpr double k2eJointStartPosition = 900;
 constexpr auto kTimerThreshold = 0.5_s;
@@ -278,4 +280,5 @@ constexpr double kAccelerationHooks = 100; // 1/10 inch per second squared
 constexpr double kPositionInitReset = 0;
 constexpr double kPositionAfterInit = 10;
 constexpr double kForwardSoftLimit = 230;
+constexpr double kPositionRetracted = -10;
 } // namespace ClimberConstant

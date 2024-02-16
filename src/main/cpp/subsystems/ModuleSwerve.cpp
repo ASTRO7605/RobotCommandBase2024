@@ -66,6 +66,8 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
                             .GetValue()}); // on dit aux swerves de garder leur position initiale
 }
 
+void ModuleSwerve::Periodic() {}
+
 void ModuleSwerve::SeedSparkMaxEncoder() {
     m_TurningSparkMaxEncoder.SetPosition(
         units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}

@@ -1,6 +1,7 @@
 #include "commands/RedescendreBarre.h"
 
-RedescendreBarre::RedescendreBarre(Barre *p_Barre, bool needForTimer) : m_pBarre{p_Barre}, needForTimer{needForTimer} {
+RedescendreBarre::RedescendreBarre(Barre *p_Barre, bool needForTimer, bool onlyBringBack2eJoint)
+    : m_pBarre{p_Barre}, needForTimer{needForTimer}, onlyBringBack2eJoint{onlyBringBack2eJoint} {
     AddRequirements({m_pBarre});
 }
 
@@ -11,15 +12,17 @@ void RedescendreBarre::Initialize() {
 }
 
 void RedescendreBarre::Execute() {
-    if (m_Timer.Get() >= BarreConstant::kTimerThreshold || !needForTimer){
-        m_pBarre->Set1erJointAngle(premierJointTarget);
+    if (m_Timer.Get() >= BarreConstant::kTimerThreshold || !needForTimer) {
         m_pBarre->Set2eJointAngle(deuxiemeJointTarget);
+        if (!onlyBringBack2eJoint) {
+            m_pBarre->Set1erJointAngle(premierJointTarget);
+        }
     }
 }
 
 bool RedescendreBarre::IsFinished() {
-    if (m_pBarre->Is1erJointAtTargetAngle(premierJointTarget) &&
-        m_pBarre->Is2eJointAtTargetAngle(deuxiemeJointTarget)) {
+    if (m_pBarre->Is2eJointAtTargetAngle(deuxiemeJointTarget) &&
+        (m_pBarre->Is1erJointAtTargetAngle(premierJointTarget) || onlyBringBack2eJoint)) {
         return true;
     }
     return false;

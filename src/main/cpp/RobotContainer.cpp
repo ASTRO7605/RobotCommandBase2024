@@ -74,6 +74,7 @@ void RobotContainer::ConfigureBindings() {
             },
             {&m_ShooterWheels})
             .ToPtr());
+
     // m_TurnStick.Button(7).WhileTrue(
     //     ShooterAngleManual(&m_ShooterAngle,
     //                        frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
@@ -101,9 +102,20 @@ void RobotContainer::ConfigureBindings() {
         PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
             .ToPtr());
 
-    m_ThrottleStick.Button(7).OnTrue(BarrePositionTest(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapApproach"), frc::Preferences::GetDouble("k2eJointStartPosition")).ToPtr());
-    m_ThrottleStick.Button(8).OnTrue(BarrePositionTest(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"), frc::Preferences::GetDouble("k2eJointAngleTrapApproach")).ToPtr());
-    m_ThrottleStick.Button(9).OnTrue(RedescendreBarre(&m_Barre, false).ToPtr());
+    m_ThrottleStick.Button(7).OnTrue(
+        BarrePositionTest(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapApproach"),
+                          frc::Preferences::GetDouble("k2eJointStartPosition"))
+            .ToPtr());
+    m_ThrottleStick.Button(8).OnTrue(
+        BarrePositionTest(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
+                          frc::Preferences::GetDouble("k2eJointStartPosition"))
+            .ToPtr());
+    m_ThrottleStick.Button(9).OnTrue(
+
+        BarrePositionTest(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
+                          frc::Preferences::GetDouble("k2eJointAngleTrap"))
+            .ToPtr());
+    m_ThrottleStick.Button(10).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
     // m_TurnStick.Button(11).WhileTrue(
     //     DeuxiemeJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
     //         .ToPtr());
@@ -134,18 +146,19 @@ void RobotContainer::ConfigureBindings() {
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
     (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
-    m_CoPilotController.Y().OnTrue(ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
+    m_CoPilotController.Y().OnTrue(
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
+                  &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
                   frc::Preferences::GetDouble("angleShooterTrap"), ScoringPositions::trap)
             .ToPtr());
     m_CoPilotController.X().OnTrue(
-        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
+                  &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
                   frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)
             .ToPtr());
     m_CoPilotController.B().OnTrue(
-        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
+                  &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
                   frc::Preferences::GetDouble("angleShooterAmp"), ScoringPositions::amp)
             .ToPtr());
 
@@ -157,9 +170,9 @@ void RobotContainer::ConfigureBindings() {
         return m_LeftHook.IsInitScheduled();
     }).OnTrue(InitLeftHook(&m_LeftHook).ToPtr());
 
-    // frc2::Trigger([this] {
-    //     return (m_RightHook.IsInitDone() && (m_LeftHook.IsInitDone()));
-    // }).OnTrue(RedescendreBarre(&m_Barre, false).ToPtr());
+    frc2::Trigger([this] {
+        return (m_RightHook.IsInitDone() && (m_LeftHook.IsInitDone()));
+    }).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

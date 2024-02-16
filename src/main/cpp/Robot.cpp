@@ -43,7 +43,8 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kPourcentageManualAngleLanceur",
                                  ShooterConstant::kPercentOutputAngle);
 
-    frc::Preferences::InitDouble("kVoltageIntake", IntakeConstant::kVoltageIntake);
+    frc::Preferences::InitDouble("kVoltageIntakeShot", IntakeConstant::kVoltageIntakeShot);
+    frc::Preferences::InitDouble("kVoltageIntakeCommand", IntakeConstant::kVoltageIntakeCommand);
 
     frc::Preferences::InitDouble("kPMotion1erJoint", BarreConstant::kPMotion1erJoint);
     frc::Preferences::InitDouble("kIMotion1erJoint", BarreConstant::kIMotion1erJoint);
@@ -70,9 +71,7 @@ void Robot::RobotInit() {
                                  BarreConstant::k1erJointAngleTrapApproach);
     frc::Preferences::InitDouble("k1erJointAngleTrapFinal", BarreConstant::k1erJointAngleTrapFinal);
     frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
-    frc::Preferences::InitDouble("k2eJointAngleTrapApproach",
-                                 BarreConstant::k2eJointAngleTrapApproach);
-    frc::Preferences::InitDouble("k2eJointAngleTrapFinal", BarreConstant::k2eJointAngleTrapFinal);
+    frc::Preferences::InitDouble("k2eJointAngleTrap", BarreConstant::k2eJointAngleTrap);
     frc::Preferences::InitDouble("k2eJointAngleAmpApproach",
                                  BarreConstant::k2eJointAngleAmpApproach);
     frc::Preferences::InitDouble("k2eJointAngleAmpFinal", BarreConstant::k2eJointAngleAmpFinal);

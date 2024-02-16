@@ -59,9 +59,15 @@ void ShooterWheels::Periodic() {
     frc::SmartDashboard::PutBoolean("IsObjectInShooter", IsObjectInShooter());
 }
 
-void ShooterWheels::SetWheelSpeeds(double speeds) {
-    m_LeftFlywheelMotorPIDController.SetReference(speeds, rev::CANSparkMax::ControlType::kVelocity);
-    m_RightFlywheelMotorPIDController.SetReference(speeds,
+void ShooterWheels::SetWheelSpeeds(double speeds, bool spin) {
+    double rightSpeeds{speeds};
+    double leftSpeeds{speeds};
+    if (spin) {
+        leftSpeeds = rightSpeeds - ShooterConstant::kRPMDifferenceSpin;
+    }
+    m_LeftFlywheelMotorPIDController.SetReference(leftSpeeds,
+                                                  rev::CANSparkMax::ControlType::kVelocity);
+    m_RightFlywheelMotorPIDController.SetReference(rightSpeeds,
                                                    rev::CANSparkMax::ControlType::kVelocity);
 }
 
@@ -79,15 +85,20 @@ void ShooterWheels::ManualToggleStartWheels(double speeds) {
     if (areWheelsRunning) {
         StopWheels();
     } else {
-        SetWheelSpeeds(speeds);
+        SetWheelSpeeds(speeds, false);
         areWheelsRunning = true;
     }
 }
 
-bool ShooterWheels::AreWheelsDoneAccelerating(double target) {
-    if ((fabs(m_LeftFlywheelMotorEncoder.GetVelocity() - target) <=
+bool ShooterWheels::AreWheelsDoneAccelerating(double target, bool spin) {
+    double rightTarget{target};
+    double leftTarget{target};
+    if (spin) {
+        leftTarget = rightTarget - ShooterConstant::kRPMDifferenceSpin;
+    }
+    if ((fabs(m_LeftFlywheelMotorEncoder.GetVelocity() - leftTarget) <=
          ShooterConstant::speedThreshold) &&
-        fabs((m_RightFlywheelMotorEncoder.GetVelocity() - target) <=
+        fabs((m_RightFlywheelMotorEncoder.GetVelocity() - rightTarget) <=
              ShooterConstant::speedThreshold)) {
         return true;
     }

@@ -85,7 +85,9 @@ frc::TrapezoidProfile<units::meters>::State RightHook::GetRightHookState() {
 }
 
 void RightHook::KeepRightHookPosition() {
-    m_RightHookMotorEncoder.SetPosition(m_RightHookMotorEncoder.GetPosition());
+    m_RightHookMotorPIDController.SetReference(
+        m_RightHookMotorEncoder.GetPosition(), rev::CANSparkBase::ControlType::kPosition,
+        ClimberConstant::positionPIDSlotID, ClimberConstant::kAFHooks);
 }
 
 bool RightHook::IsInitDone() { return isInitDone; }

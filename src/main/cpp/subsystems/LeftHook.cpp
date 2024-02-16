@@ -32,7 +32,7 @@ LeftHook::LeftHook()
     m_LeftHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit);
 
     m_LeftHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
-                                 ClimberConstant::kForwardSoftLimit *
+                                 ClimberConstant::kForwardSoftLimit /
                                      ClimberConstant::FConversionFactorPosition);
 
     isInitDone = false;
@@ -84,7 +84,9 @@ frc::TrapezoidProfile<units::meters>::State LeftHook::GetLeftHookState() {
 }
 
 void LeftHook::KeepLeftHookPosition() {
-    m_LeftHookMotorEncoder.SetPosition(m_LeftHookMotorEncoder.GetPosition());
+    m_LeftHookMotorPIDController.SetReference(
+        m_LeftHookMotorEncoder.GetPosition(), rev::CANSparkBase::ControlType::kPosition,
+        ClimberConstant::positionPIDSlotID, ClimberConstant::kAFHooks);
 }
 
 bool LeftHook::IsInitDone() { return isInitDone; }
