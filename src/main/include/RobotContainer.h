@@ -18,7 +18,7 @@
 #include "commands/RightHookPositionTest.h"
 #include "commands/ShootNote.h"
 #include "commands/ShooterAngleManual.h"
-#include "commands/ShooterPositionTest.h"
+#include "commands/ShooterPosition.h"
 #include "commands/TestAmp.h"
 
 #include "subsystems/Barre.h"
@@ -90,6 +90,7 @@ class RobotContainer {
     void SetInitHooksScheduled();
     bool IsInitHooksDone();
     void SetIdleModeSwerve(DriveConstant::IdleMode);
+    void SetShooterAngleToInitPose();
 
   private:
     void ConfigureBindings();

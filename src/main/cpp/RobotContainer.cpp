@@ -122,9 +122,6 @@ void RobotContainer::ConfigureBindings() {
     // m_TurnStick.Button(12).WhileTrue(
     //     DeuxiemeJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
     // .ToPtr());
-
-    // m_ThrottleStick.Button(7).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
-    // m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 600).ToPtr());
     // m_ThrottleStick.Button(7).OnTrue(
     //     frc2::InstantCommand([this]() { m_LeftHook.SetLeftHookPosition(70); }, {&m_LeftHook})
     //         .ToPtr());
@@ -139,10 +136,6 @@ void RobotContainer::ConfigureBindings() {
     //     LeftHookPositionTest(&m_LeftHook, 150, frc::Preferences::GetDouble("kVitesseHooks"),
     //                          frc::Preferences::GetDouble("kAccelerationHooks"))
     //         .ToPtr());
-    // m_ThrottleStick.Button(9).WhileTrue(PremierJointPositionTest(&m_Barre, 120).ToPtr());
-    // m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
-    // m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
-    // m_ThrottleStick.Button(12).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 2100).ToPtr());
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
     (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
@@ -169,6 +162,10 @@ void RobotContainer::ConfigureBindings() {
     frc2::Trigger([this] {
         return m_LeftHook.IsInitScheduled();
     }).OnTrue(InitLeftHook(&m_LeftHook).ToPtr());
+
+    frc2::Trigger([this] {
+        return m_ShooterAngle.IsShooterAngleAtInitPose();
+    }).OnTrue(ShooterPosition(&m_ShooterAngle, ShooterConstant::kIntermediateAngleShooter).ToPtr());
 
     frc2::Trigger([this] {
         return (m_RightHook.IsInitDone() && (m_LeftHook.IsInitDone()));
@@ -209,4 +206,8 @@ void RobotContainer::SetInitHooksScheduled() {
 
 bool RobotContainer::IsInitHooksDone() {
     return (m_LeftHook.IsInitDone() && m_RightHook.IsInitDone());
+}
+
+void RobotContainer::SetShooterAngleToInitPose() {
+    m_ShooterAngle.SetShooterAngleAtInitPoseFlag();
 }

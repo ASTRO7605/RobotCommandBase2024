@@ -88,6 +88,7 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kAccelerationHooks", ClimberConstant::kAccelerationHooks);
 
     hasInitHooksBeenScheduled = false;
+    hasShooterAngleBeenSet = false;
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,
    * teleoperated and test. * <p> This runs after the mode specific periodic
@@ -121,6 +122,10 @@ void Robot::AutonomousPeriodic() {
         m_Container.SetInitHooksScheduled();
         hasInitHooksBeenScheduled = true;
     }
+    if (!hasShooterAngleBeenSet) {
+        m_Container.SetShooterAngleToInitPose();
+        hasShooterAngleBeenSet = true;
+    }
 }
 
 void Robot::TeleopInit() {
@@ -137,6 +142,10 @@ void Robot::TeleopPeriodic() {
     if (!hasInitHooksBeenScheduled) {
         m_Container.SetInitHooksScheduled();
         hasInitHooksBeenScheduled = true;
+    }
+    if (!hasShooterAngleBeenSet) {
+        m_Container.SetShooterAngleToInitPose();
+        hasShooterAngleBeenSet = true;
     }
 }
 

@@ -83,9 +83,6 @@ void ShootNote::Execute() {
                 readyToShoot = true;
             }
         } else if (scoringPlace == ScoringPositions::trap) {
-            if (m_pBarre->Is1erJointAtTargetAngle(targetPremierJoint)) {
-                isPremierJointAngledRight = true;
-            }
             if (m_pShooterWheels->AreWheelsDoneAccelerating(
                     targetSpeeds, false)) { // did wheels reach their target
                 areWheelsAtRightSpeed = true;
@@ -96,7 +93,7 @@ void ShootNote::Execute() {
             if (m_pRightHook->IsRightHookAtTargetPosition(ClimberConstant::kPositionRetracted)) {
                 isRightHookAtRightPose = true;
             }
-            if (isShooterAngledRight && isPremierJointAngledRight && areWheelsAtRightSpeed &&
+            if (isShooterAngledRight && areWheelsAtRightSpeed &&
                 isLeftHookAtRightPose && isRightHookAtRightPose) {
                 readyToShoot = true;
             }
@@ -178,7 +175,6 @@ bool ShootNote::IsFinished() {
 void ShootNote::End(bool interrupted) {
     m_pShooterWheels->StopWheels();
     m_pIntake->SetIntake(false, false, false);
-    m_pShooterAngle->KeepCurrentAngle();
     if (((scoringPlace == ScoringPositions::amp) || (scoringPlace == ScoringPositions::trap)) &&
         (m_State != ShooterConstant::ShooterState::noNote)) {
         m_RedescendreBarre.Schedule();
