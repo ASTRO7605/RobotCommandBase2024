@@ -22,16 +22,6 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("angleShooterAmp", ShooterConstant::kAngleShooterAmp);
     frc::Preferences::InitDouble("angleShooterTrap", ShooterConstant::kAngleShooterTrap);
 
-    frc::Preferences::InitDouble("kPLeftFlywheel", ShooterConstant::kPLeftFlywheel);
-    frc::Preferences::InitDouble("kILeftFlywheel", ShooterConstant::kILeftFlywheel);
-    frc::Preferences::InitDouble("kDLeftFlywheel", ShooterConstant::kDLeftFlywheel);
-    frc::Preferences::InitDouble("kFFLeftFlywheel", ShooterConstant::kFFLeftFlywheel);
-
-    frc::Preferences::InitDouble("kPRightFlywheel", ShooterConstant::kPRightFlywheel);
-    frc::Preferences::InitDouble("kIRightFlywheel", ShooterConstant::kIRightFlywheel);
-    frc::Preferences::InitDouble("kDRightFlywheel", ShooterConstant::kDRightFlywheel);
-    frc::Preferences::InitDouble("kFFRightFlywheel", ShooterConstant::kFFRightFlywheel);
-
     frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
     frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);
     frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
@@ -40,26 +30,10 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kVitesseAngle", ShooterConstant::kVitesseAngle);
     frc::Preferences::InitDouble("kAccelerationAngle", ShooterConstant::kAccelerationAngle);
 
-    frc::Preferences::InitDouble("kPourcentageManualAngleLanceur",
-                                 ShooterConstant::kPercentOutputAngle);
-
-    frc::Preferences::InitDouble("kVoltageIntakeShot", IntakeConstant::kVoltageIntakeShot);
-    frc::Preferences::InitDouble("kVoltageIntakeCommand", IntakeConstant::kVoltageIntakeCommand);
-
-    frc::Preferences::InitDouble("kPMotion1erJoint", BarreConstant::kPMotion1erJoint);
-    frc::Preferences::InitDouble("kIMotion1erJoint", BarreConstant::kIMotion1erJoint);
-    frc::Preferences::InitDouble("kDMotion1erJoint", BarreConstant::kDMotion1erJoint);
-    frc::Preferences::InitDouble("kFMotion1erJoint", BarreConstant::kFMotion1erJoint);
-
     frc::Preferences::InitDouble("kPourcentageManual1erJoint",
                                  BarreConstant::kPourcentageManual1erJoint);
     frc::Preferences::InitDouble("kPourcentageManual2eJoint",
                                  BarreConstant::kPourcentageManual2eJoint);
-
-    frc::Preferences::InitDouble("kPMotion2eJoint", BarreConstant::kPMotion2eJoint);
-    frc::Preferences::InitDouble("kIMotion2eJoint", BarreConstant::kIMotion2eJoint);
-    frc::Preferences::InitDouble("kDMotion2eJoint", BarreConstant::kDMotion2eJoint);
-    frc::Preferences::InitDouble("kFMotion2eJoint", BarreConstant::kFMotion2eJoint);
 
     frc::Preferences::InitDouble("kVitesse1erJoint", BarreConstant::kVitesse1erJoint);
     frc::Preferences::InitDouble("kAcceleration1erJoint", BarreConstant::kAcceleration1erJoint);
@@ -86,6 +60,10 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kPourcentageManualHooks", ClimberConstant::kPourcentageHooks);
     frc::Preferences::InitDouble("kVitesseHooks", ClimberConstant::kVitesseHooks);
     frc::Preferences::InitDouble("kAccelerationHooks", ClimberConstant::kAccelerationHooks);
+
+    frc::Preferences::InitDouble("kPThetaRobot", DriveConstant::kPThetaRobot);
+    frc::Preferences::InitDouble("kIThetaRobot", DriveConstant::kIThetaRobot);
+    frc::Preferences::InitDouble("kDThetaRobot", DriveConstant::kDThetaRobot);
 
     hasInitHooksBeenScheduled = false;
     hasShooterAngleBeenSet = false;

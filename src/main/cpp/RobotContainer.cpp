@@ -35,16 +35,18 @@ RobotContainer::RobotContainer()
 
             dir_r *= (dir_r * dir_r);
 
-            double turn =
-                frc::ApplyDeadband(m_TurnStick.GetX(), DriveConstant::kControllerRotationDeadband);
+            double turn{};
 
-            turn *= (turn * turn);
+            if (m_Base.IsRotationBeingControlled()) {
+                turn =
+                    -units::radians_per_second_t{m_Base.GetPIDControlledRotationDegreesToSpeaker()}
+                         .value();
+            } else {
+                turn = frc::ApplyDeadband(m_TurnStick.GetX(),
+                                          DriveConstant::kControllerRotationDeadband);
 
-            frc::SmartDashboard::PutNumber("joy_r", dir_r);
-            frc::SmartDashboard::PutNumber("joy_theta",
-                                           dir_theta *
-                                               (180 / std::numbers::pi)); // needs to be degrees
-            frc::SmartDashboard::PutNumber("joy_turn", turn);
+                turn *= (turn * turn);
+            }
             // Drive by reconverting polar vector to cartesian
             m_Base.Drive(-units::meters_per_second_t{dir_r * std::sin(dir_theta)}, // forward
                          -units::meters_per_second_t{dir_r * std::cos(dir_theta)}, // sideways
@@ -74,15 +76,13 @@ void RobotContainer::ConfigureBindings() {
             },
             {&m_ShooterWheels})
             .ToPtr());
+    m_CoPilotController.RightBumper().OnTrue(
+        frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(true); }, {})
+            .ToPtr());
+    m_CoPilotController.RightBumper().OnFalse(
+        frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(false); }, {})
+            .ToPtr());
 
-    // m_TurnStick.Button(7).WhileTrue(
-    //     ShooterAngleManual(&m_ShooterAngle,
-    //                        frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
-    //         .ToPtr());
-    // m_TurnStick.Button(8).WhileTrue(
-    //     ShooterAngleManual(&m_ShooterAngle,
-    //                        -frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
-    //         .ToPtr());
     m_TurnStick.Button(7).WhileTrue(
         LeftHookManual(&m_LeftHook, frc::Preferences::GetDouble("kPourcentageManualHooks"))
             .ToPtr());
@@ -208,6 +208,4 @@ bool RobotContainer::IsInitHooksDone() {
     return (m_LeftHook.IsInitDone() && m_RightHook.IsInitDone());
 }
 
-void RobotContainer::SetShooterAngleToInitPose() {
-    m_ShooterAngle.SetShooterAngleAtInitPoseFlag();
-}
+void RobotContainer::SetShooterAngleToInitPose() { m_ShooterAngle.SetShooterAngleAtInitPoseFlag(); }

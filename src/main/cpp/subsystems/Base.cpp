@@ -4,7 +4,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 Base::Base()
-    : m_PoseEstimator{kDriveKinematics,
+    : pidControllerThetaSpeaker{frc::Preferences::GetDouble("kPThetaRobot"),
+                                frc::Preferences::GetDouble("kIThetaRobot"),
+                                frc::Preferences::GetDouble("kDThetaRobot")},
+      m_PoseEstimator{kDriveKinematics,
                       m_Gyro.GetRotation2d().Radians(),
                       {m_FrontRightModule.GetPosition(), m_FrontLeftModule.GetPosition(),
                        m_RearLeftModule.GetPosition(), m_RearRightModule.GetPosition()},
@@ -18,6 +21,8 @@ Base::Base()
     // Implementation of subsystem constructor goes here.
     m_Gyro.Calibrate();
     m_Gyro.Reset();
+
+    pidControllerThetaSpeaker.EnableContinuousInput(-180, 180);
 
     pathplanner::AutoBuilder::configureHolonomic(
         [this]() { return GetPose(); },                    // robot pose supplier
@@ -54,8 +59,8 @@ Base::Base()
         this // reference to this subsystem to add requirements
     );
 
-    // frc::SmartDashboard::PutData("VisionMeasurementFront", &m_VisionFieldFront);
-    // frc::SmartDashboard::PutData("VisionMeasurementBack", &m_VisionFieldBack);
+    frc::SmartDashboard::PutData("VisionMeasurementLeft", &m_VisionFieldLeft);
+    frc::SmartDashboard::PutData("VisionMeasurementRight", &m_VisionFieldRight);
     frc::SmartDashboard::PutData("RobotMeasurement", &m_RobotField);
 
     m_PoseEstimator.ResetPosition(m_Gyro.GetRotation2d().Radians(),
@@ -65,10 +70,18 @@ Base::Base()
                                   frc::Pose2d{0_m, 0_m, 0_rad});
 
     m_DrivingInFieldRelative = true;
+    isRotationBeingControlled = false;
     m_TimerEncoder.Restart();
 }
 
 void Base::Periodic() {
+    if (frc::DriverStation::GetAlliance().has_value()) {
+        allianceColor = frc::DriverStation::GetAlliance().value();
+    }
+
+    frc::SmartDashboard::PutNumber("distanceToSpeaker", GetDistanceToSpeaker().value());
+    frc::SmartDashboard::PutNumber("desiredRotationToSpeaker",
+                                   GetDesiredRotationToSpeaker().value());
     frc::SmartDashboard::PutNumber(
         "Gyro Angle",
         m_Gyro.GetRotation2d().Degrees().value()); // test on smart dashboard
@@ -88,8 +101,8 @@ void Base::Periodic() {
                             m_RearRightModule.GetPosition()}); // important to follow kinematics
                                                                // construction order
 
-    SetRobotPoseVisionEstimateFront();
-    SetRobotPoseVisionEstimateBack();
+    SetRobotPoseVisionEstimateLeft();
+    SetRobotPoseVisionEstimateRight();
 
     // for SmartDashboard
     m_RobotField.SetRobotPose(m_PoseEstimator.GetEstimatedPosition());
@@ -244,64 +257,71 @@ frc::ChassisSpeeds Base::GetRobotRelativeSpeeds() {
         m_RearRightModule.GetState());
 }
 
-void Base::SetRobotPoseVisionEstimateFront() {
-    // if (!m_VisionFront.SeesValidTarget()) {
-    //     // hide robot if no target in view
-    //     m_VisionFieldFront.SetRobotPose(100_m, 100_m, 0_rad);
-    //     return;
-    // }
+void Base::SetRobotPoseVisionEstimateLeft() {
+    if (!m_VisionLeft.SeesValidTarget()) {
+        // hide robot if no target in view
+        m_VisionFieldLeft.SetRobotPose(100_m, 100_m, 0_rad);
+        return;
+    }
 
-    // std::optional<PoseMeasurement> estimate = m_VisionFront.GetRobotPoseEstimate();
-    // if (!estimate.has_value()) {
-    //     return;
-    // }
+    std::optional<PoseMeasurement> estimate = m_VisionLeft.GetRobotPoseEstimate();
+    if (!estimate.has_value()) {
+        return;
+    }
 
-    // frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
+    frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
-    // auto std_devs = PoseEstimationConstant::kVisionStdDevs_XYPerMeterSquared_Front;
+    auto std_devs = PoseEstimationConstant::stdDevPerAmbiguity;
     // auto dst_sq = estimate->distance.value() * estimate->distance.value();
     // std_devs[0] *= dst_sq; // scale based on distance
     // std_devs[1] *= dst_sq;
+    std_devs[0] = estimate->ambiguity * std_devs[0] + PoseEstimationConstant::stdDevBase;
+    std_devs[1] = estimate->ambiguity * std_devs[1] + PoseEstimationConstant::stdDevBase;
+    std_devs[2] = estimate->ambiguity * std_devs[2] + PoseEstimationConstant::stdDevBase;
 
-    // frc::SmartDashboard::PutNumber("april_distance_front", estimate->distance.value());
+    auto dst = estimate->distance.value();
+    std_devs[0] *= dst; // scale based on distance
+    std_devs[1] *= dst;
+    std_devs[2] *= dst;
 
-    // m_PoseEstimator.AddVisionMeasurement(
-    //     measurement2d,
-    //     // estimated original time of data capture (now - latency in ms)
-    //     (estimate->timestamp), std_devs);
+    frc::SmartDashboard::PutNumber("april_distance_Left", estimate->distance.value());
 
-    // // Update SmartDashboard
-    // m_VisionFieldFront.SetRobotPose(measurement2d);
+    m_PoseEstimator.AddVisionMeasurement(measurement2d, (estimate->timestamp), std_devs);
+
+    // Update SmartDashboard
+    m_VisionFieldLeft.SetRobotPose(measurement2d);
 }
 
-void Base::SetRobotPoseVisionEstimateBack() {
-    // if (!m_VisionBack.SeesValidTarget()) {
-    //     // hide robot if no target in view
-    //     m_VisionFieldBack.SetRobotPose(100_m, 100_m, 0_rad);
-    //     return;
-    // }
+void Base::SetRobotPoseVisionEstimateRight() {
+    if (!m_VisionRight.SeesValidTarget()) {
+        // hide robot if no target in view
+        m_VisionFieldRight.SetRobotPose(100_m, 100_m, 0_rad);
+        return;
+    }
 
-    // std::optional<PoseMeasurement> estimate = m_VisionBack.GetRobotPoseEstimate();
-    // if (!estimate.has_value()) {
-    //     return;
-    // }
+    std::optional<PoseMeasurement> estimate = m_VisionRight.GetRobotPoseEstimate();
+    if (!estimate.has_value()) {
+        return;
+    }
 
-    // frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
+    frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
-    // auto std_devs = PoseEstimationConstant::kVisionStdDevs_XYPerMeterSquared_Back;
-    // auto dst_sq = estimate->distance.value() * estimate->distance.value();
-    // std_devs[0] *= dst_sq; // scale based on distance
-    // std_devs[1] *= dst_sq;
+    auto std_devs = PoseEstimationConstant::stdDevPerAmbiguity;
+    std_devs[0] = estimate->ambiguity * std_devs[0] + PoseEstimationConstant::stdDevBase;
+    std_devs[1] = estimate->ambiguity * std_devs[1] + PoseEstimationConstant::stdDevBase;
+    std_devs[2] = estimate->ambiguity * std_devs[2] + PoseEstimationConstant::stdDevBase;
 
-    // frc::SmartDashboard::PutNumber("april_distance_back", estimate->distance.value());
+    auto dst = estimate->distance.value();
+    std_devs[0] *= dst; // scale based on distance
+    std_devs[1] *= dst;
+    std_devs[2] *= dst;
 
-    // m_PoseEstimator.AddVisionMeasurement(
-    //     measurement2d,
-    //     // estimated original time of data capture (now - latency in ms)
-    //     (estimate->timestamp), std_devs);
+    frc::SmartDashboard::PutNumber("april_distance_Right", estimate->distance.value());
 
-    // // Update SmartDashboard
-    // m_VisionFieldBack.SetRobotPose(measurement2d);
+    m_PoseEstimator.AddVisionMeasurement(measurement2d, (estimate->timestamp), std_devs);
+
+    // Update SmartDashboard
+    m_VisionFieldRight.SetRobotPose(measurement2d);
 }
 void Base::ResetOdometry(frc::Pose2d desiredPose) {
     m_PoseEstimator.ResetPosition(GetHeadingDegrees(),
@@ -314,3 +334,45 @@ void Base::ResetOdometry(frc::Pose2d desiredPose) {
 void Base::SwitchRobotDrivingMode() { m_DrivingInFieldRelative = !m_DrivingInFieldRelative; }
 
 void Base::ResetGyroTeleopOffset() { m_GyroOffset = m_Gyro.GetRotation2d().Radians(); }
+
+bool Base::IsRotationBeingControlled() { return isRotationBeingControlled; }
+
+void Base::SetRotationBeingControlledFlag(bool yesOrNo) { isRotationBeingControlled = yesOrNo; }
+
+units::meter_t Base::GetDistanceToSpeaker() {
+    if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+        currentColorSpeakerPose = PoseEstimationConstant::blueSpeakerPoseMeters;
+    } else if (allianceColor == frc::DriverStation::Alliance::kRed) {
+        currentColorSpeakerPose = PoseEstimationConstant::redSpeakerPoseMeters;
+    }
+    auto poseToSpeaker{m_PoseEstimator.GetEstimatedPosition().Translation() -
+                       currentColorSpeakerPose};
+    return units::meter_t{std::sqrt(poseToSpeaker.X().value() * poseToSpeaker.X().value() +
+                                    poseToSpeaker.Y().value() * poseToSpeaker.Y().value())};
+}
+
+units::degree_t Base::GetDesiredRotationToSpeaker() {
+    if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+        currentColorSpeakerPose = PoseEstimationConstant::blueSpeakerPoseMeters;
+    } else if (allianceColor == frc::DriverStation::Alliance::kRed) {
+        currentColorSpeakerPose = PoseEstimationConstant::redSpeakerPoseMeters;
+    }
+    auto poseToSpeaker{m_PoseEstimator.GetEstimatedPosition().Translation() -
+                       currentColorSpeakerPose};
+    frc::SmartDashboard::PutNumber("poseToSpeakerX", poseToSpeaker.X().value());
+    frc::SmartDashboard::PutNumber("poseToSpeakerY", poseToSpeaker.Y().value());
+    double desiredRotation = std::atan2(poseToSpeaker.Y().value(), poseToSpeaker.X().value()) /
+                             DriveConstant::DegreesToRad;
+    if (desiredRotation < 0) {
+        desiredRotation = 180 + desiredRotation;
+    } else {
+        desiredRotation = -180 + desiredRotation;
+    }
+    return units::degree_t{desiredRotation};
+}
+
+units::degrees_per_second_t Base::GetPIDControlledRotationDegreesToSpeaker() {
+    return units::degrees_per_second_t{pidControllerThetaSpeaker.Calculate(
+        m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value(),
+        GetDesiredRotationToSpeaker().value())};
+}

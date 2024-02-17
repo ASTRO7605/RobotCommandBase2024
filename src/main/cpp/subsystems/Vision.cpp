@@ -89,8 +89,6 @@ bool Vision::SeesValidTarget() { return (isLatestMultiResultValid || isLatestSin
 
 std::optional<PoseMeasurement> Vision::GetRobotPoseEstimate() {
     auto poseEstimate = m_PhotonPoseEstimator.Update();
-    frc::SmartDashboard::PutBoolean("photonvision pose estimate has value",
-                                    poseEstimate.has_value());
     if (!poseEstimate.has_value())
         return {};
 
@@ -98,21 +96,17 @@ std::optional<PoseMeasurement> Vision::GetRobotPoseEstimate() {
         target_distance = GetAprilTagDistanceMeters(latestMultiResult.result.best.X().value(),
                                                     latestMultiResult.result.best.Y().value(),
                                                     latestMultiResult.result.best.Z().value());
+        target_ambiguity = latestMultiResult.result.ambiguity;
     } else {
         target_distance =
             GetAprilTagDistanceMeters(latestSingleResult.bestCameraToTarget.X().value(),
                                       latestSingleResult.bestCameraToTarget.Y().value(),
                                       latestSingleResult.bestCameraToTarget.Z().value());
+        target_ambiguity = latestSingleResult.poseAmbiguity;
     }
-    frc::SmartDashboard::PutNumber("Photonvision estimated pose X",
-                                   poseEstimate->estimatedPose.X().value());
-    frc::SmartDashboard::PutNumber("Photonvision estimated pose Y",
-                                   poseEstimate->estimatedPose.Y().value());
-    frc::SmartDashboard::PutNumber("Photonvision estimated pose Z",
-                                   poseEstimate->estimatedPose.Z().value());
 
     PoseMeasurement return_val{poseEstimate->estimatedPose, poseEstimate->timestamp,
-                               units::meter_t{target_distance}};
+                               units::meter_t{target_distance}, target_ambiguity};
     return return_val;
 }
 

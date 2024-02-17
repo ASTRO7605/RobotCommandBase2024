@@ -63,24 +63,16 @@ Barre::Barre()
                                                      BarreConstant::kTimeoutMs);
 
     m_MoteurPremierJoint.SelectProfileSlot(0, 0); // Motion
-    m_MoteurPremierJoint.Config_kP(0, frc::Preferences::GetDouble("kPMotion1erJoint"),
-                                   BarreConstant::kTimeoutMs);
-    m_MoteurPremierJoint.Config_kI(0, frc::Preferences::GetDouble("kIMotion1erJoint"),
-                                   BarreConstant::kTimeoutMs);
-    m_MoteurPremierJoint.Config_kD(0, frc::Preferences::GetDouble("kDMotion1erJoint"),
-                                   BarreConstant::kTimeoutMs);
-    m_MoteurPremierJoint.Config_kF(0, frc::Preferences::GetDouble("kFMotion1erJoint"),
-                                   BarreConstant::kTimeoutMs);
+    m_MoteurPremierJoint.Config_kP(0, BarreConstant::kPMotion1erJoint, BarreConstant::kTimeoutMs);
+    m_MoteurPremierJoint.Config_kI(0, BarreConstant::kIMotion1erJoint, BarreConstant::kTimeoutMs);
+    m_MoteurPremierJoint.Config_kD(0, BarreConstant::kDMotion1erJoint, BarreConstant::kTimeoutMs);
+    m_MoteurPremierJoint.Config_kF(0, BarreConstant::kFMotion1erJoint, BarreConstant::kTimeoutMs);
 
     m_MoteurDeuxiemeJoint.SelectProfileSlot(0, 0); // Motion
-    m_MoteurDeuxiemeJoint.Config_kP(0, frc::Preferences::GetDouble("kPMotion2eJoint"),
-                                    BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.Config_kI(0, frc::Preferences::GetDouble("kIMotion2eJoint"),
-                                    BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.Config_kD(0, frc::Preferences::GetDouble("kDMotion2eJoint"),
-                                    BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.Config_kF(0, frc::Preferences::GetDouble("kFMotion2eJoint"),
-                                    BarreConstant::kTimeoutMs);
+    m_MoteurDeuxiemeJoint.Config_kP(0, BarreConstant::kPMotion2eJoint, BarreConstant::kTimeoutMs);
+    m_MoteurDeuxiemeJoint.Config_kI(0, BarreConstant::kIMotion2eJoint, BarreConstant::kTimeoutMs);
+    m_MoteurDeuxiemeJoint.Config_kD(0, BarreConstant::kDMotion2eJoint, BarreConstant::kTimeoutMs);
+    m_MoteurDeuxiemeJoint.Config_kF(0, BarreConstant::kFMotion2eJoint, BarreConstant::kTimeoutMs);
 
     m_MoteurPremierJoint.ConfigMotionCruiseVelocity(
         frc::Preferences::GetDouble("kVitesse1erJoint") /

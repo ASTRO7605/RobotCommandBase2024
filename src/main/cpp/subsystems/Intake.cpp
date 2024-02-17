@@ -36,10 +36,10 @@ bool Intake::IsObjectInIntake() {
 
 void Intake::SetIntake(bool on, bool reversed, bool forShot) {
     double voltage{};
-    if (forShot) {
-        voltage = frc::Preferences::GetDouble("kVoltageIntakeShot");
+    if (forShot || reversed) {
+        voltage = IntakeConstant::kVoltageIntakeShot;
     } else {
-        voltage = frc::Preferences::GetDouble("kVoltageIntakeCommand");
+        voltage = IntakeConstant::kVoltageIntakeCommand;
     }
     if (reversed) {
         voltage *= -1;

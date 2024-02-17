@@ -83,24 +83,34 @@ constexpr int RearLeftCANcoderID = 10;
 constexpr int RearRightTurningID = 11;
 constexpr int RearRightDrivingID = 12;
 constexpr int RearRightCANcoderID = 13;
+
+constexpr double kPThetaRobot = 0;
+constexpr double kIThetaRobot = 0;
+constexpr double kDThetaRobot = 0;
 } // namespace DriveConstant
 
 namespace VisionConstant {
 constexpr int Pipeline = 0; // only one pipeline (AprilTags)
-constexpr std::string_view TableNameFront = "limelight-front";
-constexpr std::string_view TableNameBack = "limelight-back";
-constexpr double ambiguityThreshold = 0.2;
-extern const frc::Transform3d frontCameraTransform;
-extern const frc::Transform3d backCameraTransform;
+constexpr std::string_view TableNameRight = "photonvision-a";
+constexpr std::string_view TableNameLeft = "photonvision-b";
+constexpr double ambiguityThreshold = 0.6;
+extern const frc::Transform3d rightCameraTransform;
+extern const frc::Transform3d leftCameraTransform;
 
 enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 } // namespace VisionConstant
 namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
-constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.001};
-constexpr std::array<double, 3> kVisionStdDevs{0.9, 0.9, 0.995};
-constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Front{2.0, 2.0, 0.999};
-constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Back{2.5, 2.5, 0.999};
+constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.05};
+constexpr std::array<double, 3> kVisionStdDevs{0.9, 0.9, 0.95};
+constexpr double stdDevBase = 0.75;
+constexpr std::array<double, 3> stdDevPerAmbiguity{0.9, 0.9, 0.95};
+constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Left{2.5, 2.5, 0.999};
+constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Right{2.5, 2.5, 0.999};
+constexpr frc::Translation2d blueSpeakerPoseMeters =
+    frc::Translation2d{units::meter_t{units::inch_t{-1.5}}, units::meter_t{units::inch_t{218.42}}};
+constexpr frc::Translation2d redSpeakerPoseMeters = frc::Translation2d{
+    units::meter_t{units::inch_t{652.73}}, units::meter_t{units::inch_t{218.42}}};
 } // namespace PoseEstimationConstant
 
 namespace OIConstant {
@@ -139,7 +149,7 @@ constexpr int capteurID = 1;
 constexpr double absoluteEncoderOffset = -2078.12; // 1/10 degre
 constexpr double flywheelsSpeedSpeaker = 4500;     // RPM
 constexpr double flywheelsSpeedAmp = 550;          // RPM
-constexpr double flywheelsSpeedTrap = 0;           // RPM
+constexpr double flywheelsSpeedTrap = 1250;        // RPM
 constexpr double speedThreshold = 75;              // RPM
 constexpr auto timeThreshold = 0.2_s;
 constexpr double kPLeftFlywheel = 0.00025;
@@ -163,10 +173,10 @@ constexpr double kNominalOutputForward = 0;
 constexpr double kNominalOutputReverse = 0;
 constexpr double kPeakOutputForward = 1;
 constexpr double kPeakOutputReverse = -1;
-constexpr double kPPositionAngle = 8.75;
+constexpr double kPPositionAngle = 8.5;
 constexpr double kIPositionAngle = 0;
-constexpr double kDPositionAngle = 10.0;
-constexpr double kFPositionAngle = 4.5;
+constexpr double kDPositionAngle = 15.0;
+constexpr double kFPositionAngle = 4.25;
 constexpr double kVitesseAngle = 2000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
@@ -179,7 +189,7 @@ constexpr double kContinuousCurrent = 9;   // amperes
 constexpr double kForwardSoftLimit = 740;  // 1/10 degre
 constexpr double kReverseSoftLimit = 200;  // 1/10 degre
 constexpr double kAngleShooterAmp = 600;
-constexpr double kAngleShooterTrap = 0;
+constexpr double kAngleShooterTrap = 730;
 constexpr double kIntermediateAngleShooter = 450;
 constexpr double kRPMDifferenceSpin = 500;
 } // namespace ShooterConstant
@@ -230,7 +240,7 @@ constexpr double kDMotion2eJoint = 50;
 constexpr double kFMotion2eJoint = 0;
 constexpr double kVitesse1erJoint = 2750;
 constexpr double kAcceleration1erJoint = 12000;
-constexpr double kVitesse2eJoint = 6250;
+constexpr double kVitesse2eJoint = 6500;
 constexpr double kAcceleration2eJoint = 150000;
 constexpr double angleThreshold = 15;              // 1/10th degree
 constexpr double kForwardSoftLimit1erJoint = 1200; // 1/10 degre
@@ -268,7 +278,7 @@ constexpr double currentLimit = 50;         // amperes,
 constexpr int positionPIDSlotID = 0;
 constexpr int velocityPIDSlotID = 1;
 constexpr double positionThreshold = 5; // 1/10 pouce
-constexpr double kPourcentageHooks = 0.075;
+constexpr double kPourcentageHooks = 0.25;
 constexpr double kPourcentageInitHooks = -0.075;
 constexpr double kThresholdMotorStopped = 1;
 constexpr auto kTimeDelayForInit = 0.1_s;

@@ -76,4 +76,5 @@ class Vision : public frc2::SubsystemBase {
     photon::PhotonTrackedTarget latestSingleResult;
     fs::path deployDirectory{frc::filesystem::GetDeployDirectory()};
     double target_distance{};
+    double target_ambiguity{};
 };
