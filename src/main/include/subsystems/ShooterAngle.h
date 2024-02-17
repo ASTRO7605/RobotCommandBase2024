@@ -51,6 +51,12 @@ class ShooterAngle : public frc2::SubsystemBase {
 
     void SeedEncoder();
 
+    bool IsShooterAngleAtInitPose();
+
+    void SetShooterAngleAtInitPoseFlag();
+
   private:
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;
+
+    bool isShooterAtInitPose;
 };

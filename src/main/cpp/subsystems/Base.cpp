@@ -18,13 +18,6 @@ Base::Base()
     // Implementation of subsystem constructor goes here.
     m_Gyro.Calibrate();
     m_Gyro.Reset();
-    /*
-    m_pOdometry.reset(new frc::SwerveDriveOdometry<4>{kDriveKinematics,
-              m_Gyro.GetRotation2d().Radians(),
-              {m_FrontRightModule.GetPosition(), m_FrontLeftModule.GetPosition(),
-              m_RearLeftModule.GetPosition(), m_RearRightModule.GetPosition()},
-    frc::Pose2d{}}); //important to follow kinematics construction order
-    */
 
     pathplanner::AutoBuilder::configureHolonomic(
         [this]() { return GetPose(); },                    // robot pose supplier
@@ -72,6 +65,7 @@ Base::Base()
                                   frc::Pose2d{0_m, 0_m, 0_rad});
 
     m_DrivingInFieldRelative = true;
+    m_TimerEncoder.Restart();
 }
 
 void Base::Periodic() {
@@ -88,7 +82,6 @@ void Base::Periodic() {
     frc::SmartDashboard::PutNumber(
         "RobotOrientation", m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value());
 
-    // m_pOdometry->Update(m_Gyro.GetRotation2d().Radians(),
     m_PoseEstimator.Update(m_Gyro.GetRotation2d().Radians(),
                            {m_FrontRightModule.GetPosition(), m_FrontLeftModule.GetPosition(),
                             m_RearLeftModule.GetPosition(),
@@ -100,8 +93,19 @@ void Base::Periodic() {
 
     // for SmartDashboard
     m_RobotField.SetRobotPose(m_PoseEstimator.GetEstimatedPosition());
+    if (m_TimerEncoder.Get() >= DriveConstant::delayBeforeSeedEncoders) {
+        m_TimerEncoder.Stop();
+        m_TimerEncoder.Reset();
+        SeedSwerveEncoders();
+    }
 }
 
+void Base::SetIdleMode(DriveConstant::IdleMode idleMode) {
+    m_FrontRightModule.SetIdleMode(idleMode);
+    m_FrontLeftModule.SetIdleMode(idleMode);
+    m_RearLeftModule.SetIdleMode(idleMode);
+    m_RearRightModule.SetIdleMode(idleMode);
+}
 void Base::ResetEncoders() {
     m_FrontRightModule.ResetEncoders();
     m_FrontLeftModule.ResetEncoders();
@@ -232,10 +236,7 @@ void Base::SetWheelsInXFormation() {
 
 units::angle::degree_t Base::GetHeadingDegrees() { return m_Gyro.GetRotation2d().Degrees(); }
 
-frc::Pose2d Base::GetPose() {
-    // return m_pOdometry->GetPose();
-    return m_PoseEstimator.GetEstimatedPosition();
-}
+frc::Pose2d Base::GetPose() { return m_PoseEstimator.GetEstimatedPosition(); }
 
 frc::ChassisSpeeds Base::GetRobotRelativeSpeeds() {
     return kDriveKinematics.ToChassisSpeeds(

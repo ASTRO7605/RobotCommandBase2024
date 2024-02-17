@@ -14,4 +14,4 @@ void PremierJointManual::Execute() {
 
 bool PremierJointManual::IsFinished() { return false; }
 
-void PremierJointManual::End(bool) { m_pBarre->Manual1erJoint(0); }
+void PremierJointManual::End(bool) { m_pBarre->KeepCurrentAngle1erJoint(); }

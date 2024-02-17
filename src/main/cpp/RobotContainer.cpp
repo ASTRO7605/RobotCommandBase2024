@@ -57,11 +57,13 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings() {
     // Configure your trigger bindings here
-    m_ThrottleStick.Button(8).OnTrue(
-        frc2::InstantCommand([this]() { m_Base.SwitchRobotDrivingMode(); }).ToPtr());
-    // bouton pouce
+    // m_ThrottleStick.Button(8).OnTrue(
+    //     frc2::InstantCommand([this]() { m_Base.SwitchRobotDrivingMode(); }).ToPtr());
+    // // bouton pouce
     m_ThrottleStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
+    m_TurnStick.Button(2).OnTrue(
+        frc2::InstantCommand([this]() { m_Base.SeedSwerveEncoders(); }).ToPtr());
     // m_CoPilotController.LeftBumper().OnTrue(
     //     frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
     m_CoPilotController.LeftBumper().OnTrue(
@@ -72,46 +74,102 @@ void RobotContainer::ConfigureBindings() {
             },
             {&m_ShooterWheels})
             .ToPtr());
+
+    // m_TurnStick.Button(7).WhileTrue(
+    //     ShooterAngleManual(&m_ShooterAngle,
+    //                        frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+    //         .ToPtr());
+    // m_TurnStick.Button(8).WhileTrue(
+    //     ShooterAngleManual(&m_ShooterAngle,
+    //                        -frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+    //         .ToPtr());
     m_TurnStick.Button(7).WhileTrue(
-        ShooterAngleManual(&m_ShooterAngle,
-                           frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+        LeftHookManual(&m_LeftHook, frc::Preferences::GetDouble("kPourcentageManualHooks"))
             .ToPtr());
     m_TurnStick.Button(8).WhileTrue(
-        ShooterAngleManual(&m_ShooterAngle,
-                           -frc::Preferences::GetDouble("kPourcentageManualAngleLanceur"))
+        LeftHookManual(&m_LeftHook, -frc::Preferences::GetDouble("kPourcentageManualHooks"))
             .ToPtr());
     m_TurnStick.Button(9).WhileTrue(
-        PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
+        RightHookManual(&m_RightHook, frc::Preferences::GetDouble("kPourcentageManualHooks"))
             .ToPtr());
     m_TurnStick.Button(10).WhileTrue(
-        PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
+        RightHookManual(&m_RightHook, -frc::Preferences::GetDouble("kPourcentageManualHooks"))
             .ToPtr());
     m_TurnStick.Button(11).WhileTrue(
-        DeuxiemeJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
+        PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
             .ToPtr());
     m_TurnStick.Button(12).WhileTrue(
-
-        DeuxiemeJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
+        PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
             .ToPtr());
-    m_ThrottleStick.Button(7).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 230).ToPtr());
-    m_ThrottleStick.Button(8).WhileTrue(ShooterPositionTest(&m_ShooterAngle, 600).ToPtr());
-    m_ThrottleStick.Button(9).WhileTrue(PremierJointPositionTest(&m_Barre, 120).ToPtr());
-    m_ThrottleStick.Button(10).WhileTrue(PremierJointPositionTest(&m_Barre, 1030).ToPtr());
-    m_ThrottleStick.Button(11).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 300).ToPtr());
-    m_ThrottleStick.Button(12).WhileTrue(DeuxiemeJointPositionTest(&m_Barre, 2100).ToPtr());
 
+    m_ThrottleStick.Button(7).OnTrue(
+        BarrePositionTest(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapApproach"),
+                          frc::Preferences::GetDouble("k2eJointStartPosition"))
+            .ToPtr());
+    m_ThrottleStick.Button(8).OnTrue(
+        BarrePositionTest(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
+                          frc::Preferences::GetDouble("k2eJointStartPosition"))
+            .ToPtr());
+    m_ThrottleStick.Button(9).OnTrue(
+
+        BarrePositionTest(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
+                          frc::Preferences::GetDouble("k2eJointAngleTrap"))
+            .ToPtr());
+    m_ThrottleStick.Button(10).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
+    // m_TurnStick.Button(11).WhileTrue(
+    //     DeuxiemeJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
+    //         .ToPtr());
+    // m_TurnStick.Button(12).WhileTrue(
+    //     DeuxiemeJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual2eJoint"))
+    // .ToPtr());
+    // m_ThrottleStick.Button(7).OnTrue(
+    //     frc2::InstantCommand([this]() { m_LeftHook.SetLeftHookPosition(70); }, {&m_LeftHook})
+    //         .ToPtr());
+    // m_ThrottleStick.Button(8).OnTrue(
+    //     frc2::InstantCommand([this]() { m_LeftHook.SetLeftHookPosition(150); }, {&m_LeftHook})
+    //         .ToPtr());
+    // m_ThrottleStick.Button(7).OnTrue(
+    //     LeftHookPositionTest(&m_LeftHook, 70, frc::Preferences::GetDouble("kVitesseHooks"),
+    //                          frc::Preferences::GetDouble("kAccelerationHooks"))
+    //         .ToPtr());
+    // m_ThrottleStick.Button(8).OnTrue(
+    //     LeftHookPositionTest(&m_LeftHook, 150, frc::Preferences::GetDouble("kVitesseHooks"),
+    //                          frc::Preferences::GetDouble("kAccelerationHooks"))
+    //         .ToPtr());
     m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
-    m_CoPilotController.B().OnTrue(RedescendreBarre(&m_Barre).ToPtr());
+    (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
+        .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
+    m_CoPilotController.Y().OnTrue(
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
+                  &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
+                  frc::Preferences::GetDouble("angleShooterTrap"), ScoringPositions::trap)
+            .ToPtr());
     m_CoPilotController.X().OnTrue(
-        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
+                  &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
                   frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)
             .ToPtr());
-    m_CoPilotController.Y().OnTrue(
-        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
+    m_CoPilotController.B().OnTrue(
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
+                  &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
                   frc::Preferences::GetDouble("angleShooterAmp"), ScoringPositions::amp)
             .ToPtr());
+
+    frc2::Trigger([this] {
+        return m_RightHook.IsInitScheduled();
+    }).OnTrue(InitRightHook(&m_RightHook).ToPtr());
+
+    frc2::Trigger([this] {
+        return m_LeftHook.IsInitScheduled();
+    }).OnTrue(InitLeftHook(&m_LeftHook).ToPtr());
+
+    frc2::Trigger([this] {
+        return m_ShooterAngle.IsShooterAngleAtInitPose();
+    }).OnTrue(ShooterPosition(&m_ShooterAngle, ShooterConstant::kIntermediateAngleShooter).ToPtr());
+
+    frc2::Trigger([this] {
+        return (m_RightHook.IsInitDone() && (m_LeftHook.IsInitDone()));
+    }).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -131,8 +189,25 @@ void RobotContainer::ConfigurePathfind() {
 }
 
 void RobotContainer::SeedEncoders() {
-    m_Base.SeedSwerveEncoders();
+    // m_Base.SeedSwerveEncoders();
     m_Barre.SeedEncoder1erJoint();
     m_Barre.SeedEncoder2eJoint();
     m_ShooterAngle.SeedEncoder();
+}
+
+void RobotContainer::SetIdleModeSwerve(DriveConstant::IdleMode idleMode) {
+    m_Base.SetIdleMode(idleMode);
+}
+
+void RobotContainer::SetInitHooksScheduled() {
+    m_RightHook.SetInitScheduled();
+    m_LeftHook.SetInitScheduled();
+}
+
+bool RobotContainer::IsInitHooksDone() {
+    return (m_LeftHook.IsInitDone() && m_RightHook.IsInitDone());
+}
+
+void RobotContainer::SetShooterAngleToInitPose() {
+    m_ShooterAngle.SetShooterAngleAtInitPoseFlag();
 }

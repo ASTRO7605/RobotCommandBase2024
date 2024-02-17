@@ -5,20 +5,27 @@
 #pragma once
 
 #include "Constants.h"
+#include "commands/BarrePositionTest.h"
 #include "commands/DeuxiemeJointManual.h"
-#include "commands/DeuxiemeJointPositionTest.h"
+#include "commands/InitLeftHook.h"
+#include "commands/InitRightHook.h"
 #include "commands/IntakeCommand.h"
+#include "commands/LeftHookManual.h"
+#include "commands/LeftHookPositionTest.h"
 #include "commands/PremierJointManual.h"
-#include "commands/PremierJointPositionTest.h"
 #include "commands/RedescendreBarre.h"
+#include "commands/RightHookManual.h"
+#include "commands/RightHookPositionTest.h"
 #include "commands/ShootNote.h"
 #include "commands/ShooterAngleManual.h"
-#include "commands/ShooterPositionTest.h"
+#include "commands/ShooterPosition.h"
 #include "commands/TestAmp.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
+#include "subsystems/LeftHook.h"
+#include "subsystems/RightHook.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
 #include "subsystems/Vision.h"
@@ -79,6 +86,11 @@ class RobotContainer {
     frc2::CommandPtr GetAutonomousCommand();
 
     void SeedEncoders();
+    void BringBarreDown();
+    void SetInitHooksScheduled();
+    bool IsInitHooksDone();
+    void SetIdleModeSwerve(DriveConstant::IdleMode);
+    void SetShooterAngleToInitPose();
 
   private:
     void ConfigureBindings();
@@ -89,5 +101,7 @@ class RobotContainer {
     ShooterAngle m_ShooterAngle;
     ShooterWheels m_ShooterWheels;
     Intake m_Intake;
+    LeftHook m_LeftHook;
+    RightHook m_RightHook;
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };

@@ -28,6 +28,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include <frc/SPI.h>
+#include <frc/Timer.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/kinematics/ChassisSpeeds.h>
@@ -48,6 +49,8 @@ class Base : public frc2::SubsystemBase {
     void Periodic() override;
 
     void SeedSwerveEncoders();
+
+    void SetIdleMode(DriveConstant::IdleMode);
 
     void ResetEncoders();
 
@@ -103,7 +106,7 @@ class Base : public frc2::SubsystemBase {
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
-
+    frc::Timer m_TimerEncoder;
     AHRS m_Gyro{frc::SPI::Port::kMXP};
     ModuleSwerve m_FrontRightModule{DriveConstant::FrontRightTurningID,
                                     DriveConstant::FrontRightDrivingID,
@@ -118,7 +121,6 @@ class Base : public frc2::SubsystemBase {
                                    DriveConstant::RearRightDrivingID,
                                    DriveConstant::RearRightCANcoderID};
 
-    // std::shared_ptr<frc::SwerveDriveOdometry<4>> m_pOdometry;
     frc::SwerveDrivePoseEstimator<4> m_PoseEstimator;
 
     double m_CurrentRotation = 0.0;

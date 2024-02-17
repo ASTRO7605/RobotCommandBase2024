@@ -58,6 +58,10 @@ class Barre : public frc2::SubsystemBase {
 
     void SeedEncoder2eJoint();
 
+    void KeepCurrentAngle1erJoint();
+
+    void KeepCurrentAngle2eJoint();
+
     void Periodic() override;
 
   private:

@@ -14,4 +14,4 @@ void DeuxiemeJointManual::Execute() {
 
 bool DeuxiemeJointManual::IsFinished() { return false; }
 
-void DeuxiemeJointManual::End(bool) { m_pBarre->Manual2eJoint(0); }
+void DeuxiemeJointManual::End(bool) { m_pBarre->KeepCurrentAngle2eJoint(); }

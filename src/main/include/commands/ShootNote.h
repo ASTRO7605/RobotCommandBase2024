@@ -4,6 +4,8 @@
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
+#include "subsystems/LeftHook.h"
+#include "subsystems/RightHook.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
 #include <frc/Timer.h>
@@ -18,14 +20,20 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     ShooterWheels *m_pShooterWheels;
     Intake *m_pIntake;
     Barre *m_pBarre;
+    LeftHook *m_pLeftHook;
+    RightHook *m_pRightHook;
     double targetSpeeds;
-    double targetAngle;
+    double currentShooterTargetAngle;
+    double finalShooterTargetAngle;
     double targetPremierJoint;
     double targetDeuxiemeJoint;
-    bool areWheelsReadyToShoot;
+    bool areWheelsAtRightSpeed;
     bool isShooterAngledRight;
     bool isPremierJointAngledRight;
     bool isDeuxiemeJointAngledRight;
+    bool readyToShoot;
+    bool isLeftHookAtRightPose;
+    bool isRightHookAtRightPose;
     frc::Timer timer;
     ShooterConstant::ShooterState m_State;
     ScoringPositions scoringPlace;
@@ -37,10 +45,15 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     /// @param p_ShooterAngle
     /// @param p_ShooterWheels
     /// @param p_Intake
-    /// @param wheelSpeeds RPM
-    /// @param shooterAngle angle of the shooter (1/10 degree)
+    /// @param p_Barre
+    /// @param p_LeftHook
+    /// @param p_RightHook
+    /// @param wheelSpeeds
+    /// @param shooterAngle
+    /// @param scoringPlace
     explicit ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
-                       Intake *p_Intake, Barre *p_Barre, double wheelSpeeds, double shooterAngle,
+                       Intake *p_Intake, Barre *p_Barre, LeftHook *p_LeftHook,
+                       RightHook *p_RightHook, double wheelSpeeds, double shooterAngle,
                        ScoringPositions scoringPlace);
     void Initialize() override;
     void Execute() override;

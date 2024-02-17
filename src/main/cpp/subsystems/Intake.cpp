@@ -34,8 +34,13 @@ bool Intake::IsObjectInIntake() {
     return !(m_capteurInterieurIntake->Get());
 } // si vrai, pas d'objet
 
-void Intake::SetIntake(bool on, bool reversed) {
-    double voltage{frc::Preferences::GetDouble("kVoltageIntake")};
+void Intake::SetIntake(bool on, bool reversed, bool forShot) {
+    double voltage{};
+    if (forShot) {
+        voltage = frc::Preferences::GetDouble("kVoltageIntakeShot");
+    } else {
+        voltage = frc::Preferences::GetDouble("kVoltageIntakeCommand");
+    }
     if (reversed) {
         voltage *= -1;
     }

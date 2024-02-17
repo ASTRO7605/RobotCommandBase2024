@@ -26,7 +26,7 @@ class ShooterWheels : public frc2::SubsystemBase {
     void Periodic() override;
     /// @brief Set shooter wheels to a specific speed
     /// @param speeds Speed of wheels (RPM)
-    void SetWheelSpeeds(double speeds);
+    void SetWheelSpeeds(double speeds, bool spin);
 
     bool IsObjectInShooter();
 
@@ -40,7 +40,7 @@ class ShooterWheels : public frc2::SubsystemBase {
     /// @brief Function to check if wheel speeds are within a certain threshold of a target
     /// @param target Target to check (RPM)
     /// @return True if within threshold, false if not
-    bool AreWheelsDoneAccelerating(double target);
+    bool AreWheelsDoneAccelerating(double target, bool spin);
 
   private:
     rev::CANSparkMax m_LeftFlywheelMotor;

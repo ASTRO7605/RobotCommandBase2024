@@ -1,16 +1,18 @@
 #pragma once
 
+#include "subsystems/LeftHook.h"
+#include <frc/Timer.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/LeftHook.h"
+#include <frc2/command/PrintCommand.h>
 
-class LeftHookManual : public frc2::CommandHelper<frc2::Command, LeftHookManual> {
+class InitLeftHook : public frc2::CommandHelper<frc2::Command, InitLeftHook> {
   private:
     LeftHook *m_pLeftHook;
-    double percent;
+    frc::Timer m_Timer;
 
   public:
-    explicit LeftHookManual(LeftHook *p_LeftHook, double percent);
+    explicit InitLeftHook(LeftHook *p_LeftHook);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

@@ -4,13 +4,14 @@
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/Barre.h"
 
-class PremierJointPositionTest : public frc2::CommandHelper<frc2::Command, PremierJointPositionTest> {
+class BarrePositionTest : public frc2::CommandHelper<frc2::Command, BarrePositionTest> {
   private:
     Barre *m_pBarre;
-    double angle;
+    double angle1erJoint;
+    double angle2eJoint;
 
   public:
-    explicit PremierJointPositionTest(Barre *p_Barre, double angle);
+    explicit BarrePositionTest(Barre *p_Barre, double angle1erJoint, double angle2eJoint);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

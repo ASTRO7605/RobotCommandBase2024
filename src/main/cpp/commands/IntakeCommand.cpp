@@ -5,7 +5,7 @@ IntakeCommand::IntakeCommand(Intake *p_Intake, bool reversed)
     AddRequirements({m_pIntake});
 }
 
-void IntakeCommand::Initialize() { m_pIntake->SetIntake(true, isReversed); }
+void IntakeCommand::Initialize() { m_pIntake->SetIntake(true, isReversed, false); }
 
 void IntakeCommand::Execute() {}
 
@@ -16,4 +16,4 @@ bool IntakeCommand::IsFinished() {
     return false;
 }
 
-void IntakeCommand::End(bool interrupted) { m_pIntake->SetIntake(false, false); }
+void IntakeCommand::End(bool interrupted) { m_pIntake->SetIntake(false, false, false); }

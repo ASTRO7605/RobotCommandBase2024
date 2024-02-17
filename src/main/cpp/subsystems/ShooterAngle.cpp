@@ -26,6 +26,8 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
                                        ShooterConstant::kTimeoutMs);
 
+    SeedEncoder();
+
     m_MoteurAngle.ConfigPeakOutputForward(ShooterConstant::kPeakOutputForward,
                                           ShooterConstant::kTimeoutMs);
     m_MoteurAngle.ConfigPeakOutputReverse(ShooterConstant::kPeakOutputReverse,
@@ -64,6 +66,8 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.ConfigPeakCurrentLimit(ShooterConstant::kPeakCurrentDuration);
     m_MoteurAngle.ConfigContinuousCurrentLimit(ShooterConstant::kContinuousCurrent);
     m_MoteurAngle.EnableCurrentLimit(true);
+
+    isShooterAtInitPose = false;
 }
 
 void ShooterAngle::Periodic() {
@@ -122,4 +126,12 @@ void ShooterAngle::SeedEncoder() {
     }
     relativeEncoderPosition = static_cast<int>(relativeEncoderPosition) % 4096;
     m_MoteurAngle.SetSelectedSensorPosition(relativeEncoderPosition);
+}
+
+bool ShooterAngle::IsShooterAngleAtInitPose() {
+    return isShooterAtInitPose;
+}
+
+void ShooterAngle::SetShooterAngleAtInitPoseFlag() {
+    isShooterAtInitPose = true;
 }
