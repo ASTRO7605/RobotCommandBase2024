@@ -111,7 +111,7 @@ class Base : public frc2::SubsystemBase {
 
     units::degree_t GetDesiredRotationToSpeaker();
 
-    units::degrees_per_second_t GetPIDControlledRotationDegreesToSpeaker();
+    units::degrees_per_second_t GetPIDControlledRotationSpeedToSpeaker();
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be

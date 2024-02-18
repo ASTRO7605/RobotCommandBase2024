@@ -192,6 +192,10 @@ constexpr double kAngleShooterAmp = 600;
 constexpr double kAngleShooterTrap = 730;
 constexpr double kIntermediateAngleShooter = 450;
 constexpr double kRPMDifferenceSpin = 500;
+constexpr std::pair<units::meter_t, double> firstDistanceWheelSpeedsCouple = std::make_pair(1_m, 3000);
+constexpr std::pair<units::meter_t, double> firstDistanceShooterAngleCouple = std::make_pair(1_m, 500);
+extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance; 
+extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
 } // namespace ShooterConstant
 
 namespace IntakeConstant {

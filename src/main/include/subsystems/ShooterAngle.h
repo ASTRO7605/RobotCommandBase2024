@@ -6,6 +6,7 @@
 
 #include "Constants.h"
 #include <wpi/deprecated.h>
+#include <wpi/interpolating_map.h>
 
 #include <rev/CANSparkBase.h>
 #include <rev/CANSparkMax.h>
@@ -59,4 +60,6 @@ class ShooterAngle : public frc2::SubsystemBase {
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;
 
     bool isShooterAtInitPose;
+
+    wpi::interpolating_map<double, double> interpolatingMapShooterAngle; // enter meters to get angle
 };

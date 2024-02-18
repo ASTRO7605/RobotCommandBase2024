@@ -39,7 +39,7 @@ RobotContainer::RobotContainer()
 
             if (m_Base.IsRotationBeingControlled()) {
                 turn =
-                    -units::radians_per_second_t{m_Base.GetPIDControlledRotationDegreesToSpeaker()}
+                    -units::radians_per_second_t{m_Base.GetPIDControlledRotationSpeedToSpeaker()}
                          .value();
             } else {
                 turn = frc::ApplyDeadband(m_TurnStick.GetX(),

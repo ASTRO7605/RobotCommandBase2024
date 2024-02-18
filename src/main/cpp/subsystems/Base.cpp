@@ -22,7 +22,7 @@ Base::Base()
     m_Gyro.Calibrate();
     m_Gyro.Reset();
 
-    pidControllerThetaSpeaker.EnableContinuousInput(-180, 180);
+    pidControllerThetaSpeaker.EnableContinuousInput(-1, 1);
 
     pathplanner::AutoBuilder::configureHolonomic(
         [this]() { return GetPose(); },                    // robot pose supplier
@@ -371,8 +371,8 @@ units::degree_t Base::GetDesiredRotationToSpeaker() {
     return units::degree_t{desiredRotation};
 }
 
-units::degrees_per_second_t Base::GetPIDControlledRotationDegreesToSpeaker() {
+units::degrees_per_second_t Base::GetPIDControlledRotationSpeedToSpeaker() {
     return units::degrees_per_second_t{pidControllerThetaSpeaker.Calculate(
-        m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value(),
-        GetDesiredRotationToSpeaker().value())};
+        m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value() / 180,
+        GetDesiredRotationToSpeaker().value() / 180)};
 }

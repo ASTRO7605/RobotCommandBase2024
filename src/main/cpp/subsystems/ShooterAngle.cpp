@@ -68,6 +68,11 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.EnableCurrentLimit(true);
 
     isShooterAtInitPose = false;
+
+    for (auto couple: ShooterConstant::shooterAngleAccordingToDistance) {
+        interpolatingMapShooterAngle.insert(couple.first.value(), couple.second);
+    }
+
 }
 
 void ShooterAngle::Periodic() {

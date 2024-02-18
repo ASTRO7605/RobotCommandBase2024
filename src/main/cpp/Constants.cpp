@@ -8,3 +8,11 @@ const frc::Transform3d VisionConstant::leftCameraTransform{frc::Transform3d(
 
 const frc::TrapezoidProfile<units::radians>::Constraints DriveConstant::kThetaControllerConstraints{
     DriveConstant::kMaxAutoAngularSpeed, DriveConstant::kMaxAutoAngularAcceleration};
+
+const std::vector<std::pair<units::meter_t, double>> ShooterConstant::wheelSpeedsAccordingToDistance{
+    ShooterConstant::firstDistanceWheelSpeedsCouple
+};
+
+const std::vector<std::pair<units::meter_t, double>> ShooterConstant::shooterAngleAccordingToDistance{
+    ShooterConstant::firstDistanceShooterAngleCouple
+};

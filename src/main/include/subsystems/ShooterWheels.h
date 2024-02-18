@@ -10,6 +10,7 @@
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxRelativeEncoder.h>
 #include <rev/SparkPIDController.h>
+#include <wpi/interpolating_map.h>
 
 #include <frc/DigitalInput.h>
 #include <frc/Preferences.h>
@@ -55,4 +56,6 @@ class ShooterWheels : public frc2::SubsystemBase {
     std::shared_ptr<frc::DigitalInput> m_capteurInterieurShooter;
 
     bool areWheelsRunning;
+
+    wpi::interpolating_map<double, double> interpolatingMapShooterWheels;
 };
