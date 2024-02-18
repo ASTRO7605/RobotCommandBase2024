@@ -305,3 +305,50 @@ constexpr double kPositionAfterInit = 10;
 constexpr double kForwardSoftLimit = 230;
 constexpr double kPositionRetracted = -10;
 } // namespace ClimberConstant
+
+namespace LEDConstants {
+constexpr int kLEDChannel = 9;
+constexpr int kNumLeds = 12;
+
+constexpr int kNumRainbowStepsPerLed = 4;
+constexpr int kNumRainbowColors = kNumRainbowStepsPerLed * kNumLeds;
+
+// moves by 1 LED each n 20-millis periods
+constexpr int kSweepPrescale = 6;
+
+// toggles LEDs each n 20-millis periods
+constexpr int kFlashPrescale = 5;
+
+// switches LEDs each n 20-millis periods
+constexpr int kAlternatePrescale = 5;
+
+constexpr int kNumRequestedFullOnLeds = 8;
+
+constexpr auto kRequestGamePieceDuration = 7.5_s;
+constexpr auto kTargetAcquiredDuration = 3_s;
+
+// 8-bit R, G, B
+struct Color {
+    uint8_t red;
+    uint8_t grn;
+    uint8_t blu;
+};
+
+namespace Colors {
+constexpr Color Off{0, 0, 0};
+constexpr Color RED_ALLIANCE{255, 0, 0};
+constexpr Color BLUE_ALLIANCE{0, 0, 255};
+constexpr Color IntakeDone{255, 185, 0};
+constexpr Color TargetAcquired{0, 255, 0};
+constexpr Color Error{255, 0, 0};
+} // namespace Colors
+
+enum Animation {
+    RED_ALLIANCE,
+    BLUE_ALLIANCE,
+    INTAKE_DONE,
+    TARGET_ACQUIRED,
+    ERROR,
+    OFF,
+};
+} // namespace LEDConstants

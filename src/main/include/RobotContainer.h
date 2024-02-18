@@ -25,6 +25,7 @@
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
+#include "subsystems/Led.h"
 #include "subsystems/LeftHook.h"
 #include "subsystems/RightHook.h"
 #include "subsystems/ShooterAngle.h"
@@ -106,5 +107,6 @@ class RobotContainer : public frc2::SubsystemBase {
     Intake m_Intake;
     LeftHook m_LeftHook;
     RightHook m_RightHook;
+    Led m_Led;
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };
