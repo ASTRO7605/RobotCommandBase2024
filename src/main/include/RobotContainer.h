@@ -24,6 +24,7 @@
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
+#include "subsystems/Led.h"
 #include "subsystems/LeftHook.h"
 #include "subsystems/RightHook.h"
 #include "subsystems/ShooterAngle.h"
@@ -76,32 +77,34 @@
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and trigger mappings) should be declared here.
  */
-class RobotContainer {
-  public:
-    RobotContainer();
-    frc2::CommandJoystick m_ThrottleStick;
-    frc2::CommandJoystick m_TurnStick;
-    frc2::CommandXboxController m_CoPilotController;
+class RobotContainer
+{
+public:
+  RobotContainer();
+  frc2::CommandJoystick m_ThrottleStick;
+  frc2::CommandJoystick m_TurnStick;
+  frc2::CommandXboxController m_CoPilotController;
 
-    frc2::CommandPtr GetAutonomousCommand();
+  frc2::CommandPtr GetAutonomousCommand();
 
-    void SeedEncoders();
-    void BringBarreDown();
-    void SetInitHooksScheduled();
-    bool IsInitHooksDone();
-    void SetIdleModeSwerve(DriveConstant::IdleMode);
-    void SetShooterAngleToInitPose();
+  void SeedEncoders();
+  void BringBarreDown();
+  void SetInitHooksScheduled();
+  bool IsInitHooksDone();
+  void SetIdleModeSwerve(DriveConstant::IdleMode);
+  void SetShooterAngleToInitPose();
 
-  private:
-    void ConfigureBindings();
-    void ConfigurePathfind();
-    // The robot's subsystems are defined here...
-    Base m_Base;
-    Barre m_Barre;
-    ShooterAngle m_ShooterAngle;
-    ShooterWheels m_ShooterWheels;
-    Intake m_Intake;
-    LeftHook m_LeftHook;
-    RightHook m_RightHook;
-    frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
+private:
+  void ConfigureBindings();
+  void ConfigurePathfind();
+  // The robot's subsystems are defined here...
+  Base m_Base;
+  Barre m_Barre;
+  ShooterAngle m_ShooterAngle;
+  ShooterWheels m_ShooterWheels;
+  Intake m_Intake;
+  LeftHook m_LeftHook;
+  RightHook m_RightHook;
+  Led m_Led;
+  frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };
