@@ -56,10 +56,13 @@ class ShooterAngle : public frc2::SubsystemBase {
 
     void SetShooterAngleAtInitPoseFlag();
 
+    double GetInterpolatedShooterAngle(double distanceMeters);
+
   private:
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;
 
     bool isShooterAtInitPose;
 
-    wpi::interpolating_map<double, double> interpolatingMapShooterAngle; // enter meters to get angle
+    wpi::interpolating_map<double, double>
+        interpolatingMapShooterAngle; // enter meters to get angle
 };

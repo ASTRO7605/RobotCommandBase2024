@@ -23,13 +23,13 @@ void ShootNote::Execute() {
     switch (m_State) {
     case (ShooterConstant::ShooterState::init):
         if (scoringPlace == ScoringPositions::speaker) {
-            // if (finalShooterTargetAngle >=
-            //     ShooterConstant::kIntermediateAngleShooter) { // check if need to flick shooter
-            //     currentShooterTargetAngle = finalShooterTargetAngle;
-            // } else {
-            //     currentShooterTargetAngle = ShooterConstant::kIntermediateAngleShooter;
-            // }
-            currentShooterTargetAngle = finalShooterTargetAngle;
+            if (finalShooterTargetAngle >=
+                ShooterConstant::kIntermediateAngleShooter) { // check if need to flick shooter
+                currentShooterTargetAngle = finalShooterTargetAngle;
+            } else {
+                currentShooterTargetAngle = ShooterConstant::kIntermediateAngleShooter;
+            }
+            // currentShooterTargetAngle = finalShooterTargetAngle;
             m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
         } else {
             if (scoringPlace == ScoringPositions::amp) {
@@ -42,7 +42,7 @@ void ShootNote::Execute() {
             currentShooterTargetAngle = finalShooterTargetAngle;
             m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
         }
-        // m_pBase->SetWheelsInXFormation();
+        m_pBase->SetWheelsInXFormation();
         areWheelsAtRightSpeed = false;
         isShooterAngledRight = false;
         isPremierJointAngledRight = false;
@@ -93,8 +93,8 @@ void ShootNote::Execute() {
             if (m_pRightHook->IsRightHookAtTargetPosition(ClimberConstant::kPositionRetracted)) {
                 isRightHookAtRightPose = true;
             }
-            if (isShooterAngledRight && areWheelsAtRightSpeed &&
-                isLeftHookAtRightPose && isRightHookAtRightPose) {
+            if (isShooterAngledRight && areWheelsAtRightSpeed && isLeftHookAtRightPose &&
+                isRightHookAtRightPose) {
                 readyToShoot = true;
             }
         }

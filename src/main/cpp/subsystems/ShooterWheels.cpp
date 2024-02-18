@@ -49,6 +49,10 @@ ShooterWheels::ShooterWheels()
     m_RightFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels);
 
     areWheelsRunning = false;
+
+    for (auto couple : ShooterConstant::wheelSpeedsAccordingToDistance) {
+        interpolatingMapShooterWheels.insert(couple.first.value(), couple.second);
+    }
 }
 
 void ShooterWheels::Periodic() {
@@ -103,4 +107,8 @@ bool ShooterWheels::AreWheelsDoneAccelerating(double target, bool spin) {
         return true;
     }
     return false;
+}
+
+double ShooterWheels::GetInterpolatedWheelSpeeds(double distanceMeters) {
+    return interpolatingMapShooterWheels[distanceMeters];
 }

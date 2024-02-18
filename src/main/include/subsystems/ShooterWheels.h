@@ -43,6 +43,8 @@ class ShooterWheels : public frc2::SubsystemBase {
     /// @return True if within threshold, false if not
     bool AreWheelsDoneAccelerating(double target, bool spin);
 
+    double GetInterpolatedWheelSpeeds(double distanceMeters);
+
   private:
     rev::CANSparkMax m_LeftFlywheelMotor;
     rev::CANSparkMax m_RightFlywheelMotor;

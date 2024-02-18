@@ -87,6 +87,9 @@ constexpr int RearRightCANcoderID = 13;
 constexpr double kPThetaRobot = 0;
 constexpr double kIThetaRobot = 0;
 constexpr double kDThetaRobot = 0;
+
+constexpr double kThresholdRobotAngle = 0.85;
+constexpr auto kThresholdTimer = 0.1_s;
 } // namespace DriveConstant
 
 namespace VisionConstant {
@@ -180,21 +183,27 @@ constexpr double kFPositionAngle = 4.25;
 constexpr double kVitesseAngle = 2000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
-constexpr double angleThreshold = 5;        // dixieme de degre
-constexpr double kMaxAF = 0.0445;
+constexpr double angleThreshold = 7.5;      // dixieme de degre
+constexpr double kMaxAF = 0 /*.0445*/;
 constexpr double FDegToRad = std::numbers::pi / 180;
-constexpr double kPeakCurrentLimit = 9;    // amperes
+constexpr double kPeakCurrentLimit = 20;   // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
-constexpr double kContinuousCurrent = 9;   // amperes
-constexpr double kForwardSoftLimit = 740;  // 1/10 degre
+constexpr double kContinuousCurrent = 20;  // amperes
+constexpr double kForwardSoftLimit = 750;  // 1/10 degre
 constexpr double kReverseSoftLimit = 200;  // 1/10 degre
 constexpr double kAngleShooterAmp = 600;
 constexpr double kAngleShooterTrap = 730;
 constexpr double kIntermediateAngleShooter = 450;
 constexpr double kRPMDifferenceSpin = 500;
-constexpr std::pair<units::meter_t, double> firstDistanceWheelSpeedsCouple = std::make_pair(1_m, 3000);
-constexpr std::pair<units::meter_t, double> firstDistanceShooterAngleCouple = std::make_pair(1_m, 500);
-extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance; 
+constexpr std::pair<units::meter_t, double> firstDistanceWheelSpeedsCouple =
+    std::make_pair(2_m, 3000);
+constexpr std::pair<units::meter_t, double> firstDistanceShooterAngleCouple =
+    std::make_pair(2_m, 500);
+constexpr std::pair<units::meter_t, double> secondDistanceWheelSpeedsCouple =
+    std::make_pair(4_m, 5000);
+constexpr std::pair<units::meter_t, double> secondDistanceShooterAngleCouple =
+    std::make_pair(4_m, 300);
+extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance;
 extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
 } // namespace ShooterConstant
 

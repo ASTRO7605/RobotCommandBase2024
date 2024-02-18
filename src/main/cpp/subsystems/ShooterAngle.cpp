@@ -69,10 +69,9 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
 
     isShooterAtInitPose = false;
 
-    for (auto couple: ShooterConstant::shooterAngleAccordingToDistance) {
+    for (auto couple : ShooterConstant::shooterAngleAccordingToDistance) {
         interpolatingMapShooterAngle.insert(couple.first.value(), couple.second);
     }
-
 }
 
 void ShooterAngle::Periodic() {
@@ -133,10 +132,10 @@ void ShooterAngle::SeedEncoder() {
     m_MoteurAngle.SetSelectedSensorPosition(relativeEncoderPosition);
 }
 
-bool ShooterAngle::IsShooterAngleAtInitPose() {
-    return isShooterAtInitPose;
-}
+bool ShooterAngle::IsShooterAngleAtInitPose() { return isShooterAtInitPose; }
 
-void ShooterAngle::SetShooterAngleAtInitPoseFlag() {
-    isShooterAtInitPose = true;
+void ShooterAngle::SetShooterAngleAtInitPoseFlag() { isShooterAtInitPose = true; }
+
+double ShooterAngle::GetInterpolatedShooterAngle(double distanceMeters) {
+    return interpolatingMapShooterAngle[distanceMeters];
 }

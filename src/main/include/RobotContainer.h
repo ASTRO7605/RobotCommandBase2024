@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Constants.h"
+#include "commands/AlignWithSpeaker.h"
 #include "commands/BarrePositionTest.h"
 #include "commands/DeuxiemeJointManual.h"
 #include "commands/InitLeftHook.h"
@@ -41,6 +42,7 @@
 #include <frc/trajectory/TrajectoryConfig.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc/trajectory/TrajectoryUtil.h>
+#include <frc2/command/SubsystemBase.h>
 
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
@@ -76,9 +78,10 @@
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and trigger mappings) should be declared here.
  */
-class RobotContainer {
+class RobotContainer : public frc2::SubsystemBase {
   public:
     RobotContainer();
+    void Periodic() override;
     frc2::CommandJoystick m_ThrottleStick;
     frc2::CommandJoystick m_TurnStick;
     frc2::CommandXboxController m_CoPilotController;
