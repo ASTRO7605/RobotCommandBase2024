@@ -68,13 +68,6 @@ void RobotContainer::Periodic() {
                                                             m_Base.GetDistanceToSpeaker().value()));
 }
 
-void RobotContainer::Periodic() {
-    frc::SmartDashboard::PutNumber("interpolatedAngle", m_ShooterAngle.GetInterpolatedShooterAngle(
-                                                            m_Base.GetDistanceToSpeaker().value()));
-    frc::SmartDashboard::PutNumber("interpolatedSpeed", m_ShooterWheels.GetInterpolatedWheelSpeeds(
-                                                            m_Base.GetDistanceToSpeaker().value()));
-}
-
 void RobotContainer::ConfigureBindings() {
     // Configure your trigger bindings here
     // m_ThrottleStick.Button(8).OnTrue(

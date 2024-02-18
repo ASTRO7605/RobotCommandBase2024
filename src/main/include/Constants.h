@@ -320,7 +320,7 @@ constexpr int kSweepPrescale = 6;
 constexpr int kFlashPrescale = 5;
 
 // switches LEDs each n 20-millis periods
-constexpr int kAlternatePrescale = 5;
+constexpr int kAlternatePrescale = 15;
 
 constexpr int kNumRequestedFullOnLeds = 8;
 
@@ -344,8 +344,7 @@ constexpr Color Error{255, 0, 0};
 } // namespace Colors
 
 enum Animation {
-    RED_ALLIANCE,
-    BLUE_ALLIANCE,
+    ALLIANCE,
     INTAKE_DONE,
     TARGET_ACQUIRED,
     ERROR,
