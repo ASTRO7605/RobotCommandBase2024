@@ -6,53 +6,53 @@
 
 #include <cstdint>
 
-static uint8_t const rainbow_red[LEDConstants::kNumRainbowColors] = // hsv, 100% s, 100% v,
+static uint8_t const rainbow_red[LedConstants::kNumRainbowColors] = // hsv, 100% s, 100% v,
                                                                     // [0;360[ deg h by 7.5deg
                                                                     // increments
     {255, 255, 255, 255, 255, 255, 255, 255, 255, 223, 191, 159, 128, 96,  64,  32,
      0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
      0,   32,  64,  96,  128, 159, 191, 223, 255, 255, 255, 255, 255, 255, 255, 255};
 
-static uint8_t const rainbow_grn[LEDConstants::kNumRainbowColors] = {
+static uint8_t const rainbow_grn[LedConstants::kNumRainbowColors] = {
     0,   32,  64,  96,  128, 159, 191, 223, 255, 255, 255, 255, 255, 255, 255, 255,
     255, 255, 255, 255, 255, 255, 255, 255, 255, 223, 191, 159, 128, 96,  64,  32,
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0};
 
-static uint8_t const rainbow_blu[LEDConstants::kNumRainbowColors] = {
+static uint8_t const rainbow_blu[LedConstants::kNumRainbowColors] = {
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
     0,   32,  64,  96,  128, 159, 191, 223, 255, 255, 255, 255, 255, 255, 255, 255,
     255, 255, 255, 255, 255, 255, 255, 255, 255, 223, 191, 159, 128, 96,  64,  32};
 
 LED::LED() : m_currentAnim(LEDConstants::Animation::ALLIANCE) {
-    m_led.SetLength(LEDConstants::kNumLeds);
+    m_led.SetLength(LedConstants::kNumLeds);
     m_led.SetData(m_buffer);
     m_led.Start();
 }
 
 void LED::Periodic() {
     switch (m_currentAnim) {
-    case LEDConstants::Animation::INTAKE_DONE:
-        solid_color(LEDConstants::Colors::IntakeDone);
+    case LedConstants::Animation::INTAKE_DONE:
+        solid_color(LedConstants::Colors::IntakeDone);
         break;
 
-    case LEDConstants::Animation::TARGET_ACQUIRED:
-        solid_color(LEDConstants::Colors::TargetAcquired);
+    case LedConstants::Animation::TARGET_ACQUIRED:
+        solid_color(LedConstants::Colors::TargetAcquired);
         break;
 
-    case LEDConstants::Animation::ALLIANCE: {
+    case LedConstants::Animation::ALLIANCE: {
         auto alli = frc::DriverStation::GetAlliance();
         if (alli && alli.value() == frc::DriverStation::Alliance::kRed) {
-            color_sweep(LEDConstants::Colors::RED_ALLIANCE);
+            color_sweep(LedConstants::Colors::RED_ALLIANCE);
         } else if (alli && alli.value() == frc::DriverStation::Alliance::kBlue) {
-            color_sweep(LEDConstants::Colors::BLUE_ALLIANCE);
+            color_sweep(LedConstants::Colors::BLUE_ALLIANCE);
         } else {
-            alternate(LEDConstants::Colors::RED_ALLIANCE, LEDConstants::Colors::BLUE_ALLIANCE);
+            alternate(LedConstants::Colors::RED_ALLIANCE, LedConstants::Colors::BLUE_ALLIANCE);
         }
         break;
     }
 
-    case LEDConstants::Animation::ERROR:
-        color_flash(LEDConstants::Colors::Error);
+    case LedConstants::Animation::ERROR:
+        color_flash(LedConstants::Colors::Error);
         break;
 
     default:
@@ -60,22 +60,26 @@ void LED::Periodic() {
     }
 }
 
-void LED::SetAnimation(LEDConstants::Animation animation) { m_currentAnim = animation; }
+void LED::SetAnimation(LedConstants::Animation animation) { m_currentAnim = animation; }
 
-void LED::color_sweep(LEDConstants::Color color) {
+LedConstants::Animation LED::GetAnimation(LedConstants::Animation animation) {
+    return m_currentAnim;
+}
+
+void LED::color_sweep(LedConstants::Color color) {
     static double prescale_counter = 0.0;
     static int anim_counter = 0;
 
-    prescale_counter += (1.0 / LEDConstants::kSweepPrescale);
+    prescale_counter += (1.0 / LedConstants::kSweepPrescale);
 
     // calculate value to compare against as being prescale_counter after
     // kRequestedPrescale increments (may not be equal to 1)
-    if (prescale_counter >= (LEDConstants::kSweepPrescale * (1.0 / LEDConstants::kSweepPrescale))) {
+    if (prescale_counter >= (LedConstants::kSweepPrescale * (1.0 / LedConstants::kSweepPrescale))) {
         // reset prescale and increment animation
         prescale_counter = 0.0;
         ++anim_counter;
 
-        if (anim_counter >= LEDConstants::kNumLeds)
+        if (anim_counter >= LedConstants::kNumLeds)
             anim_counter = 0;
     }
 
@@ -91,17 +95,17 @@ void LED::color_sweep(LEDConstants::Color color) {
 
     // next LED
     ++led;
-    if (led >= LEDConstants::kNumLeds)
+    if (led >= LedConstants::kNumLeds)
         led = 0;
 
     // turn on LEDs in middle of sequence
-    for (int count = 0; count < LEDConstants::kNumRequestedFullOnLeds; ++count) {
+    for (int count = 0; count < LedConstants::kNumRequestedFullOnLeds; ++count) {
 
         m_buffer[led].SetRGB(color.red, color.grn, color.blu);
 
         // next LED
         ++led;
-        if (led >= LEDConstants::kNumLeds)
+        if (led >= LedConstants::kNumLeds)
             led = 0;
     }
 
@@ -112,31 +116,31 @@ void LED::color_sweep(LEDConstants::Color color) {
 
     // next LED
     ++led;
-    if (led >= LEDConstants::kNumLeds)
+    if (led >= LedConstants::kNumLeds)
         led = 0;
 
     // turn off LEDs past sequence
     for (int count = 0;
-         count < (LEDConstants::kNumLeds - LEDConstants::kNumRequestedFullOnLeds - 2); ++count) {
-        m_buffer[led].SetRGB(LEDConstants::Colors::Off.red, LEDConstants::Colors::Off.grn,
-                             LEDConstants::Colors::Off.blu);
+         count < (LedConstants::kNumLeds - LedConstants::kNumRequestedFullOnLeds - 2); ++count) {
+        m_buffer[led].SetRGB(LedConstants::Colors::Off.red, LedConstants::Colors::Off.grn,
+                             LedConstants::Colors::Off.blu);
 
         // next LED
         ++led;
-        if (led >= LEDConstants::kNumLeds)
+        if (led >= LedConstants::kNumLeds)
             led = 0;
     }
 
     m_led.SetData(m_buffer);
 }
 
-void LED::color_flash(LEDConstants::Color color) {
+void LED::color_flash(LedConstants::Color color) {
     static int prescale_counter = 0;
     static bool leds_on = true;
 
     ++prescale_counter;
 
-    if (prescale_counter < LEDConstants::kFlashPrescale) {
+    if (prescale_counter < LedConstants::kFlashPrescale) {
         // prescale counter not reached yet
         return;
     }
@@ -145,26 +149,26 @@ void LED::color_flash(LEDConstants::Color color) {
     leds_on = !leds_on;
 
     if (leds_on) {
-        for (int led = 0; led < LEDConstants::kNumLeds; ++led) {
+        for (int led = 0; led < LedConstants::kNumLeds; ++led) {
             m_buffer[led].SetRGB(color.red, color.grn, color.blu);
         }
     } else {
-        for (int led = 0; led < LEDConstants::kNumLeds; ++led) {
-            m_buffer[led].SetRGB(LEDConstants::Colors::Off.red, LEDConstants::Colors::Off.grn,
-                                 LEDConstants::Colors::Off.blu);
+        for (int led = 0; led < LedConstants::kNumLeds; ++led) {
+            m_buffer[led].SetRGB(LedConstants::Colors::Off.red, LedConstants::Colors::Off.grn,
+                                 LedConstants::Colors::Off.blu);
         }
     }
 
     m_led.SetData(m_buffer);
 }
 
-void LED::alternate(LEDConstants::Color color1, LEDConstants::Color color2) {
+void LED::alternate(LedConstants::Color color1, LedConstants::Color color2) {
     static int prescale_counter = 0;
     static bool is1 = true;
 
     ++prescale_counter;
 
-    if (prescale_counter < LEDConstants::kAlternatePrescale) {
+    if (prescale_counter < LedConstants::kAlternatePrescale) {
         // prescale counter not reached yet
         return;
     }
@@ -172,17 +176,17 @@ void LED::alternate(LEDConstants::Color color1, LEDConstants::Color color2) {
     prescale_counter = 0;
     is1 = !is1;
 
-    LEDConstants::Color current = is1 ? color1 : color2;
+    LedConstants::Color current = is1 ? color1 : color2;
 
-    for (int led = 0; led < LEDConstants::kNumLeds; ++led) {
-        m_buffer[led].SetRGB(current.red, current.grn, current.blu);
+    for (int led = 0; led < LedConstants::kNumLeds; ++led) {
+        m_buffer[led].SetRGB(current.red, current.blu, current.grn);
     }
 
     m_led.SetData(m_buffer);
 }
 
-void LED::solid_color(LEDConstants::Color color) {
-    for (int led = 0; led < (LEDConstants::kNumLeds); ++led) {
+void LED::solid_color(LedConstants::Color color) {
+    for (int led = 0; led < (LedConstants::kNumLeds); ++led) {
         m_buffer[led].SetRGB(color.red, color.grn, color.blu);
     }
 
