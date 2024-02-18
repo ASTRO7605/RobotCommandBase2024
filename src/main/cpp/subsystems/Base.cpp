@@ -271,6 +271,10 @@ void Base::SetRobotPoseVisionEstimateLeft() {
 
     frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
+    if (estimate->ambiguity == 0) {
+        estimate->ambiguity = 0.01;
+    }
+
     auto std_devs = PoseEstimationConstant::stdDevPerAmbiguity;
     // auto dst_sq = estimate->distance.value() * estimate->distance.value();
     // std_devs[0] *= dst_sq; // scale based on distance
@@ -293,6 +297,7 @@ void Base::SetRobotPoseVisionEstimateLeft() {
 }
 
 void Base::SetRobotPoseVisionEstimateRight() {
+
     if (!m_VisionRight.SeesValidTarget()) {
         // hide robot if no target in view
         m_VisionFieldRight.SetRobotPose(100_m, 100_m, 0_rad);
@@ -305,6 +310,10 @@ void Base::SetRobotPoseVisionEstimateRight() {
     }
 
     frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
+
+    if (estimate->ambiguity == 0) {
+        estimate->ambiguity = 0.01;
+    }
 
     auto std_devs = PoseEstimationConstant::stdDevPerAmbiguity;
     std_devs[0] = estimate->ambiguity * std_devs[0] + PoseEstimationConstant::stdDevBase;
@@ -323,6 +332,7 @@ void Base::SetRobotPoseVisionEstimateRight() {
     // Update SmartDashboard
     m_VisionFieldRight.SetRobotPose(measurement2d);
 }
+
 void Base::ResetOdometry(frc::Pose2d desiredPose) {
     m_PoseEstimator.ResetPosition(GetHeadingDegrees(),
                                   {m_FrontRightModule.GetPosition(),

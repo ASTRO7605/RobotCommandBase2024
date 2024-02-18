@@ -139,3 +139,5 @@ void ShooterAngle::SetShooterAngleAtInitPoseFlag() { isShooterAtInitPose = true;
 double ShooterAngle::GetInterpolatedShooterAngle(double distanceMeters) {
     return interpolatingMapShooterAngle[distanceMeters];
 }
+
+void ShooterAngle::SetMotorNeutral() { m_MoteurAngle.NeutralOutput(); }

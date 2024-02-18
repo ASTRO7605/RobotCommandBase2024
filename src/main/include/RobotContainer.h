@@ -95,6 +95,7 @@ class RobotContainer : public frc2::SubsystemBase {
     bool IsInitHooksDone();
     void SetIdleModeSwerve(DriveConstant::IdleMode);
     void SetShooterAngleToInitPose();
+    void SetShooterAngleToNeutral();
 
   private:
     void ConfigureBindings();

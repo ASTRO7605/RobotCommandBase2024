@@ -62,10 +62,12 @@ RobotContainer::RobotContainer()
 }
 
 void RobotContainer::Periodic() {
-    frc::SmartDashboard::PutNumber("interpolatedAngle", m_ShooterAngle.GetInterpolatedShooterAngle(
-                                                            m_Base.GetDistanceToSpeaker().value()));
-    frc::SmartDashboard::PutNumber("interpolatedSpeed", m_ShooterWheels.GetInterpolatedWheelSpeeds(
-                                                            m_Base.GetDistanceToSpeaker().value()));
+    // frc::SmartDashboard::PutNumber("interpolatedAngle",
+    // m_ShooterAngle.GetInterpolatedShooterAngle(
+    //                                                         m_Base.GetDistanceToSpeaker().value()));
+    // frc::SmartDashboard::PutNumber("interpolatedSpeed",
+    // m_ShooterWheels.GetInterpolatedWheelSpeeds(
+    //                                                         m_Base.GetDistanceToSpeaker().value()));
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -161,11 +163,16 @@ void RobotContainer::ConfigureBindings() {
     //               &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
     //               frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)
     //         .ToPtr());
+    // m_CoPilotController.X().OnTrue(frc2::SequentialCommandGroup{
+    //     AlignWithSpeaker(&m_Base),
+    //     ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
+    //               &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
+    //               frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)}
+    //                                    .ToPtr());
     m_CoPilotController.X().OnTrue(frc2::SequentialCommandGroup{
         AlignWithSpeaker(&m_Base),
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
-                  &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
-                  frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)}
+                  &m_RightHook, 0, 0, ScoringPositions::speaker)}
                                        .ToPtr());
     m_CoPilotController.B().OnTrue(
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
@@ -227,3 +234,5 @@ bool RobotContainer::IsInitHooksDone() {
 }
 
 void RobotContainer::SetShooterAngleToInitPose() { m_ShooterAngle.SetShooterAngleAtInitPoseFlag(); }
+
+void RobotContainer::SetShooterAngleToNeutral() { m_ShooterAngle.SetMotorNeutral(); }

@@ -175,7 +175,7 @@ void LED::alternate(LEDConstants::Color color1, LEDConstants::Color color2) {
     LEDConstants::Color current = is1 ? color1 : color2;
 
     for (int led = 0; led < LEDConstants::kNumLeds; ++led) {
-        m_buffer[led].SetRGB(current.red, current.blu, current.grn);
+        m_buffer[led].SetRGB(current.red, current.grn, current.blu);
     }
 
     m_led.SetData(m_buffer);

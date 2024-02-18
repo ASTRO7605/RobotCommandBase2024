@@ -80,7 +80,11 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() { m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast); }
+void Robot::DisabledInit() {
+    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
+    hasShooterAngleBeenSet = false;
+    m_Container.SetShooterAngleToNeutral();
+}
 
 void Robot::DisabledPeriodic() {}
 
@@ -111,6 +115,7 @@ void Robot::TeleopInit() {
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
     }
+    m_Container.SetShooterAngleToInitPose();
 }
 
 /**
@@ -121,10 +126,10 @@ void Robot::TeleopPeriodic() {
         m_Container.SetInitHooksScheduled();
         hasInitHooksBeenScheduled = true;
     }
-    if (!hasShooterAngleBeenSet) {
-        m_Container.SetShooterAngleToInitPose();
-        hasShooterAngleBeenSet = true;
-    }
+    // if (!hasShooterAngleBeenSet) {
+    //     m_Container.SetShooterAngleToInitPose();
+    //     hasShooterAngleBeenSet = true;
+    // }
 }
 
 /**

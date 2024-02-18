@@ -17,19 +17,27 @@ void ShootNote::Initialize() {
     } else {
         m_State = ShooterConstant::ShooterState::init;
     }
+    if (scoringPlace == ScoringPositions::speaker) {
+        targetSpeeds =
+            m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
+        finalShooterTargetAngle =
+            m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
+    }
+    frc::SmartDashboard::PutNumber("interpolatedAngle", finalShooterTargetAngle);
+    frc::SmartDashboard::PutNumber("interpolatedSpeed", targetSpeeds);
 }
 
 void ShootNote::Execute() {
     switch (m_State) {
     case (ShooterConstant::ShooterState::init):
         if (scoringPlace == ScoringPositions::speaker) {
-            if (finalShooterTargetAngle >=
-                ShooterConstant::kIntermediateAngleShooter) { // check if need to flick shooter
-                currentShooterTargetAngle = finalShooterTargetAngle;
-            } else {
-                currentShooterTargetAngle = ShooterConstant::kIntermediateAngleShooter;
-            }
-            // currentShooterTargetAngle = finalShooterTargetAngle;
+            // if (finalShooterTargetAngle >=
+            //     ShooterConstant::kIntermediateAngleShooter) { // check if need to flick shooter
+            //     currentShooterTargetAngle = finalShooterTargetAngle;
+            // } else {
+            //     currentShooterTargetAngle = ShooterConstant::kIntermediateAngleShooter;
+            // }
+            currentShooterTargetAngle = finalShooterTargetAngle;
             m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
         } else {
             if (scoringPlace == ScoringPositions::amp) {
@@ -114,9 +122,9 @@ void ShootNote::Execute() {
         break;
     case (ShooterConstant::ShooterState::moveNoteInShooter):
         m_pIntake->SetIntake(true, false, true);
-        if (scoringPlace == ScoringPositions::speaker) { // to do the flick
-            currentShooterTargetAngle = finalShooterTargetAngle;
-        }
+        // if (scoringPlace == ScoringPositions::speaker) { // to do the flick
+        //     currentShooterTargetAngle = finalShooterTargetAngle;
+        // }
         m_State = ShooterConstant::ShooterState::waitingForNoteToEnter;
         break;
     case (ShooterConstant::ShooterState::waitingForNoteToEnter):

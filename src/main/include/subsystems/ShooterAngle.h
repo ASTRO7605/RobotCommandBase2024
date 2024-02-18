@@ -58,6 +58,8 @@ class ShooterAngle : public frc2::SubsystemBase {
 
     double GetInterpolatedShooterAngle(double distanceMeters);
 
+    void SetMotorNeutral();
+
   private:
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurAngle;
 

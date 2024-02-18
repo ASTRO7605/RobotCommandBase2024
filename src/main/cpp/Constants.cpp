@@ -12,9 +12,23 @@ const frc::TrapezoidProfile<units::radians>::Constraints DriveConstant::kThetaCo
 const std::vector<std::pair<units::meter_t, double>>
     ShooterConstant::wheelSpeedsAccordingToDistance{
         ShooterConstant::firstDistanceWheelSpeedsCouple,
-        ShooterConstant::secondDistanceWheelSpeedsCouple};
+        ShooterConstant::secondDistanceWheelSpeedsCouple,
+        ShooterConstant::thirdDistanceWheelSpeedsCouple,
+        ShooterConstant::fourthDistanceWheelSpeedsCouple,
+        ShooterConstant::fifthDistanceWheelSpeedsCouple,
+        ShooterConstant::sixthDistanceWheelSpeedsCouple,
+        ShooterConstant::seventhDistanceWheelSpeedsCouple,
+        ShooterConstant::eighthDistanceWheelSpeedsCouple,
+    };
 
 const std::vector<std::pair<units::meter_t, double>>
     ShooterConstant::shooterAngleAccordingToDistance{
         ShooterConstant::firstDistanceShooterAngleCouple,
-        ShooterConstant::secondDistanceShooterAngleCouple};
+        ShooterConstant::secondDistanceShooterAngleCouple,
+        ShooterConstant::thirdDistanceShooterAngleCouple,
+        ShooterConstant::fourthDistanceShooterAngleCouple,
+        ShooterConstant::fifthDistanceShooterAngleCouple,
+        ShooterConstant::sixthDistanceShooterAngleCouple,
+        ShooterConstant::seventhDistanceShooterAngleCouple,
+        ShooterConstant::eighthDistanceShooterAngleCouple,
+    };
