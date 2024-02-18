@@ -306,8 +306,8 @@ constexpr double kForwardSoftLimit = 230;
 constexpr double kPositionRetracted = -10;
 } // namespace ClimberConstant
 
-namespace LEDConstants {
-constexpr int kLEDChannel = 9;
+namespace LedConstants {
+constexpr int kLedChannel = 9;
 constexpr int kNumLeds = 12;
 
 constexpr int kNumRainbowStepsPerLed = 4;
@@ -350,4 +350,4 @@ enum Animation {
     ERROR,
     OFF,
 };
-} // namespace LEDConstants
+} // namespace LedConstants
