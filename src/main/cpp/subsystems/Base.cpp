@@ -386,3 +386,10 @@ units::degrees_per_second_t Base::GetPIDControlledRotationSpeedToSpeaker() {
         m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value() / 180,
         GetDesiredRotationToSpeaker().value() / 180)};
 }
+
+bool Base::IsRobotInRangeToShoot() {
+    if (GetDistanceToSpeaker() <= DriveConstant::kThresholdInSpeakerRange) {
+        return true;
+    }
+    return false;
+}

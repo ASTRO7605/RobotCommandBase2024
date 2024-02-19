@@ -58,6 +58,11 @@ RobotContainer::RobotContainer()
         },
         {&m_Base}));
 
+    m_ShooterAngle.SetDefaultCommand(frc2::RunCommand(
+        [this] {
+        m_ShooterAngle.SetShooterAngle(m_ShooterAngle.GetInterpolatedShooterAngle(m_Base.GetDistanceToSpeaker().value()));
+        },
+        {&m_ShooterAngle}));
     ConfigurePathfind();
 }
 
@@ -81,20 +86,23 @@ void RobotContainer::ConfigureBindings() {
         frc2::InstantCommand([this]() { m_Base.SeedSwerveEncoders(); }).ToPtr());
     // m_CoPilotController.LeftBumper().OnTrue(
     //     frc2::InstantCommand{[this] { pathfindingCommand.Schedule(); }, {&m_Base}}.ToPtr());
-    m_CoPilotController.LeftBumper().OnTrue(
-        frc2::InstantCommand(
-            [this]() {
-                m_ShooterWheels.ManualToggleStartWheels(
-                    frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"));
-            },
-            {&m_ShooterWheels})
-            .ToPtr());
+    // m_CoPilotController.LeftBumper().OnTrue(
+    //     frc2::InstantCommand(
+    //         [this]() {
+    //             m_ShooterWheels.ManualToggleStartWheels(
+    //                 frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"));
+    //         },
+    //         {&m_ShooterWheels})
+    //         .ToPtr());
     m_CoPilotController.RightBumper().OnTrue(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(true); }, {})
             .ToPtr());
     m_CoPilotController.RightBumper().OnFalse(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(false); }, {})
             .ToPtr());
+    m_CoPilotController.RightBumper().WhileTrue(
+        StartShooterWheels(&m_ShooterWheels, &m_Base).ToPtr()
+    );
 
     m_TurnStick.Button(7).WhileTrue(
         LeftHookManual(&m_LeftHook, frc::Preferences::GetDouble("kPourcentageManualHooks"))

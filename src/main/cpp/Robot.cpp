@@ -104,10 +104,10 @@ void Robot::AutonomousPeriodic() {
         m_Container.SetInitHooksScheduled();
         hasInitHooksBeenScheduled = true;
     }
-    if (!hasShooterAngleBeenSet) {
-        m_Container.SetShooterAngleToInitPose();
-        hasShooterAngleBeenSet = true;
-    }
+    // if (!hasShooterAngleBeenSet) {
+    //     m_Container.SetShooterAngleToInitPose();
+    //     hasShooterAngleBeenSet = true;
+    // }
 }
 
 void Robot::TeleopInit() {
@@ -115,7 +115,7 @@ void Robot::TeleopInit() {
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
     }
-    m_Container.SetShooterAngleToInitPose();
+    //m_Container.SetShooterAngleToInitPose();
 }
 
 /**

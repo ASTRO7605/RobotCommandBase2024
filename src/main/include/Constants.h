@@ -90,6 +90,8 @@ constexpr double kDThetaRobot = 0;
 
 constexpr double kThresholdRobotAngle = 0.85;
 constexpr auto kThresholdTimer = 0.1_s;
+
+constexpr auto kThresholdInSpeakerRange = 3.35_m;
 } // namespace DriveConstant
 
 namespace VisionConstant {

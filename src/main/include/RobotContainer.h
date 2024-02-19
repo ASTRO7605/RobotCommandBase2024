@@ -20,6 +20,7 @@
 #include "commands/ShootNote.h"
 #include "commands/ShooterAngleManual.h"
 #include "commands/ShooterPosition.h"
+#include "commands/StartShooterWheels.h"
 #include "commands/TestAmp.h"
 #include "commands/TimedLed.h"
 
