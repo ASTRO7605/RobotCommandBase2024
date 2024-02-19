@@ -1,13 +1,13 @@
 #include "commands/TimedLed.h"
 
 TimedLed::TimedLed(Led &led, LedConstants::Animation anim, units::second_t duration)
-    : m_Led(led), m_anim(start_anim), m_duration(duration) {
+    : m_Led(led), m_anim(anim), m_duration(duration) {
     AddRequirements({&m_Led});
 }
 
 void TimedLed::Initialize() {
-    m_Led.SetAnimation(m_anim);
     m_end_anim = m_Led.GetAnimation();
+    m_Led.SetAnimation(m_anim);
 
     m_timer.Reset();
     m_timer.Start();

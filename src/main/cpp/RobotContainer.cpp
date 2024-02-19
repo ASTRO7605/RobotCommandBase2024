@@ -150,9 +150,15 @@ void RobotContainer::ConfigureBindings() {
     //     LeftHookPositionTest(&m_LeftHook, 150, frc::Preferences::GetDouble("kVitesseHooks"),
     //                          frc::Preferences::GetDouble("kAccelerationHooks"))
     //         .ToPtr());
-    m_CoPilotController.A().WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
+    m_CoPilotController.A().WhileTrue(
+        IntakeCommand(&m_Intake, false,
+                      TimedLed(m_Led, LedConstants::Animation::INTAKE_DONE, 3.0_s))
+            .ToPtr());
     (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
-        .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
+        .WhileTrue(IntakeCommand(&m_Intake, true,
+                                 TimedLed(m_Led, LedConstants::Animation::INTAKE_DONE, 3.0_s))
+                       .ToPtr());
+
     m_CoPilotController.Y().OnTrue(
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
                   &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),

@@ -21,6 +21,7 @@
 #include "commands/ShooterAngleManual.h"
 #include "commands/ShooterPosition.h"
 #include "commands/TestAmp.h"
+#include "commands/TimedLed.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
@@ -108,6 +109,6 @@ class RobotContainer : public frc2::SubsystemBase {
     Intake m_Intake;
     LeftHook m_LeftHook;
     RightHook m_RightHook;
-    LED m_LED;
+    Led m_Led;
     frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 };

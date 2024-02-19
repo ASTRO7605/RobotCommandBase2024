@@ -7,10 +7,9 @@
 #include "Constants.h"
 #include "subsystems/Led.h"
 
-class TimedLed : public frc2::CommandHelper<frc2::CommandBase, TimedLed> {
+class TimedLed : public frc2::CommandHelper<frc2::Command, TimedLed> {
   public:
-    explicit TimedLED(LED &led, LEDConstants::Animation start_anim,
-                      LEDConstants::Animation end_anim, units::second_t duration);
+    explicit TimedLed(Led &led, LedConstants::Animation anim, units::second_t duration);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

@@ -4,32 +4,13 @@
 
 #include "subsystems/Led.h"
 
-#include <cstdint>
-
-static uint8_t const rainbow_red[LedConstants::kNumRainbowColors] = // hsv, 100% s, 100% v,
-                                                                    // [0;360[ deg h by 7.5deg
-                                                                    // increments
-    {255, 255, 255, 255, 255, 255, 255, 255, 255, 223, 191, 159, 128, 96,  64,  32,
-     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-     0,   32,  64,  96,  128, 159, 191, 223, 255, 255, 255, 255, 255, 255, 255, 255};
-
-static uint8_t const rainbow_grn[LedConstants::kNumRainbowColors] = {
-    0,   32,  64,  96,  128, 159, 191, 223, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 223, 191, 159, 128, 96,  64,  32,
-    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0};
-
-static uint8_t const rainbow_blu[LedConstants::kNumRainbowColors] = {
-    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-    0,   32,  64,  96,  128, 159, 191, 223, 255, 255, 255, 255, 255, 255, 255, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 223, 191, 159, 128, 96,  64,  32};
-
-LED::LED() : m_currentAnim(LEDConstants::Animation::ALLIANCE) {
+Led::Led() : m_currentAnim(LedConstants::Animation::ALLIANCE) {
     m_led.SetLength(LedConstants::kNumLeds);
     m_led.SetData(m_buffer);
     m_led.Start();
 }
 
-void LED::Periodic() {
+void Led::Periodic() {
     switch (m_currentAnim) {
     case LedConstants::Animation::INTAKE_DONE:
         solid_color(LedConstants::Colors::IntakeDone);
@@ -60,13 +41,7 @@ void LED::Periodic() {
     }
 }
 
-void LED::SetAnimation(LedConstants::Animation animation) { m_currentAnim = animation; }
-
-LedConstants::Animation LED::GetAnimation(LedConstants::Animation animation) {
-    return m_currentAnim;
-}
-
-void LED::color_sweep(LedConstants::Color color) {
+void Led::color_sweep(LedConstants::Color color) {
     static double prescale_counter = 0.0;
     static int anim_counter = 0;
 
@@ -134,7 +109,7 @@ void LED::color_sweep(LedConstants::Color color) {
     m_led.SetData(m_buffer);
 }
 
-void LED::color_flash(LedConstants::Color color) {
+void Led::color_flash(LedConstants::Color color) {
     static int prescale_counter = 0;
     static bool leds_on = true;
 
@@ -162,7 +137,7 @@ void LED::color_flash(LedConstants::Color color) {
     m_led.SetData(m_buffer);
 }
 
-void LED::alternate(LedConstants::Color color1, LedConstants::Color color2) {
+void Led::alternate(LedConstants::Color color1, LedConstants::Color color2) {
     static int prescale_counter = 0;
     static bool is1 = true;
 
@@ -185,7 +160,7 @@ void LED::alternate(LedConstants::Color color1, LedConstants::Color color2) {
     m_led.SetData(m_buffer);
 }
 
-void LED::solid_color(LedConstants::Color color) {
+void Led::solid_color(LedConstants::Color color) {
     for (int led = 0; led < (LedConstants::kNumLeds); ++led) {
         m_buffer[led].SetRGB(color.red, color.grn, color.blu);
     }

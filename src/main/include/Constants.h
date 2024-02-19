@@ -362,7 +362,7 @@ namespace Colors {
 constexpr Color Off{0, 0, 0};
 constexpr Color RED_ALLIANCE{255, 0, 0};
 constexpr Color BLUE_ALLIANCE{0, 0, 255};
-constexpr Color IntakeDone{255, 185, 0};
+constexpr Color IntakeDone{255, 55, 0};
 constexpr Color TargetAcquired{0, 255, 0};
 constexpr Color Error{255, 0, 0};
 } // namespace Colors
