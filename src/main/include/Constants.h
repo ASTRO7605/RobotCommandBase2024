@@ -12,10 +12,20 @@
 #include <units/velocity.h>
 #include <units/voltage.h>
 
-enum ScoringPositions { speaker, amp, trap };
-namespace DriveConstant {
+enum ScoringPositions
+{
+    speaker,
+    amp,
+    trap
+};
+namespace DriveConstant
+{
 constexpr auto delayBeforeSeedEncoders = 2.5_s;
-enum IdleMode { Coast, Brake };
+enum IdleMode
+{
+    Coast,
+    Brake
+};
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
 constexpr double kWheelDiameterM = 0.09689;
@@ -94,7 +104,8 @@ constexpr auto kThresholdTimer = 0.1_s;
 constexpr auto kThresholdInSpeakerRange = 3.35_m;
 } // namespace DriveConstant
 
-namespace VisionConstant {
+namespace VisionConstant
+{
 constexpr int Pipeline = 0; // only one pipeline (AprilTags)
 constexpr std::string_view TableNameRight = "photonvision-a";
 constexpr std::string_view TableNameLeft = "photonvision-b";
@@ -102,9 +113,15 @@ constexpr double ambiguityThreshold = 0.6;
 extern const frc::Transform3d rightCameraTransform;
 extern const frc::Transform3d leftCameraTransform;
 
-enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
+enum class LedMode : int
+{
+    Off = 1,
+    Flash = 2,
+    On = 3
+};
 } // namespace VisionConstant
-namespace PoseEstimationConstant {
+namespace PoseEstimationConstant
+{
 // x(m), y(m), theta(rad)
 constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.05};
 constexpr std::array<double, 3> kVisionStdDevs{0.9, 0.9, 0.95};
@@ -118,7 +135,8 @@ constexpr frc::Translation2d redSpeakerPoseMeters = frc::Translation2d{
     units::meter_t{units::inch_t{652.73}}, units::meter_t{units::inch_t{218.42}}};
 } // namespace PoseEstimationConstant
 
-namespace OIConstant {
+namespace OIConstant
+{
 constexpr int TurnStickID = 0;
 constexpr int ThrottleStickID = 1;
 constexpr int CoPilotControllerID = 2;
@@ -135,8 +153,10 @@ constexpr int CoPilot_RPush_Button = 10;
 constexpr double axisThreshold = 0.5;
 } // namespace OIConstant
 
-namespace ShooterConstant {
-enum ShooterState {
+namespace ShooterConstant
+{
+enum ShooterState
+{
     init,
     waitingForSubsystems,
     waitingForDeuxiemeJointTrap,
@@ -233,7 +253,8 @@ extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccording
 extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
 } // namespace ShooterConstant
 
-namespace IntakeConstant {
+namespace IntakeConstant
+{
 constexpr int topMotorID = 14;
 constexpr int bottomMotorID = 15;
 constexpr int capteurID = 0;
@@ -243,7 +264,8 @@ constexpr double kVoltageIntakeShot = 10;   // volts
 constexpr double kVoltageIntakeCommand = 4;
 } // namespace IntakeConstant
 
-namespace BarreConstant {
+namespace BarreConstant
+{
 constexpr int moteurPremierJointID = 19;
 constexpr int moteurDeuxiemeJointID = 20;
 constexpr int kTimeoutMs = 30;
@@ -299,7 +321,8 @@ constexpr double k2eJointStartPosition = 900;
 constexpr auto kTimerThreshold = 0.5_s;
 } // namespace BarreConstant
 
-namespace ClimberConstant {
+namespace ClimberConstant
+{
 constexpr int leftHookMotorID = 21;
 constexpr int rightHookMotorID = 22;
 constexpr double FConversionFactorPosition =
@@ -332,7 +355,8 @@ constexpr double kForwardSoftLimit = 230;
 constexpr double kPositionRetracted = -10;
 } // namespace ClimberConstant
 
-namespace LedConstants {
+namespace LedConstants
+{
 constexpr int kLedChannel = 9;
 constexpr int kNumLeds = 12;
 
@@ -354,26 +378,25 @@ constexpr auto kRequestGamePieceDuration = 7.5_s;
 constexpr auto kTargetAcquiredDuration = 3_s;
 
 // 8-bit R, G, B
-struct Color {
+struct Color
+{
     uint8_t red;
     uint8_t grn;
     uint8_t blu;
 };
 
-namespace Colors {
+namespace Colors
+{
 constexpr Color Off{0, 0, 0};
-constexpr Color RED_ALLIANCE{255, 0, 0};
-constexpr Color BLUE_ALLIANCE{0, 0, 255};
-constexpr Color IntakeDone{255, 55, 0};
-constexpr Color TargetAcquired{0, 255, 0};
-constexpr Color Error{255, 0, 0};
+constexpr Color RedAlliance{255, 0, 0};
+constexpr Color BlueAlliance{0, 0, 255};
+constexpr Color NoteInIntake{255, 55, 0};
+constexpr Color RobotInRange{0, 255, 0};
 } // namespace Colors
 
-enum Animation {
+enum Animation
+{
     ALLIANCE,
-    INTAKE_DONE,
-    TARGET_ACQUIRED,
-    ERROR,
-    OFF,
+    SPLIT,
 };
 } // namespace LedConstants

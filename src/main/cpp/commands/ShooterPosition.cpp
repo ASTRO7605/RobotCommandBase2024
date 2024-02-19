@@ -10,10 +10,7 @@ void ShooterPosition::Initialize() {}
 void ShooterPosition::Execute() { m_pShooterAngle->SetShooterAngle(angle); }
 
 bool ShooterPosition::IsFinished() {
-    if (m_pShooterAngle->IsShooterAtTargetAngle(angle)) {
-        return true;
-    }
-    return false;
+    return (m_pShooterAngle->IsShooterAtTargetAngle(angle));
 }
 
 void ShooterPosition::End(bool) {}

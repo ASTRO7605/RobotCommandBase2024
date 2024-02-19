@@ -22,7 +22,6 @@
 #include "commands/ShooterPosition.h"
 #include "commands/StartShooterWheels.h"
 #include "commands/TestAmp.h"
-#include "commands/TimedLed.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
@@ -98,6 +97,9 @@ class RobotContainer : public frc2::SubsystemBase {
     void SetIdleModeSwerve(DriveConstant::IdleMode);
     void SetShooterAngleToInitPose();
     void SetShooterAngleToNeutral();
+
+    void SetLedForDisabled() {m_Led.SetAnimation(LedConstants::Animation::ALLIANCE);};
+    void SetLedForEnabled() {m_Led.SetAnimation(LedConstants::Animation::SPLIT);};
 
   private:
     void ConfigureBindings();

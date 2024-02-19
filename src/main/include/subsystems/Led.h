@@ -7,7 +7,8 @@
 
 #include <array>
 
-class Led : public frc2::SubsystemBase {
+class Led : public frc2::SubsystemBase
+{
   public:
     Led();
     void Periodic() override;
@@ -15,14 +16,18 @@ class Led : public frc2::SubsystemBase {
     void SetAnimation(LedConstants::Animation animation) { m_currentAnim = animation; };
     LedConstants::Animation GetAnimation() { return m_currentAnim; };
 
+    void SetNoteInIntake(bool in_intake) { note_in_intake = in_intake; };
+    void SetRobotInRange(bool in_range) { robot_in_range = in_range; };
+
   private:
     void rainbow();
     void color_sweep(LedConstants::Color color);
-    void color_flash(LedConstants::Color color);
-    void solid_color(LedConstants::Color color);
     void alternate(LedConstants::Color color1, LedConstants::Color color2);
+    void split(LedConstants::Color top, LedConstants::Color bottom);
 
     frc::AddressableLED m_led{LedConstants::kLedChannel};
     std::array<frc::AddressableLED::LEDData, LedConstants::kNumLeds> m_buffer;
     LedConstants::Animation m_currentAnim;
+    bool note_in_intake;
+    bool robot_in_range;
 };

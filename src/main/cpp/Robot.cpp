@@ -6,7 +6,8 @@
 
 #include <wpi/MemoryBuffer.h>
 
-void Robot::RobotInit() {
+void Robot::RobotInit()
+{
     frc::CameraServer::StartAutomaticCapture();
 
     m_Container.SeedEncoders();
@@ -80,10 +81,12 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {
+void Robot::DisabledInit()
+{
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
     hasShooterAngleBeenSet = false;
     m_Container.SetShooterAngleToNeutral();
+    m_Container.SetLedForDisabled();
 }
 
 void Robot::DisabledPeriodic() {}
@@ -92,15 +95,20 @@ void Robot::DisabledPeriodic() {}
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
  */
-void Robot::AutonomousInit() {
+void Robot::AutonomousInit()
+{
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
-    if (m_autonomousCommand.get() != nullptr) {
+    if (m_autonomousCommand.get() != nullptr)
+    {
         m_autonomousCommand.Schedule();
     }
+    m_Container.SetLedForEnabled();
 }
 
-void Robot::AutonomousPeriodic() {
-    if (!hasInitHooksBeenScheduled) {
+void Robot::AutonomousPeriodic()
+{
+    if (!hasInitHooksBeenScheduled)
+    {
         m_Container.SetInitHooksScheduled();
         hasInitHooksBeenScheduled = true;
     }
@@ -110,19 +118,24 @@ void Robot::AutonomousPeriodic() {
     // }
 }
 
-void Robot::TeleopInit() {
+void Robot::TeleopInit()
+{
+    m_Container.SetLedForEnabled();
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
-    if (m_autonomousCommand.get() != nullptr) {
+    if (m_autonomousCommand.get() != nullptr)
+    {
         m_autonomousCommand.Cancel();
     }
-    //m_Container.SetShooterAngleToInitPose();
+    // m_Container.SetShooterAngleToInitPose();
 }
 
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {
-    if (!hasInitHooksBeenScheduled) {
+void Robot::TeleopPeriodic()
+{
+    if (!hasInitHooksBeenScheduled)
+    {
         m_Container.SetInitHooksScheduled();
         hasInitHooksBeenScheduled = true;
     }
