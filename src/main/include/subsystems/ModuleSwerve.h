@@ -44,4 +44,6 @@ class ModuleSwerve : public frc2::SubsystemBase {
     rev::SparkPIDController m_DrivingPIDController;
 
     frc::SwerveModuleState m_DesiredState;
+
+    bool hasEncoderBeenSeeded;
 };

@@ -117,7 +117,7 @@ void RobotContainer::ConfigureBindings() {
     m_CoPilotController.RightBumper().OnFalse(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(false); }, {})
             .ToPtr());
-    m_CoPilotController.RightBumper().OnTrue(
+    m_CoPilotController.RightBumper().WhileTrue(
         StartShooterWheels(&m_ShooterWheels, &m_Base, true).ToPtr());
     m_CoPilotController.RightBumper().OnFalse(
         StartShooterWheels(&m_ShooterWheels, &m_Base, false).ToPtr());
@@ -235,7 +235,7 @@ void RobotContainer::ConfigurePathfind() {
     auto path = pathplanner::PathPlannerPath::fromPathFile("approach amp");
 
     pathplanner::PathConstraints constraints =
-        pathplanner::PathConstraints(1.0_mps, 1.0_mps_sq, 450_deg_per_s, 720_deg_per_s_sq);
+        pathplanner::PathConstraints(1.0_mps, 1.0_mps_sq, 450_deg_per_s, 540_deg_per_s_sq);
 
     pathfindingCommand = pathplanner::AutoBuilder::pathfindThenFollowPath(path, constraints);
 }

@@ -106,11 +106,11 @@ void Base::Periodic() {
 
     // for SmartDashboard
     m_RobotField.SetRobotPose(m_PoseEstimator.GetEstimatedPosition());
-    if (m_TimerEncoder.Get() >= DriveConstant::delayBeforeSeedEncoders) {
-        m_TimerEncoder.Stop();
-        m_TimerEncoder.Reset();
-        SeedSwerveEncoders();
-    }
+    // if (m_TimerEncoder.Get() >= DriveConstant::delayBeforeSeedEncoders) {
+    //     m_TimerEncoder.Stop();
+    //     m_TimerEncoder.Reset();
+    //     SeedSwerveEncoders();
+    // }
 }
 
 void Base::SetIdleMode(DriveConstant::IdleMode idleMode) {
@@ -126,12 +126,12 @@ void Base::ResetEncoders() {
     m_RearRightModule.ResetEncoders();
 }
 
-void Base::SeedSwerveEncoders() {
-    m_FrontRightModule.SeedSparkMaxEncoder();
-    m_FrontLeftModule.SeedSparkMaxEncoder();
-    m_RearLeftModule.SeedSparkMaxEncoder();
-    m_RearRightModule.SeedSparkMaxEncoder();
-}
+// void Base::SeedSwerveEncoders() {
+//     m_FrontRightModule.SeedSparkMaxEncoder();
+//     m_FrontLeftModule.SeedSparkMaxEncoder();
+//     m_RearLeftModule.SeedSparkMaxEncoder();
+//     m_RearRightModule.SeedSparkMaxEncoder();
+// }
 
 void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
                  units::radians_per_second_t rotationSpeed, bool rateLimiting) {
@@ -392,4 +392,8 @@ bool Base::IsRobotInRangeToShoot() {
         return true;
     }
     return false;
+}
+
+double Base::GetRotationPIDError() {
+    return pidControllerThetaSpeaker.GetPositionError();
 }

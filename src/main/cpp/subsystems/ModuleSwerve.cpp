@@ -11,8 +11,8 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
                                          rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_DrivingEncoder{m_DrivingMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_TurningPIDController{m_TurningMotor.GetPIDController()},
-      m_DrivingPIDController{m_DrivingMotor.GetPIDController()},
-      m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()} {
+      m_DrivingPIDController{m_DrivingMotor.GetPIDController()}/*,
+      m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()}*/ {
 
     m_TurningMotor.RestoreFactoryDefaults();
     m_DrivingMotor.RestoreFactoryDefaults();
@@ -61,18 +61,29 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
     m_TurningMotor.SetSmartCurrentLimit(DriveConstant::currentLimit);
 
     m_DrivingEncoder.SetPosition(0);
-    m_DesiredState.angle = frc::Rotation2d(
-        units::radian_t{m_TurningCANcoder.GetAbsolutePosition()
-                            .GetValue()}); // on dit aux swerves de garder leur position initiale
+    // m_DesiredState.angle = frc::Rotation2d(
+    //     units::radian_t{m_TurningCANcoder.GetAbsolutePosition()
+    //                         .GetValue()}); // on dit aux swerves de garder leur position initiale
+    hasEncoderBeenSeeded = false;
 }
 
-void ModuleSwerve::Periodic() {}
-
-void ModuleSwerve::SeedSparkMaxEncoder() {
-    m_TurningSparkMaxEncoder.SetPosition(
-        units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}
-            .value()); // seed les spark max avec la valeur du CANcoder
+void ModuleSwerve::Periodic() {
+    if (!hasEncoderBeenSeeded) {
+        auto absoluteEncoderPose = m_TurningCANcoder.GetPosition().WaitForUpdate(0.1_s);
+        if (absoluteEncoderPose.GetStatus().IsOK()) {
+            m_TurningSparkMaxEncoder.SetPosition(
+        units::radian_t{absoluteEncoderPose.GetValue()}
+            .value());
+            hasEncoderBeenSeeded = true;
+        }
+    }
 }
+
+// void ModuleSwerve::SeedSparkMaxEncoder() {
+//     m_TurningSparkMaxEncoder.SetPosition(
+//         units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}
+//             .value()); // seed les spark max avec la valeur du CANcoder
+// }
 
 frc::SwerveModuleState ModuleSwerve::GetState() {
     return {units::meters_per_second_t{m_DrivingEncoder.GetVelocity()},
@@ -98,7 +109,7 @@ void ModuleSwerve::SetDesiredState(frc::SwerveModuleState desiredState) {
     m_TurningPIDController.SetReference(optimizedDesiredState.angle.Radians().value(),
                                         rev::CANSparkMax::ControlType::kPosition);
 
-    m_DesiredState = desiredState;
+    /*m_DesiredState = desiredState;*/
 }
 
 void ModuleSwerve::ResetEncoders() { m_DrivingEncoder.SetPosition(0); }
