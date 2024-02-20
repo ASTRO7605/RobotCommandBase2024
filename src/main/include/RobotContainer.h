@@ -67,6 +67,7 @@
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/button/CommandJoystick.h>
@@ -98,8 +99,8 @@ class RobotContainer : public frc2::SubsystemBase {
     void SetShooterAngleToInitPose();
     void SetShooterAngleToNeutral();
 
-    void SetLedForDisabled() {m_Led.SetAnimation(LedConstants::Animation::ALLIANCE);};
-    void SetLedForEnabled() {m_Led.SetAnimation(LedConstants::Animation::SPLIT);};
+    void SetLedForDisabled() { m_Led.SetAnimation(LedConstants::Animation::ALLIANCE); };
+    void SetLedForEnabled() { m_Led.SetAnimation(LedConstants::Animation::SPLIT); };
 
   private:
     void ConfigureBindings();
@@ -113,5 +114,7 @@ class RobotContainer : public frc2::SubsystemBase {
     LeftHook m_LeftHook;
     RightHook m_RightHook;
     Led m_Led;
-    frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
+    frc2::CommandPtr pathfindingCommand{frc2::RunCommand([](){})};
+
+    frc2::CommandPtr autoAlignWithAmp{frc2::RunCommand([](){})};
 };
