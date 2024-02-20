@@ -11,8 +11,11 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
                                          rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_DrivingEncoder{m_DrivingMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_TurningPIDController{m_TurningMotor.GetPIDController()},
-      m_DrivingPIDController{m_DrivingMotor.GetPIDController()}/*,
-      m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()}*/ {
+      m_DrivingPIDController{m_DrivingMotor.GetPIDController()} /*,
+       m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()}*/
+{
+    m_TurningCANcoder.GetPosition().SetUpdateFrequency(20_Hz);
+    m_TurningCANcoder.OptimizeBusUtilization();
 
     m_TurningMotor.RestoreFactoryDefaults();
     m_DrivingMotor.RestoreFactoryDefaults();
@@ -69,11 +72,10 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
 
 void ModuleSwerve::Periodic() {
     if (!hasEncoderBeenSeeded) {
-        auto absoluteEncoderPose = m_TurningCANcoder.GetPosition().WaitForUpdate(0.1_s);
+        auto absoluteEncoderPose = m_TurningCANcoder.GetPosition().WaitForUpdate(5_s);
         if (absoluteEncoderPose.GetStatus().IsOK()) {
             m_TurningSparkMaxEncoder.SetPosition(
-        units::radian_t{absoluteEncoderPose.GetValue()}
-            .value());
+                units::radian_t{absoluteEncoderPose.GetValue()}.value());
             hasEncoderBeenSeeded = true;
         }
     }

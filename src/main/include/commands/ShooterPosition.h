@@ -8,9 +8,10 @@ class ShooterPosition : public frc2::CommandHelper<frc2::Command, ShooterPositio
   private:
     ShooterAngle *m_pShooterAngle;
     double angle;
+    bool endAutomatically;
 
   public:
-    explicit ShooterPosition(ShooterAngle *p_ShooterAngle, double angle);
+    explicit ShooterPosition(ShooterAngle *p_ShooterAngle, double angle, bool endAutomatically);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

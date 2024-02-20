@@ -15,8 +15,9 @@ Base::Base()
 
                       // State and vision standard deviations for Kalman filter.
                       PoseEstimationConstant::kStateStdDevs,
-                      PoseEstimationConstant::kVisionStdDevs} // important to follow kinematics
-                                                              // construction order
+                      PoseEstimationConstant::kVisionStdDevsDefault}
+// important to follow kinematics
+// construction order
 {
     // Implementation of subsystem constructor goes here.
     m_Gyro.Calibrate();
@@ -275,18 +276,21 @@ void Base::SetRobotPoseVisionEstimateLeft() {
         estimate->ambiguity = 0.01;
     }
 
-    auto std_devs = PoseEstimationConstant::stdDevPerAmbiguity;
+    auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeterSqared;
     // auto dst_sq = estimate->distance.value() * estimate->distance.value();
     // std_devs[0] *= dst_sq; // scale based on distance
     // std_devs[1] *= dst_sq;
-    std_devs[0] = estimate->ambiguity * std_devs[0] + PoseEstimationConstant::stdDevBase;
-    std_devs[1] = estimate->ambiguity * std_devs[1] + PoseEstimationConstant::stdDevBase;
-    std_devs[2] = estimate->ambiguity * std_devs[2] + PoseEstimationConstant::stdDevBase;
+    std_devs[0] = estimate->ambiguity * std_devs[0] +
+                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[0];
+    std_devs[1] = estimate->ambiguity * std_devs[1] +
+                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[1];
+    std_devs[2] = estimate->ambiguity * std_devs[2] +
+                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[2];
 
     auto dst = estimate->distance.value();
-    std_devs[0] *= dst; // scale based on distance
-    std_devs[1] *= dst;
-    std_devs[2] *= dst;
+    std_devs[0] *= dst * dst; // scale based on distance
+    std_devs[1] *= dst * dst;
+    std_devs[2] *= dst * dst;
 
     frc::SmartDashboard::PutNumber("april_distance_Left", estimate->distance.value());
 
@@ -315,15 +319,18 @@ void Base::SetRobotPoseVisionEstimateRight() {
         estimate->ambiguity = 0.01;
     }
 
-    auto std_devs = PoseEstimationConstant::stdDevPerAmbiguity;
-    std_devs[0] = estimate->ambiguity * std_devs[0] + PoseEstimationConstant::stdDevBase;
-    std_devs[1] = estimate->ambiguity * std_devs[1] + PoseEstimationConstant::stdDevBase;
-    std_devs[2] = estimate->ambiguity * std_devs[2] + PoseEstimationConstant::stdDevBase;
+    auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeterSqared;
+    std_devs[0] = estimate->ambiguity * std_devs[0] +
+                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[0];
+    std_devs[1] = estimate->ambiguity * std_devs[1] +
+                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[1];
+    std_devs[2] = estimate->ambiguity * std_devs[2] +
+                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[2];
 
     auto dst = estimate->distance.value();
-    std_devs[0] *= dst; // scale based on distance
-    std_devs[1] *= dst;
-    std_devs[2] *= dst;
+    std_devs[0] *= dst * dst; // scale based on distance^2
+    std_devs[1] *= dst * dst;
+    std_devs[2] *= dst * dst;
 
     frc::SmartDashboard::PutNumber("april_distance_Right", estimate->distance.value());
 
@@ -344,6 +351,18 @@ void Base::ResetOdometry(frc::Pose2d desiredPose) {
 void Base::SwitchRobotDrivingMode() { m_DrivingInFieldRelative = !m_DrivingInFieldRelative; }
 
 void Base::ResetGyroTeleopOffset() { m_GyroOffset = m_Gyro.GetRotation2d().Radians(); }
+
+void Base::ResetGyroTeleopOffsetPoseEstimator() {
+    units::degree_t current_heading = m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees();
+    units::degree_t current_gyro = m_Gyro.GetRotation2d().Degrees();
+
+    units::degree_t target_heading =
+        (allianceColor == frc::DriverStation::Alliance::kBlue) ? 0_deg : 180_deg;
+
+    units::degree_t error = target_heading - current_heading;
+
+    m_GyroOffset = current_gyro + error;
+}
 
 bool Base::IsRotationBeingControlled() { return isRotationBeingControlled; }
 
@@ -394,6 +413,4 @@ bool Base::IsRobotInRangeToShoot() {
     return false;
 }
 
-double Base::GetRotationPIDError() {
-    return pidControllerThetaSpeaker.GetPositionError();
-}
+double Base::GetRotationPIDError() { return pidControllerThetaSpeaker.GetPositionError(); }

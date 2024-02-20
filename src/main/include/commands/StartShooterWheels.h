@@ -10,10 +10,12 @@ class StartShooterWheels : public frc2::CommandHelper<frc2::Command, StartShoote
   private:
     ShooterWheels *m_pShooterWheels;
     Base *m_pBase;
-    bool start;
+    bool shootInSpeaker;
+    double desiredWheelSpeeds;
 
   public:
-    explicit StartShooterWheels(ShooterWheels *p_ShooterWheels, Base *p_Base, bool start);
+    explicit StartShooterWheels(ShooterWheels *p_ShooterWheels, Base *p_Base,
+                                bool shootInSpeaker, double desiredWheelsSpeeds = 0);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

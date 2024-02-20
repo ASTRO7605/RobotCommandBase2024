@@ -84,6 +84,11 @@ class Base : public frc2::SubsystemBase {
     void ResetGyroTeleopOffset();
 
     /**
+     * Realigne l'avant du field oriented sur l'orientation du robot avec PoseEstimator
+     */
+    void ResetGyroTeleopOffsetPoseEstimator();
+
+    /**
      * important to follow order: FrontRight, FrontLeft, RearLeft, RearRight
      */
     frc::SwerveDriveKinematics<4> kDriveKinematics{
@@ -145,7 +150,8 @@ class Base : public frc2::SubsystemBase {
     bool isRotationBeingControlled;
     frc::Translation2d currentColorSpeakerPose;
 
-    frc::DriverStation::Alliance allianceColor;
+    // garbage default value
+    frc::DriverStation::Alliance allianceColor = frc::DriverStation::Alliance::kRed;
 
     units::radian_t m_GyroOffset = 0_rad;
 

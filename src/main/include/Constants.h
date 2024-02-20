@@ -107,15 +107,13 @@ enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
 constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.05};
-constexpr std::array<double, 3> kVisionStdDevs{0.9, 0.9, 0.95};
-constexpr double stdDevBase = 0.75;
-constexpr std::array<double, 3> stdDevPerAmbiguity{0.9, 0.9, 0.95};
-constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Left{2.5, 2.5, 0.999};
-constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Right{2.5, 2.5, 0.999};
+constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.05};
+constexpr std::array<double, 3> kVisionStdDevsPerMeterSquaredBase{0.2, 0.2, 0.85};
+constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeterSqared{0.02, 0.02, 0.02};
 constexpr frc::Translation2d blueSpeakerPoseMeters =
-    frc::Translation2d{units::meter_t{units::inch_t{-1.5}}, units::meter_t{units::inch_t{218.42}}};
-constexpr frc::Translation2d redSpeakerPoseMeters = frc::Translation2d{
-    units::meter_t{units::inch_t{652.73}}, units::meter_t{units::inch_t{218.42}}};
+    frc::Translation2d{units::inch_t{-1.5}, units::inch_t{218.42}};
+constexpr frc::Translation2d redSpeakerPoseMeters =
+    frc::Translation2d{units::inch_t{652.73}, units::inch_t{218.42}};
 } // namespace PoseEstimationConstant
 
 namespace OIConstant {

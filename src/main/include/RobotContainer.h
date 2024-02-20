@@ -6,7 +6,7 @@
 
 #include "Constants.h"
 #include "commands/AlignWithSpeaker.h"
-#include "commands/BarrePositionTest.h"
+#include "commands/BarrePosition.h"
 #include "commands/DeuxiemeJointManual.h"
 #include "commands/InitLeftHook.h"
 #include "commands/InitRightHook.h"
@@ -21,6 +21,7 @@
 #include "commands/ShooterAngleManual.h"
 #include "commands/ShooterPosition.h"
 #include "commands/StartShooterWheels.h"
+#include "commands/StopShooterWheels.h"
 #include "commands/TestAmp.h"
 
 #include "subsystems/Barre.h"
@@ -36,9 +37,9 @@
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/ScheduleCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/button/JoystickButton.h>
-#include <frc2/command/ScheduleCommand.h>
 #include <wpi/MemoryBuffer.h>
 #include <wpi/fs.h>
 
@@ -67,6 +68,7 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelDeadlineGroup.h>
+#include <frc2/command/RepeatCommand.h>
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SwerveControllerCommand.h>
@@ -106,6 +108,7 @@ class RobotContainer : public frc2::SubsystemBase {
   private:
     void ConfigureBindings();
     void ConfigurePathfind();
+    void ConfigureNamedCommands();
     // The robot's subsystems are defined here...
     Base m_Base;
     Barre m_Barre;
@@ -115,7 +118,7 @@ class RobotContainer : public frc2::SubsystemBase {
     LeftHook m_LeftHook;
     RightHook m_RightHook;
     Led m_Led;
-    frc2::CommandPtr pathfindingCommand{frc2::RunCommand([](){})};
+    frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
 
-    frc2::CommandPtr autoAlignWithAmp{frc2::RunCommand([](){})};
+    frc2::CommandPtr autoAlignWithAmp{frc2::RunCommand([]() {})};
 };
