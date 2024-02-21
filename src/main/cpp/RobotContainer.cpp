@@ -104,11 +104,25 @@ void RobotContainer::ConfigureBindings() {
     m_TurnStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
 
-    m_CoPilotController.LeftBumper().WhileTrue(frc2::cmd::Sequence(std::move(pathfindingCommand)));
+    m_CoPilotController.LeftBumper().WhileTrue(frc2::cmd::Sequence(
+        std::move(pathfindingCommand),
+        frc2::ScheduleCommand(
+            ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre, &m_LeftHook,
+                      &m_RightHook, frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
+                      frc::Preferences::GetDouble("angleShooterAmp"), ScoringPositions::amp)
+                .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)
+                .Unwrap()
+                .get())
+            .ToPtr()));
     m_CoPilotController.LeftBumper().WhileTrue(
         ShooterPosition(&m_ShooterAngle, frc::Preferences::GetDouble("angleShooterAmp"), false)
             .ToPtr());
     m_CoPilotController.LeftBumper().OnFalse(RedescendreBarre(&m_Barre, false, false).ToPtr());
+    m_CoPilotController.LeftBumper().WhileTrue(
+        StartShooterWheels(&m_ShooterWheels, &m_Base, false,
+                           frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"))
+            .ToPtr());
+    m_CoPilotController.LeftBumper().OnFalse(StopShooterWheels(&m_ShooterWheels).ToPtr());
 
     m_CoPilotController.RightBumper().OnTrue(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(true); }, {})

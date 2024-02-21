@@ -71,7 +71,7 @@ extern const frc::TrapezoidProfile<units::radians>::Constraints kThetaController
 constexpr double kVoltageCompensation = 10;             // volts
 constexpr double DegreesToRad = std::numbers::pi / 180; // degrees * conversion factor => rad
 constexpr int PowerDistributionHubID = 1;
-constexpr int FrontRightTurningID = 2;
+constexpr int FrontRightTurningID = 48;
 constexpr int FrontRightDrivingID = 3;
 constexpr int FrontRightCANcoderID = 4;
 constexpr int FrontLeftTurningID = 5;

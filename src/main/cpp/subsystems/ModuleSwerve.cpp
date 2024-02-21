@@ -72,11 +72,13 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
 
 void ModuleSwerve::Periodic() {
     if (!hasEncoderBeenSeeded) {
-        auto absoluteEncoderPose = m_TurningCANcoder.GetPosition().WaitForUpdate(5_s);
+        auto absoluteEncoderPose = m_TurningCANcoder.GetPosition().WaitForUpdate(1_s);
         if (absoluteEncoderPose.GetStatus().IsOK()) {
-            m_TurningSparkMaxEncoder.SetPosition(
-                units::radian_t{absoluteEncoderPose.GetValue()}.value());
-            hasEncoderBeenSeeded = true;
+            if (m_TurningSparkMaxEncoder.SetPosition(
+                    units::radian_t{absoluteEncoderPose.GetValue()}.value()) ==
+                rev::REVLibError::kOk) {
+                hasEncoderBeenSeeded = true;
+            }
         }
     }
 }
