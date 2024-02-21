@@ -270,4 +270,23 @@ void RobotContainer::ConfigureNamedCommands() {
                                           frc::Preferences::GetDouble("k1erJointAngleAmp"),
                                           frc::Preferences::GetDouble("k2eJointAngleAmpApproach"))
                                 .ToPtr()));
+            
+    pathplanner::NamedCommands::registerCommand(
+        "barre approach trap",
+        frc2::cmd::Parallel(BarrePosition(&m_Barre,
+                                          frc::Preferences::GetDouble("k1erJointAngleTrapApproach"),
+                                          frc::Preferences::GetDouble("k2eJointStartPosition"))
+                                .ToPtr()));
+
+    pathplanner::NamedCommands::registerCommand(
+        "barre final trap",
+        frc2::cmd::Parallel(BarrePosition(&m_Barre,
+                                          frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
+                                          frc::Preferences::GetDouble("k2eJointStartPosition"))
+                                .ToPtr()));
+    pathplanner::NamedCommands::registerCommand(
+        "extend crochets", 
+        frc2::cmd::Parallel(RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionExtended, frc::Preferences::GetDouble("kVitesseHooks"), frc::Preferences::GetDouble("kAccelerationHooks")).ToPtr())
+    );
+        
 }

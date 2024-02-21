@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.526151755006213,
+        "y": 4.696309212438245
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.498178112256159,
+        "y": 4.737751646142027
+      },
+      "isLocked": false,
+      "linkedName": "Stage Speaker Approach"
+    },
+    {
+      "anchor": {
+        "x": 4.151579014582598,
+        "y": 5.328526161524922
+      },
+      "prevControl": {
+        "x": 4.1822760452583445,
+        "y": 5.289058550656106
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Stage Speaker Backup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 0.5,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 540.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Stage speaker side",
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

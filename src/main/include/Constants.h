@@ -328,6 +328,7 @@ constexpr double kPositionInitReset = 0;
 constexpr double kPositionAfterInit = 10;
 constexpr double kForwardSoftLimit = 230;
 constexpr double kPositionRetracted = -10;
+constexpr double kPositionExtended = 0;
 } // namespace ClimberConstant
 
 namespace LedConstants {

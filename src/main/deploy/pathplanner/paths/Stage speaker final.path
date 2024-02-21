@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.550419100838203,
-        "y": 4.647330063890897
+        "x": 4.151579014582598,
+        "y": 5.328526161524922
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.284011644946369,
-        "y": 5.042007776323246
+        "x": 4.1757910479269436,
+        "y": 5.284779419459571
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Stage Speaker Backup"
     },
     {
       "anchor": {
-        "x": 4.224809988081516,
-        "y": 5.219612746917802
+        "x": 4.426308960726027,
+        "y": 4.871958572745974
       },
       "prevControl": {
-        "x": 4.255507018757262,
-        "y": 5.180145136048986
+        "x": 4.445743193562651,
+        "y": 4.825890030398165
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Stage speaker side",
   "previewStartingState": {
     "rotation": -60.0,
     "velocity": 0
