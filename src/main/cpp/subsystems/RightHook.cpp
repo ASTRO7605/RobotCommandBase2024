@@ -6,42 +6,53 @@ RightHook::RightHook()
     : m_RightHookMotor{ClimberConstant::rightHookMotorID, rev::CANSparkMax::MotorType::kBrushless},
       m_RightHookMotorEncoder{
           m_RightHookMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
-      m_RightHookMotorPIDController{m_RightHookMotor.GetPIDController()} {
-    m_RightHookMotor.RestoreFactoryDefaults();
-
-    m_RightHookMotor.SetInverted(true);
-
-    m_RightHookMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
-
-    m_RightHookMotorEncoder.SetPositionConversionFactor(ClimberConstant::FConversionFactorPosition);
-
-    m_RightHookMotorEncoder.SetVelocityConversionFactor(ClimberConstant::FConversionFactorVelocity);
-
-    // position
-    m_RightHookMotorPIDController.SetP(frc::Preferences::GetDouble("kPHooksPosition"),
-                                       ClimberConstant::positionPIDSlotID);
-    m_RightHookMotorPIDController.SetI(frc::Preferences::GetDouble("kIHooksPosition"),
-                                       ClimberConstant::positionPIDSlotID);
-    m_RightHookMotorPIDController.SetD(frc::Preferences::GetDouble("kDHooksPosition"),
-                                       ClimberConstant::positionPIDSlotID);
-    m_RightHookMotorPIDController.SetFF(frc::Preferences::GetDouble("kFFHooksPosition"),
-                                        ClimberConstant::positionPIDSlotID);
-
-    m_RightHookMotor.EnableVoltageCompensation(ClimberConstant::kVoltageCompensation);
-
-    m_RightHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit);
-
-    m_RightHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
-                                  ClimberConstant::kForwardSoftLimit *
-                                      ClimberConstant::FConversionFactorPosition);
-
-    isInitDone = false;
-    isInitScheduled = false;
-}
+      m_RightHookMotorPIDController{m_RightHookMotor.GetPIDController()}, isInitDone{false},
+      isInitScheduled{false}, m_MotorInitialized{false} {}
 
 void RightHook::Periodic() {
     frc::SmartDashboard::PutNumber("rightHookPosition", m_RightHookMotorEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("rightHookVelocity", m_RightHookMotorEncoder.GetVelocity());
+
+    if (m_MotorInitialized || m_RightHookMotor.RestoreFactoryDefaults() != rev::REVLibError::kOk ||
+
+        m_RightHookMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake) !=
+            rev::REVLibError::kOk ||
+
+        m_RightHookMotorEncoder.SetPositionConversionFactor(
+            ClimberConstant::FConversionFactorPosition) != rev::REVLibError::kOk ||
+
+        m_RightHookMotorEncoder.SetVelocityConversionFactor(
+            ClimberConstant::FConversionFactorVelocity) != rev::REVLibError::kOk ||
+
+        // position
+        m_RightHookMotorPIDController.SetP(frc::Preferences::GetDouble("kPHooksPosition"),
+                                           ClimberConstant::positionPIDSlotID) !=
+            rev::REVLibError::kOk ||
+        m_RightHookMotorPIDController.SetI(frc::Preferences::GetDouble("kIHooksPosition"),
+                                           ClimberConstant::positionPIDSlotID) !=
+            rev::REVLibError::kOk ||
+        m_RightHookMotorPIDController.SetD(frc::Preferences::GetDouble("kDHooksPosition"),
+                                           ClimberConstant::positionPIDSlotID) !=
+            rev::REVLibError::kOk ||
+        m_RightHookMotorPIDController.SetFF(frc::Preferences::GetDouble("kFFHooksPosition"),
+                                            ClimberConstant::positionPIDSlotID) !=
+            rev::REVLibError::kOk ||
+
+        m_RightHookMotor.EnableVoltageCompensation(ClimberConstant::kVoltageCompensation) !=
+            rev::REVLibError::kOk ||
+
+        m_RightHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit) !=
+            rev::REVLibError::kOk ||
+
+        m_RightHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
+                                      ClimberConstant::kForwardSoftLimit /
+                                          ClimberConstant::FConversionFactorPosition) !=
+            rev::REVLibError::kOk) {
+    } else {
+        // Stuff that doesn't return an error code
+        m_RightHookMotor.SetInverted(false);
+        m_MotorInitialized = true;
+    }
 }
 
 void RightHook::SetRightHookPosition(double position) {

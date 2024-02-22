@@ -8,27 +8,35 @@ Intake::Intake()
       m_TopMotorEncoder{m_TopMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_BottomMotorEncoder{m_BottomMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_TopMotorPIDController{m_TopMotor.GetPIDController()},
-      m_BottomMotorPIDController{m_BottomMotor.GetPIDController()} {
+      m_BottomMotorPIDController{m_BottomMotor.GetPIDController()}, m_MotorsInitialized{false} {
 
     m_capteurInterieurIntake.reset(new frc::DigitalInput(IntakeConstant::capteurID));
-
-    m_TopMotor.RestoreFactoryDefaults();
-    m_BottomMotor.RestoreFactoryDefaults();
-
-    m_TopMotor.SetInverted(true);
-    m_BottomMotor.SetInverted(true);
-
-    m_TopMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    m_BottomMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-
-    m_TopMotor.EnableVoltageCompensation(IntakeConstant::kVoltageCompensation);
-    m_BottomMotor.EnableVoltageCompensation(IntakeConstant::kVoltageCompensation);
-
-    m_TopMotor.SetSmartCurrentLimit(IntakeConstant::kCurrentLimit);
-    m_BottomMotor.SetSmartCurrentLimit(IntakeConstant::kCurrentLimit);
 }
 
-void Intake::Periodic() { frc::SmartDashboard::PutBoolean("IsObjectInIntake", IsObjectInIntake()); }
+void Intake::Periodic() {
+    frc::SmartDashboard::PutBoolean("IsObjectInIntake", IsObjectInIntake());
+
+    if (m_MotorsInitialized || m_TopMotor.RestoreFactoryDefaults() != rev::REVLibError::kOk ||
+        m_BottomMotor.RestoreFactoryDefaults() != rev::REVLibError::kOk ||
+
+        m_TopMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake) != rev::REVLibError::kOk ||
+        m_BottomMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake) != rev::REVLibError::kOk ||
+
+        m_TopMotor.EnableVoltageCompensation(IntakeConstant::kVoltageCompensation) !=
+            rev::REVLibError::kOk ||
+        m_BottomMotor.EnableVoltageCompensation(IntakeConstant::kVoltageCompensation) !=
+            rev::REVLibError::kOk ||
+
+        m_TopMotor.SetSmartCurrentLimit(IntakeConstant::kCurrentLimit) != rev::REVLibError::kOk ||
+        m_BottomMotor.SetSmartCurrentLimit(IntakeConstant::kCurrentLimit) !=
+            rev::REVLibError::kOk) {
+    } else {
+        // Stuff that doesn't return error codes
+        m_TopMotor.SetInverted(true);
+        m_BottomMotor.SetInverted(true);
+        m_MotorsInitialized = true;
+    }
+}
 
 bool Intake::IsObjectInIntake() {
     return !(m_capteurInterieurIntake->Get());

@@ -46,4 +46,5 @@ class ModuleSwerve : public frc2::SubsystemBase {
     frc::SwerveModuleState m_DesiredState;
 
     bool hasEncoderBeenSeeded;
+    bool m_MotorsInitialized;
 };

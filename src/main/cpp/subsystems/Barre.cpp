@@ -10,10 +10,24 @@ double computekAF1erJoint(double angle) {
 
 Barre::Barre()
     : m_MoteurPremierJoint{BarreConstant::moteurPremierJointID},
-      m_MoteurDeuxiemeJoint{BarreConstant::moteurDeuxiemeJointID}, m_MotorsInitialized{false} {
+      m_MoteurDeuxiemeJoint{BarreConstant::moteurDeuxiemeJointID}, m_MotorsInitialized{false} {}
+
+void Barre::Periodic() {
+    frc::SmartDashboard::PutNumber("1erJointPosition",
+                                   m_MoteurPremierJoint.GetSelectedSensorPosition() *
+                                       BarreConstant::FConversionFactorPosition1erJoint);
+    frc::SmartDashboard::PutNumber("1erJointVelocity",
+                                   m_MoteurPremierJoint.GetSelectedSensorVelocity() *
+                                       BarreConstant::FConversionFactorVelocity1erJoint);
+    frc::SmartDashboard::PutNumber("2eJointPosition",
+                                   m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
+                                       BarreConstant::FConversionFactorPosition2eJoint);
+    frc::SmartDashboard::PutNumber("2eJointVelocity",
+                                   m_MoteurDeuxiemeJoint.GetSelectedSensorVelocity() *
+                                       BarreConstant::FConversionFactorVelocity2eJoint);
 
     // Non-zero or false indicates success
-    if (m_MoteurPremierJoint.ConfigFactoryDefault() ||
+    if (m_MotorsInitialized || m_MoteurPremierJoint.ConfigFactoryDefault() ||
             m_MoteurDeuxiemeJoint.ConfigFactoryDefault() ||
 
             m_MoteurPremierJoint.ConfigSelectedFeedbackSensor(
@@ -116,7 +130,6 @@ Barre::Barre()
             BarreConstant::FConversionFactorPosition2eJoint) ||
         m_MoteurDeuxiemeJoint.ConfigForwardSoftLimitEnable(true) ||
         m_MoteurDeuxiemeJoint.ConfigReverseSoftLimitEnable(true)) {
-        return;
     } else {
         // Stuff that doesn't return a status code
         m_MoteurPremierJoint.EnableVoltageCompensation(true);
@@ -136,21 +149,6 @@ Barre::Barre()
 
         m_MotorsInitialized = true;
     }
-}
-
-void Barre::Periodic() {
-    frc::SmartDashboard::PutNumber("1erJointPosition",
-                                   m_MoteurPremierJoint.GetSelectedSensorPosition() *
-                                       BarreConstant::FConversionFactorPosition1erJoint);
-    frc::SmartDashboard::PutNumber("1erJointVelocity",
-                                   m_MoteurPremierJoint.GetSelectedSensorVelocity() *
-                                       BarreConstant::FConversionFactorVelocity1erJoint);
-    frc::SmartDashboard::PutNumber("2eJointPosition",
-                                   m_MoteurDeuxiemeJoint.GetSelectedSensorPosition() *
-                                       BarreConstant::FConversionFactorPosition2eJoint);
-    frc::SmartDashboard::PutNumber("2eJointVelocity",
-                                   m_MoteurDeuxiemeJoint.GetSelectedSensorVelocity() *
-                                       BarreConstant::FConversionFactorVelocity2eJoint);
 }
 
 void Barre::Manual1erJoint(double percent) {

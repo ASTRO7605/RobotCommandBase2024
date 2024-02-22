@@ -67,4 +67,6 @@ class ShooterAngle : public frc2::SubsystemBase {
 
     wpi::interpolating_map<double, double>
         interpolatingMapShooterAngle; // enter meters to get angle
+
+    bool m_MotorInitialized;
 };
