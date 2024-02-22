@@ -8,8 +8,7 @@ double computekAF(double angle) {
     return val;
 }
 
-ShooterAngle::ShooterAngle()
-    : m_MoteurAngle{ShooterConstant::angleMotorID}, m_MotorInitialized{false} {
+ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
 
     m_MoteurAngle.ConfigFactoryDefault();
 

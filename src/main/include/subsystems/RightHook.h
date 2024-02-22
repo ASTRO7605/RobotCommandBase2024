@@ -67,5 +67,4 @@ class RightHook : public frc2::SubsystemBase {
 
     bool isInitDone;
     bool isInitScheduled;
-    bool m_MotorInitialized;
 };

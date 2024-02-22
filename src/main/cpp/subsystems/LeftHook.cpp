@@ -6,52 +6,53 @@ LeftHook::LeftHook()
     : m_LeftHookMotor{ClimberConstant::leftHookMotorID, rev::CANSparkMax::MotorType::kBrushless},
       m_LeftHookMotorEncoder{
           m_LeftHookMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
-      m_LeftHookMotorPIDController{m_LeftHookMotor.GetPIDController()}, isInitDone{false},
-      isInitScheduled{false}, m_MotorInitialized{false} {}
+      m_LeftHookMotorPIDController{m_LeftHookMotor.GetPIDController()} {
+    m_LeftHookMotor.RestoreFactoryDefaults();
+
+    m_LeftHookMotor.SetCANTimeout(50);
+
+    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
+    // Prefer prime numbers
+
+    m_LeftHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 59);
+
+    m_LeftHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 23);
+
+    m_LeftHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 23);
+
+    m_LeftHookMotor.SetInverted(false);
+
+    m_LeftHookMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake);
+
+    m_LeftHookMotorEncoder.SetPositionConversionFactor(ClimberConstant::FConversionFactorPosition);
+
+    m_LeftHookMotorEncoder.SetVelocityConversionFactor(ClimberConstant::FConversionFactorVelocity);
+
+    // position
+    m_LeftHookMotorPIDController.SetP(frc::Preferences::GetDouble("kPHooksPosition"),
+                                      ClimberConstant::positionPIDSlotID);
+    m_LeftHookMotorPIDController.SetI(frc::Preferences::GetDouble("kIHooksPosition"),
+                                      ClimberConstant::positionPIDSlotID);
+    m_LeftHookMotorPIDController.SetD(frc::Preferences::GetDouble("kDHooksPosition"),
+                                      ClimberConstant::positionPIDSlotID);
+    m_LeftHookMotorPIDController.SetFF(frc::Preferences::GetDouble("kFFHooksPosition"),
+                                       ClimberConstant::positionPIDSlotID);
+
+    m_LeftHookMotor.EnableVoltageCompensation(ClimberConstant::kVoltageCompensation);
+
+    m_LeftHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit);
+
+    m_LeftHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
+                                 ClimberConstant::kForwardSoftLimit /
+                                     ClimberConstant::FConversionFactorPosition);
+
+    isInitDone = false;
+    isInitScheduled = false;
+}
 
 void LeftHook::Periodic() {
-    frc::SmartDashboard::PutNumber("LeftHookPosition", m_LeftHookMotorEncoder.GetPosition());
-    frc::SmartDashboard::PutNumber("LeftHookVelocity", m_LeftHookMotorEncoder.GetVelocity());
-
-    if (m_MotorInitialized || m_LeftHookMotor.RestoreFactoryDefaults() != rev::REVLibError::kOk ||
-
-        m_LeftHookMotor.SetIdleMode(rev::CANSparkBase::IdleMode::kBrake) != rev::REVLibError::kOk ||
-
-        m_LeftHookMotorEncoder.SetPositionConversionFactor(
-            ClimberConstant::FConversionFactorPosition) != rev::REVLibError::kOk ||
-
-        m_LeftHookMotorEncoder.SetVelocityConversionFactor(
-            ClimberConstant::FConversionFactorVelocity) != rev::REVLibError::kOk ||
-
-        // position
-        m_LeftHookMotorPIDController.SetP(frc::Preferences::GetDouble("kPHooksPosition"),
-                                          ClimberConstant::positionPIDSlotID) !=
-            rev::REVLibError::kOk ||
-        m_LeftHookMotorPIDController.SetI(frc::Preferences::GetDouble("kIHooksPosition"),
-                                          ClimberConstant::positionPIDSlotID) !=
-            rev::REVLibError::kOk ||
-        m_LeftHookMotorPIDController.SetD(frc::Preferences::GetDouble("kDHooksPosition"),
-                                          ClimberConstant::positionPIDSlotID) !=
-            rev::REVLibError::kOk ||
-        m_LeftHookMotorPIDController.SetFF(frc::Preferences::GetDouble("kFFHooksPosition"),
-                                           ClimberConstant::positionPIDSlotID) !=
-            rev::REVLibError::kOk ||
-
-        m_LeftHookMotor.EnableVoltageCompensation(ClimberConstant::kVoltageCompensation) !=
-            rev::REVLibError::kOk ||
-
-        m_LeftHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit) !=
-            rev::REVLibError::kOk ||
-
-        m_LeftHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
-                                     ClimberConstant::kForwardSoftLimit /
-                                         ClimberConstant::FConversionFactorPosition) !=
-            rev::REVLibError::kOk) {
-    } else {
-        // Stuff that doesn't return an error code
-        m_LeftHookMotor.SetInverted(false);
-        m_MotorInitialized = true;
-    }
+    frc::SmartDashboard::PutNumber("leftHookPosition", m_LeftHookMotorEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("leftHookVelocity", m_LeftHookMotorEncoder.GetVelocity());
 }
 
 void LeftHook::SetLeftHookPosition(double position) {
