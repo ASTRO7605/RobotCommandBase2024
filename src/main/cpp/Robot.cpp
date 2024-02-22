@@ -47,7 +47,9 @@ void Robot::RobotInit() {
                                  BarreConstant::k1erJointAngleTrapIntermediaire);
     frc::Preferences::InitDouble("k1erJointAngleTrapFinal", BarreConstant::k1erJointAngleTrapFinal);
     frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
-    frc::Preferences::InitDouble("k2eJointAngleTrap", BarreConstant::k2eJointAngleTrap);
+    frc::Preferences::InitDouble("k2eJointAngleTrapApproach",
+                                 BarreConstant::k2eJointAngleTrapApproach);
+    frc::Preferences::InitDouble("k2eJointAngleTrapFinal", BarreConstant::k2eJointAngleTrapFinal);
     frc::Preferences::InitDouble("k2eJointAngleAmpApproach",
                                  BarreConstant::k2eJointAngleAmpApproach);
     frc::Preferences::InitDouble("k2eJointAngleAmpFinal", BarreConstant::k2eJointAngleAmpFinal);

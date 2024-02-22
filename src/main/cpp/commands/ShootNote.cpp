@@ -45,8 +45,9 @@ void ShootNote::Execute() {
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpApproach");
                 m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
             } else if (scoringPlace == ScoringPositions::trap) {
+                // targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointStartPosition");
                 targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleTrapFinal");
-                targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointStartPosition");
+                targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapApproach");
                 m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
             }
             currentShooterTargetAngle = finalShooterTargetAngle;
@@ -94,17 +95,20 @@ void ShootNote::Execute() {
                     targetSpeeds, true)) { // did wheels reach their target
                 areWheelsAtRightSpeed = true;
             }
-            if (isShooterAngledRight && areWheelsAtRightSpeed) {
+            if (m_pBarre->Is2eJointAtTargetAngle(targetDeuxiemeJoint)) {
+                isDeuxiemeJointAngledRight = true;
+            }
+            if (isShooterAngledRight && areWheelsAtRightSpeed && isDeuxiemeJointAngledRight) {
                 readyToShoot = true;
             }
         }
         if (readyToShoot) {
-            if (scoringPlace == ScoringPositions::trap) {
-                targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrap");
-                m_State = ShooterConstant::ShooterState::waitingForDeuxiemeJointTrap;
-            } else {
-                m_State = ShooterConstant::ShooterState::moveNoteInShooter;
-            }
+            // if (scoringPlace == ScoringPositions::trap) {
+            // targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrap");
+            // m_State = ShooterConstant::ShooterState::waitingForDeuxiemeJointTrap;
+            // } else {
+            m_State = ShooterConstant::ShooterState::moveNoteInShooter;
+            // }
         }
         break;
     case (ShooterConstant::ShooterState::waitingForDeuxiemeJointTrap):
@@ -123,6 +127,8 @@ void ShootNote::Execute() {
         if (m_pShooterWheels->IsObjectInShooter()) {
             if (scoringPlace == ScoringPositions::amp) {
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpFinal");
+            } else if (scoringPlace == ScoringPositions::trap) {
+                targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapFinal");
             }
             isDeuxiemeJointAngledRight = false;
             m_State = ShooterConstant::ShooterState::waitingForNoteToExit;
