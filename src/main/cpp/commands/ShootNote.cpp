@@ -18,10 +18,11 @@ void ShootNote::Initialize() {
         m_State = ShooterConstant::ShooterState::init;
     }
     if (scoringPlace == ScoringPositions::speaker) {
-        targetSpeeds =
-            m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
-        finalShooterTargetAngle =
-            m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
+        // targetSpeeds =
+
+        //     m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
+        // finalShooterTargetAngle =
+        //     m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
     }
     frc::SmartDashboard::PutNumber("interpolatedAngle", finalShooterTargetAngle);
     frc::SmartDashboard::PutNumber("interpolatedSpeed", targetSpeeds);

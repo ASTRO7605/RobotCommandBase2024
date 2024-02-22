@@ -324,13 +324,16 @@ constexpr auto kTimeDelayForInit = 0.1_s;
 constexpr double FConversionTenthInchToMeter = 0.00254;
 constexpr double FConversionTenthInchPerSecondToMeterPerSecond = 0.00254;
 constexpr double FConversionTenthInchPerSecondSquaredToMeterPerSecondSquared = 0.00254;
-constexpr double kVitesseHooks = 100;      // 1/10 inch per second
-constexpr double kAccelerationHooks = 100; // 1/10 inch per second squared
+constexpr double kVitesseExtensionHooks = 100;       // 1/10 inch per second
+constexpr double kAccelerationExtensionHooks = 100;  // 1/10 inch per second squared
+constexpr double kVitesseRetractionHooks = 100;      // 1/10 inch per second
+constexpr double kAccelerationRetractionHooks = 100; // 1/10 inch per second squared
 constexpr double kPositionInitReset = 0;
 constexpr double kPositionAfterInit = 10;
-constexpr double kForwardSoftLimit = 230;
-constexpr double kPositionRetracted = -10;
-constexpr double kPositionExtended = 225;
+constexpr double kForwardSoftLimit = 220;
+constexpr double kPositionRetracted = -25;
+constexpr double kPositionExtended = 210;
+constexpr double kPositionExtendedTrap = 180;
 } // namespace ClimberConstant
 
 namespace LedConstants {

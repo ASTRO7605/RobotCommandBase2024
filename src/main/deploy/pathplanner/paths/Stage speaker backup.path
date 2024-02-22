@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.526151755006213,
-        "y": 4.696309212438245
+        "x": 4.512924718157131,
+        "y": 4.7519196576854705
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.498178112256159,
-        "y": 4.737751646142027
+        "x": 4.484951075407078,
+        "y": 4.793362091389253
       },
       "isLocked": false,
       "linkedName": "Stage Speaker Approach"
     },
     {
       "anchor": {
-        "x": 4.151579014582598,
-        "y": 5.328526161524922
+        "x": 4.384654461616616,
+        "y": 4.967019010961099
       },
       "prevControl": {
-        "x": 4.1822760452583445,
-        "y": 5.289058550656106
+        "x": 4.415351492292363,
+        "y": 4.927551400092283
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,7 +30,25 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "barre intermediaire trap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 0.5,
     "maxAcceleration": 1.0,

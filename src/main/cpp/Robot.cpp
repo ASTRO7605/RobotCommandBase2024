@@ -62,8 +62,14 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kFFHooksPosition", ClimberConstant::kFFHooksPosition);
 
     frc::Preferences::InitDouble("kPourcentageManualHooks", ClimberConstant::kPourcentageHooks);
-    frc::Preferences::InitDouble("kVitesseHooks", ClimberConstant::kVitesseHooks);
-    frc::Preferences::InitDouble("kAccelerationHooks", ClimberConstant::kAccelerationHooks);
+
+    frc::Preferences::InitDouble("kVitesseExtensionHooks", ClimberConstant::kVitesseExtensionHooks);
+    frc::Preferences::InitDouble("kAccelerationExtensionHooks",
+                                 ClimberConstant::kAccelerationExtensionHooks);
+    frc::Preferences::InitDouble("kVitesseRetractionHooks",
+                                 ClimberConstant::kVitesseRetractionHooks);
+    frc::Preferences::InitDouble("kAccelerationRetractionHooks",
+                                 ClimberConstant::kAccelerationRetractionHooks);
 
     frc::Preferences::InitDouble("kPThetaRobot", DriveConstant::kPThetaRobot);
     frc::Preferences::InitDouble("kIThetaRobot", DriveConstant::kIThetaRobot);
@@ -104,10 +110,10 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
-    // if (!hasInitHooksBeenScheduled) {
-    //     m_Container.SetInitHooksScheduled();
-    //     hasInitHooksBeenScheduled = true;
-    // }
+    if (!hasInitHooksBeenScheduled) {
+        m_Container.SetInitHooksScheduled();
+        hasInitHooksBeenScheduled = true;
+    }
 }
 
 void Robot::TeleopInit() {
@@ -122,10 +128,10 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
-    // if (!hasInitHooksBeenScheduled) {
-    //     m_Container.SetInitHooksScheduled();
-    //     hasInitHooksBeenScheduled = true;
-    // }
+    if (!hasInitHooksBeenScheduled) {
+        m_Container.SetInitHooksScheduled();
+        hasInitHooksBeenScheduled = true;
+    }
 }
 
 /**

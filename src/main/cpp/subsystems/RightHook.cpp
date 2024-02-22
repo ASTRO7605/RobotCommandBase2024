@@ -42,8 +42,8 @@ RightHook::RightHook()
     m_RightHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit);
 
     m_RightHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
-                                  ClimberConstant::kForwardSoftLimit *
-                                      ClimberConstant::FConversionFactorPosition);
+                                  ClimberConstant::kForwardSoftLimit);
+    m_RightHookMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, true);
 
     isInitDone = false;
     isInitScheduled = false;

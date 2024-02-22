@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.916001345516204,
-        "y": 5.63926893619553
+        "x": 4.05904534885993,
+        "y": 5.493913757058284
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.966001345516204,
-        "y": 5.63926893619553
+        "x": 4.109045348859933,
+        "y": 5.493913757058284
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.526151755006213,
-        "y": 4.696309212438245
+        "x": 4.512924718157131,
+        "y": 4.7519196576854705
       },
       "prevControl": {
-        "x": 4.476151755006213,
-        "y": 4.696309212438245
+        "x": 4.462924718157131,
+        "y": 4.7519196576854705
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,9 +30,27 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "barre approach trap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 0.5,
+    "maxVelocity": 1.0,
     "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 540.0

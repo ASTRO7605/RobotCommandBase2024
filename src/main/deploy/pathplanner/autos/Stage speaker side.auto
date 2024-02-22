@@ -8,26 +8,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Stage speaker approach"
+            "pathName": "stage speaker approach"
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Stage speaker backup"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "barre approach trap"
-                }
-              }
-            ]
+            "pathName": "stage speaker backup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "extend crochets trap"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "stage speaker final"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "retract crochets trap"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "barre final trap"
           }
         }
       ]

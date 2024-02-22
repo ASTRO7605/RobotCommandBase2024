@@ -43,8 +43,8 @@ LeftHook::LeftHook()
     m_LeftHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit);
 
     m_LeftHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
-                                 ClimberConstant::kForwardSoftLimit /
-                                     ClimberConstant::FConversionFactorPosition);
+                                 ClimberConstant::kForwardSoftLimit);
+    m_LeftHookMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, true);
 
     isInitDone = false;
     isInitScheduled = false;
