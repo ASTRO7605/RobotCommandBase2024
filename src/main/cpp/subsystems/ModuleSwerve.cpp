@@ -11,76 +11,79 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
                                          rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_DrivingEncoder{m_DrivingMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_TurningPIDController{m_TurningMotor.GetPIDController()},
-      m_DrivingPIDController{m_DrivingMotor.GetPIDController()} /*,
-       m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()}*/
-{
-    m_TurningMotor.RestoreFactoryDefaults();
-    m_DrivingMotor.RestoreFactoryDefaults();
-
-    m_TurningMotor.SetCANTimeout(50);
-    m_DrivingMotor.SetCANTimeout(50);
-
-    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
-    // Prefer prime numbers
-
-    m_TurningMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 47);
-    m_DrivingMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 57);
-
-    m_TurningCANcoder.GetPosition().SetUpdateFrequency(20_Hz);
-    m_TurningCANcoder.OptimizeBusUtilization();
-
-    m_TurningMotor.SetInverted(true);
-    m_DrivingMotor.SetInverted(true);
-
-    m_TurningMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    m_DrivingMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-
-    m_DrivingEncoder.SetPositionConversionFactor(
-        DriveConstant::kWheelCirconfM /
-        DriveConstant::kDrivingGearRatio); // from motor rotations to meters
-    m_DrivingEncoder.SetVelocityConversionFactor(
-        (DriveConstant::kWheelCirconfM / DriveConstant::kDrivingGearRatio) / 60); // m/s
-    m_DrivingEncoder.SetPosition(0);
-    m_TurningSparkMaxEncoder.SetPosition(
-        units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}.value());
-
-    m_TurningSparkMaxEncoder.SetPositionConversionFactor(
-        (2 * std::numbers::pi) /
-        DriveConstant::kTurningGearRatio); // from motor rotations to radians
-    m_TurningSparkMaxEncoder.SetVelocityConversionFactor(
-        ((2 * std::numbers::pi) / DriveConstant::kTurningGearRatio) / 60); // radians/s
-
-    m_TurningPIDController.SetPositionPIDWrappingEnabled(
-        true); // PID controller can go through 0 to get to setpoint
-    m_TurningPIDController.SetPositionPIDWrappingMinInput(0);
-    m_TurningPIDController.SetPositionPIDWrappingMaxInput(std::numbers::pi * 2);
-
-    m_DrivingPIDController.SetP(DriveConstant::kPDriving);
-    m_DrivingPIDController.SetI(DriveConstant::kIDriving);
-    m_DrivingPIDController.SetD(DriveConstant::kDDriving);
-    m_DrivingPIDController.SetFF(DriveConstant::kFFDriving);
-    m_DrivingPIDController.SetOutputRange(DriveConstant::kDrivingMinInput,
-                                          DriveConstant::kDrivingMaxInput);
-
-    m_TurningPIDController.SetP(DriveConstant::kPTurning);
-    m_TurningPIDController.SetI(DriveConstant::kITurning);
-    m_TurningPIDController.SetD(DriveConstant::kDTurning);
-    m_TurningPIDController.SetFF(DriveConstant::kFFTurning);
-    m_TurningPIDController.SetOutputRange(DriveConstant::kTurningMinInput,
-                                          DriveConstant::kTurningMaxInput);
-
-    m_DrivingMotor.SetSmartCurrentLimit(DriveConstant::currentLimit);
-    m_TurningMotor.SetSmartCurrentLimit(DriveConstant::currentLimit);
-
-    m_DrivingEncoder.SetPosition(0);
-    // m_DesiredState.angle = frc::Rotation2d(
-    //     units::radian_t{m_TurningCANcoder.GetAbsolutePosition()
-    //                         .GetValue()}); // on dit aux swerves de garder leur position initiale
-    hasEncoderBeenSeeded = false;
-}
+      m_DrivingPIDController{m_DrivingMotor.GetPIDController()}, m_MotorsInitialized{false},
+      hasEncoderBeenSeeded{false} /*,
+m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()}*/
+{}
 
 void ModuleSwerve::Periodic() {
-    if (!hasEncoderBeenSeeded) {
+    // CTRE: Ok is 0
+    if (m_MotorsInitialized || m_TurningCANcoder.GetPosition().SetUpdateFrequency(20_Hz) ||
+            m_TurningCANcoder.OptimizeBusUtilization() ||
+
+            m_TurningMotor.RestoreFactoryDefaults() != rev::REVLibError::kOk ||
+            m_DrivingMotor.RestoreFactoryDefaults() != rev::REVLibError::kOk ||
+
+            m_TurningMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake) !=
+                rev::REVLibError::kOk ||
+            m_DrivingMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake) !=
+                rev::REVLibError::kOk ||
+
+            m_DrivingEncoder.SetPositionConversionFactor(DriveConstant::kWheelCirconfM /
+                                                         DriveConstant::kDrivingGearRatio) !=
+                rev::REVLibError::kOk || // from motor rotations to meters
+            m_DrivingEncoder.SetVelocityConversionFactor(
+                (DriveConstant::kWheelCirconfM / DriveConstant::kDrivingGearRatio) / 60) !=
+                rev::REVLibError::kOk || // m/s
+            m_DrivingEncoder.SetPosition(0) != rev::REVLibError::kOk ||
+            m_TurningSparkMaxEncoder.SetPosition(
+                units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}.value()) !=
+                rev::REVLibError::kOk ||
+
+            m_TurningSparkMaxEncoder.SetPositionConversionFactor(
+                (2 * std::numbers::pi) /
+                DriveConstant::kTurningGearRatio); // from motor rotations to radians
+        m_TurningSparkMaxEncoder.SetVelocityConversionFactor(
+            ((2 * std::numbers::pi) / DriveConstant::kTurningGearRatio) / 60) !=
+            rev::REVLibError::kOk || // radians/s
+
+        m_TurningPIDController.SetPositionPIDWrappingEnabled(
+            true); // PID controller can go through 0 to get to setpoint
+        m_TurningPIDController.SetPositionPIDWrappingMinInput(0) != rev::REVLibError::kOk ||
+        m_TurningPIDController.SetPositionPIDWrappingMaxInput(std::numbers::pi * 2) !=
+            rev::REVLibError::kOk ||
+
+        m_DrivingPIDController.SetP(DriveConstant::kPDriving) != rev::REVLibError::kOk ||
+        m_DrivingPIDController.SetI(DriveConstant::kIDriving) != rev::REVLibError::kOk ||
+        m_DrivingPIDController.SetD(DriveConstant::kDDriving) != rev::REVLibError::kOk ||
+        m_DrivingPIDController.SetFF(DriveConstant::kFFDriving) != rev::REVLibError::kOk ||
+        m_DrivingPIDController.SetOutputRange(DriveConstant::kDrivingMinInput,
+                                              DriveConstant::kDrivingMaxInput) !=
+            rev::REVLibError::kOk ||
+
+        m_TurningPIDController.SetP(DriveConstant::kPTurning) != rev::REVLibError::kOk ||
+        m_TurningPIDController.SetI(DriveConstant::kITurning) != rev::REVLibError::kOk ||
+        m_TurningPIDController.SetD(DriveConstant::kDTurning) != rev::REVLibError::kOk ||
+        m_TurningPIDController.SetFF(DriveConstant::kFFTurning) != rev::REVLibError::kOk ||
+        m_TurningPIDController.SetOutputRange(DriveConstant::kTurningMinInput,
+                                              DriveConstant::kTurningMaxInput) !=
+            rev::REVLibError::kOk ||
+
+        m_DrivingMotor.SetSmartCurrentLimit(DriveConstant::currentLimit) != rev::REVLibError::kOk ||
+        m_TurningMotor.SetSmartCurrentLimit(DriveConstant::currentLimit) != rev::REVLibError::kOk ||
+
+        m_DrivingEncoder.SetPosition(0) != rev::REVLibError::kOk) {
+    } else {
+        // Stuff that doesn't allow error checking
+        m_TurningMotor.SetInverted(true);
+        m_DrivingMotor.SetInverted(true);
+        m_MotorsInitialized = true;
+    }
+    // m_DesiredState.angle = frc::Rotation2d(
+    //     units::radian_t{m_TurningCANcoder.GetAbsolutePosition()
+    //                         .GetValue()}); // on dit aux swerves de garder leur position
+    //                         initiale)
+    if (m_MotorsInitialized && !hasEncoderBeenSeeded) {
         auto absoluteEncoderPose = m_TurningCANcoder.GetPosition().WaitForUpdate(1_s);
         if (absoluteEncoderPose.GetStatus().IsOK()) {
             if (m_TurningSparkMaxEncoder.SetPosition(

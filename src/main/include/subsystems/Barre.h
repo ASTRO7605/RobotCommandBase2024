@@ -54,9 +54,9 @@ class Barre : public frc2::SubsystemBase {
     /// @return true or false
     bool Is2eJointAtTargetAngle(double target);
 
-    void SeedEncoder1erJoint();
+    ctre::phoenix::ErrorCode SeedEncoder1erJoint();
 
-    void SeedEncoder2eJoint();
+    ctre::phoenix::ErrorCode SeedEncoder2eJoint();
 
     void KeepCurrentAngle1erJoint();
 
@@ -67,4 +67,5 @@ class Barre : public frc2::SubsystemBase {
   private:
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurPremierJoint;
     ctre::phoenix::motorcontrol::can::TalonSRX m_MoteurDeuxiemeJoint;
+    bool m_MotorsInitialized;
 };

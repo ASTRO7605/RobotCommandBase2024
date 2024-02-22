@@ -44,4 +44,5 @@ class Intake : public frc2::SubsystemBase {
     rev::SparkPIDController m_BottomMotorPIDController;
 
     std::shared_ptr<frc::DigitalInput> m_capteurInterieurIntake;
+    bool m_MotorsInitialized;
 };

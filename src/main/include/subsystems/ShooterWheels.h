@@ -60,4 +60,6 @@ class ShooterWheels : public frc2::SubsystemBase {
     bool areWheelsRunning;
 
     wpi::interpolating_map<double, double> interpolatingMapShooterWheels;
+
+    bool m_MotorsInitialized;
 };

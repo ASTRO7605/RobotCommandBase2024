@@ -11,52 +11,10 @@ ShooterWheels::ShooterWheels()
       m_RightFlywheelMotorEncoder{
           m_RightFlywheelMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_LeftFlywheelMotorPIDController{m_LeftFlywheelMotor.GetPIDController()},
-      m_RightFlywheelMotorPIDController{m_RightFlywheelMotor.GetPIDController()} {
+      m_RightFlywheelMotorPIDController{m_RightFlywheelMotor.GetPIDController()},
+      m_MotorsInitialized{false} {
 
     m_capteurInterieurShooter.reset(new frc::DigitalInput(ShooterConstant::capteurID));
-
-    m_LeftFlywheelMotor.RestoreFactoryDefaults();
-    m_RightFlywheelMotor.RestoreFactoryDefaults();
-
-    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
-    m_LeftFlywheelMotor.SetCANTimeout(50);
-    m_RightFlywheelMotor.SetCANTimeout(50);
-
-    m_LeftFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 50);
-    m_RightFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 50);
-
-    m_LeftFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 50);
-    m_RightFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 50);
-
-    m_LeftFlywheelMotor.SetInverted(false);
-    m_RightFlywheelMotor.SetInverted(true);
-
-    m_LeftFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    m_RightFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-
-    m_LeftFlywheelMotorEncoder.SetPositionConversionFactor(
-        ShooterConstant::FConversionFactorWheels);             // 42 counts per revolution
-    m_LeftFlywheelMotorEncoder.SetVelocityConversionFactor(1); // already in RPM
-
-    m_RightFlywheelMotorEncoder.SetPositionConversionFactor(
-        ShooterConstant::FConversionFactorWheels);              // 42 counts per revolution
-    m_RightFlywheelMotorEncoder.SetVelocityConversionFactor(1); // already in RPM
-
-    m_LeftFlywheelMotorPIDController.SetP(ShooterConstant::kPLeftFlywheel);
-    m_LeftFlywheelMotorPIDController.SetI(ShooterConstant::kILeftFlywheel);
-    m_LeftFlywheelMotorPIDController.SetD(ShooterConstant::kDLeftFlywheel);
-    m_LeftFlywheelMotorPIDController.SetFF(ShooterConstant::kFFLeftFlywheel);
-
-    m_RightFlywheelMotorPIDController.SetP(ShooterConstant::kPRightFlywheel);
-    m_RightFlywheelMotorPIDController.SetI(ShooterConstant::kIRightFlywheel);
-    m_RightFlywheelMotorPIDController.SetD(ShooterConstant::kDRightFlywheel);
-    m_RightFlywheelMotorPIDController.SetFF(ShooterConstant::kFFRightFlywheel);
-
-    m_LeftFlywheelMotor.EnableVoltageCompensation(ShooterConstant::kVoltageCompensation);
-    m_RightFlywheelMotor.EnableVoltageCompensation(ShooterConstant::kVoltageCompensation);
-
-    m_LeftFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels);
-    m_RightFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels);
 
     areWheelsRunning = false;
 
@@ -71,6 +29,61 @@ void ShooterWheels::Periodic() {
     frc::SmartDashboard::PutNumber("rightShooterMotorVelocity",
                                    m_RightFlywheelMotorEncoder.GetVelocity());
     frc::SmartDashboard::PutBoolean("IsObjectInShooter", IsObjectInShooter());
+
+    if (m_MotorsInitialized ||
+        m_LeftFlywheelMotor.RestoreFactoryDefaults() != rev::REVLibError::kOk ||
+        m_RightFlywheelMotor.RestoreFactoryDefaults() != rev::REVLibError::kOk ||
+
+        m_LeftFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast) !=
+            rev::REVLibError::kOk ||
+        m_RightFlywheelMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast) !=
+            rev::REVLibError::kOk ||
+
+        m_LeftFlywheelMotorEncoder.SetPositionConversionFactor(
+            ShooterConstant::FConversionFactorWheels) !=
+            rev::REVLibError::kOk || // 42 counts per revolution
+        m_LeftFlywheelMotorEncoder.SetVelocityConversionFactor(1) !=
+            rev::REVLibError::kOk || // already in RPM
+
+        m_RightFlywheelMotorEncoder.SetPositionConversionFactor(
+            ShooterConstant::FConversionFactorWheels) !=
+            rev::REVLibError::kOk || // 42 counts per revolution
+        m_RightFlywheelMotorEncoder.SetVelocityConversionFactor(1) !=
+            rev::REVLibError::kOk || // already in RPM
+
+        m_LeftFlywheelMotorPIDController.SetP(ShooterConstant::kPLeftFlywheel) !=
+            rev::REVLibError::kOk ||
+        m_LeftFlywheelMotorPIDController.SetI(ShooterConstant::kILeftFlywheel) !=
+            rev::REVLibError::kOk ||
+        m_LeftFlywheelMotorPIDController.SetD(ShooterConstant::kDLeftFlywheel) !=
+            rev::REVLibError::kOk ||
+        m_LeftFlywheelMotorPIDController.SetFF(ShooterConstant::kFFLeftFlywheel) !=
+            rev::REVLibError::kOk ||
+
+        m_RightFlywheelMotorPIDController.SetP(ShooterConstant::kPRightFlywheel) !=
+            rev::REVLibError::kOk ||
+        m_RightFlywheelMotorPIDController.SetI(ShooterConstant::kIRightFlywheel) !=
+            rev::REVLibError::kOk ||
+        m_RightFlywheelMotorPIDController.SetD(ShooterConstant::kDRightFlywheel) !=
+            rev::REVLibError::kOk ||
+        m_RightFlywheelMotorPIDController.SetFF(ShooterConstant::kFFRightFlywheel) !=
+            rev::REVLibError::kOk ||
+
+        m_LeftFlywheelMotor.EnableVoltageCompensation(ShooterConstant::kVoltageCompensation) !=
+            rev::REVLibError::kOk ||
+        m_RightFlywheelMotor.EnableVoltageCompensation(ShooterConstant::kVoltageCompensation) !=
+            rev::REVLibError::kOk ||
+
+        m_LeftFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels) !=
+            rev::REVLibError::kOk ||
+        m_RightFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels) !=
+            rev::REVLibError::kOk) {
+    } else {
+        // Stuff that doesn't allow error checking
+        m_LeftFlywheelMotor.SetInverted(false);
+        m_RightFlywheelMotor.SetInverted(true);
+        m_MotorsInitialized = true;
+    }
 }
 
 void ShooterWheels::SetWheelSpeeds(double speeds, bool spin) {
