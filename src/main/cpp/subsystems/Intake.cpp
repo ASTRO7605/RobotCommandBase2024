@@ -18,6 +18,19 @@ Intake::Intake()
     m_TopMotor.SetInverted(true);
     m_BottomMotor.SetInverted(true);
 
+    m_TopMotor.SetCANTimeout(50);
+    m_BottomMotor.SetCANTimeout(50);
+
+    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
+    m_TopMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 157);
+    m_BottomMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 163);
+
+    m_TopMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 157);
+    m_BottomMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 163);
+
+    m_TopMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 157);
+    m_BottomMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 163);
+
     m_TopMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     m_BottomMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 

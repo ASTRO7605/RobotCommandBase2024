@@ -18,6 +18,16 @@ ShooterWheels::ShooterWheels()
     m_LeftFlywheelMotor.RestoreFactoryDefaults();
     m_RightFlywheelMotor.RestoreFactoryDefaults();
 
+    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
+    m_LeftFlywheelMotor.SetCANTimeout(50);
+    m_RightFlywheelMotor.SetCANTimeout(50);
+
+    m_LeftFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 50);
+    m_RightFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 50);
+
+    m_LeftFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 50);
+    m_RightFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 50);
+
     m_LeftFlywheelMotor.SetInverted(false);
     m_RightFlywheelMotor.SetInverted(true);
 

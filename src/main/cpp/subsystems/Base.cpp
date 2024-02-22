@@ -83,6 +83,7 @@ void Base::Periodic() {
     frc::SmartDashboard::PutNumber("distanceToSpeaker", GetDistanceToSpeaker().value());
     frc::SmartDashboard::PutNumber("desiredRotationToSpeaker",
                                    GetDesiredRotationToSpeaker().value());
+    frc::SmartDashboard::PutNumber("rotationError", GetRotationPIDError());
     frc::SmartDashboard::PutNumber(
         "Gyro Angle",
         m_Gyro.GetRotation2d().Degrees().value()); // test on smart dashboard

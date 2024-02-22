@@ -21,9 +21,9 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
 
     m_MoteurAngle.SetSensorPhase(false);
 
-    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
+    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 101,
                                        ShooterConstant::kTimeoutMs);
-    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
+    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 101,
                                        ShooterConstant::kTimeoutMs);
 
     SeedEncoder();

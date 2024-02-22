@@ -35,13 +35,13 @@ Barre::Barre()
     SeedEncoder1erJoint();
     SeedEncoder2eJoint();
 
-    m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
+    m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 101,
                                               BarreConstant::kTimeoutMs);
-    m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
+    m_MoteurPremierJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 101,
                                               BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
+    m_MoteurDeuxiemeJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 101,
                                                BarreConstant::kTimeoutMs);
-    m_MoteurDeuxiemeJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
+    m_MoteurDeuxiemeJoint.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 101,
                                                BarreConstant::kTimeoutMs);
 
     m_MoteurPremierJoint.ConfigPeakOutputForward(BarreConstant::kPeakOutputForward,

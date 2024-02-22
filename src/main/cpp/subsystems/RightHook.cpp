@@ -8,6 +8,16 @@ RightHook::RightHook()
           m_RightHookMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_RightHookMotorPIDController{m_RightHookMotor.GetPIDController()} {
     m_RightHookMotor.RestoreFactoryDefaults();
+    m_RightHookMotor.SetCANTimeout(50);
+
+    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
+    // Prefer prime numbers
+
+    m_RightHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 59);
+
+    m_RightHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 23);
+
+    m_RightHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 23);
 
     m_RightHookMotor.SetInverted(true);
 

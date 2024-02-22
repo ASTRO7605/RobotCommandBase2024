@@ -14,11 +14,20 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
       m_DrivingPIDController{m_DrivingMotor.GetPIDController()} /*,
        m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()}*/
 {
-    m_TurningCANcoder.GetPosition().SetUpdateFrequency(20_Hz);
-    m_TurningCANcoder.OptimizeBusUtilization();
-
     m_TurningMotor.RestoreFactoryDefaults();
     m_DrivingMotor.RestoreFactoryDefaults();
+
+    m_TurningMotor.SetCANTimeout(50);
+    m_DrivingMotor.SetCANTimeout(50);
+
+    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
+    // Prefer prime numbers
+
+    m_TurningMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 47);
+    m_DrivingMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 57);
+
+    m_TurningCANcoder.GetPosition().SetUpdateFrequency(20_Hz);
+    m_TurningCANcoder.OptimizeBusUtilization();
 
     m_TurningMotor.SetInverted(true);
     m_DrivingMotor.SetInverted(true);
@@ -78,7 +87,10 @@ void ModuleSwerve::Periodic() {
                     units::radian_t{absoluteEncoderPose.GetValue()}.value()) ==
                 rev::REVLibError::kOk) {
                 hasEncoderBeenSeeded = true;
+            } else {
+                frc::SmartDashboard::PutString("debug", "sparkFailed");
             }
+        } else {
         }
     }
 }

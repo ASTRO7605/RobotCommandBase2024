@@ -189,7 +189,7 @@ constexpr double FDegToRad = std::numbers::pi / 180;
 constexpr double kPeakCurrentLimit = 20;   // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
 constexpr double kContinuousCurrent = 20;  // amperes
-constexpr double kForwardSoftLimit = 750;  // 1/10 degre
+constexpr double kForwardSoftLimit = 765;  // 1/10 degre
 constexpr double kReverseSoftLimit = 200;  // 1/10 degre
 constexpr double kAngleShooterAmp = 600;
 constexpr double kAngleShooterTrap = 730;
@@ -244,7 +244,7 @@ constexpr double kVoltageIntakeCommand = 4;
 namespace BarreConstant {
 constexpr int moteurPremierJointID = 19;
 constexpr int moteurDeuxiemeJointID = 20;
-constexpr int kTimeoutMs = 30;
+constexpr int kTimeoutMs = 50;
 constexpr double kNominalOutputForward = 0;
 constexpr double kNominalOutputReverse = 0;
 constexpr double kPeakOutputForward = 1;
@@ -287,6 +287,7 @@ constexpr double kReverseSoftLimit2eJoint = 100;   // 1/10 degre
 constexpr double kPourcentageManual1erJoint = 0.15;
 constexpr double kPourcentageManual2eJoint = 0.16;
 constexpr double k1erJointAngleTrapApproach = 350;
+constexpr double k1erJointAngleTrapIntermediaire = 900;
 constexpr double k1erJointAngleTrapFinal = 1110;
 constexpr double k1erJointAngleAmp = 1030;
 constexpr double k2eJointAngleTrap = 2700;
@@ -328,7 +329,7 @@ constexpr double kPositionInitReset = 0;
 constexpr double kPositionAfterInit = 10;
 constexpr double kForwardSoftLimit = 230;
 constexpr double kPositionRetracted = -10;
-constexpr double kPositionExtended = 0;
+constexpr double kPositionExtended = 225;
 } // namespace ClimberConstant
 
 namespace LedConstants {

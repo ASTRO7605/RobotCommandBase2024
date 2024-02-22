@@ -43,6 +43,8 @@ void Robot::RobotInit() {
 
     frc::Preferences::InitDouble("k1erJointAngleTrapApproach",
                                  BarreConstant::k1erJointAngleTrapApproach);
+    frc::Preferences::InitDouble("k1erJointAngleTrapIntermediaire",
+                                 BarreConstant::k1erJointAngleTrapIntermediaire);
     frc::Preferences::InitDouble("k1erJointAngleTrapFinal", BarreConstant::k1erJointAngleTrapFinal);
     frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
     frc::Preferences::InitDouble("k2eJointAngleTrap", BarreConstant::k2eJointAngleTrap);
@@ -100,10 +102,10 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
-    if (!hasInitHooksBeenScheduled) {
-        m_Container.SetInitHooksScheduled();
-        hasInitHooksBeenScheduled = true;
-    }
+    // if (!hasInitHooksBeenScheduled) {
+    //     m_Container.SetInitHooksScheduled();
+    //     hasInitHooksBeenScheduled = true;
+    // }
 }
 
 void Robot::TeleopInit() {
@@ -118,10 +120,10 @@ void Robot::TeleopInit() {
  * This function is called periodically during operator control.
  */
 void Robot::TeleopPeriodic() {
-    if (!hasInitHooksBeenScheduled) {
-        m_Container.SetInitHooksScheduled();
-        hasInitHooksBeenScheduled = true;
-    }
+    // if (!hasInitHooksBeenScheduled) {
+    //     m_Container.SetInitHooksScheduled();
+    //     hasInitHooksBeenScheduled = true;
+    // }
 }
 
 /**
