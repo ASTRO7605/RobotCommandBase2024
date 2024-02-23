@@ -95,7 +95,10 @@ void RobotContainer::ConfigureBindings() {
             .ToPtr());
     m_CoPilotController.RightBumper().OnFalse(StopShooterWheels(&m_ShooterWheels).ToPtr());
 
-    m_CoPilotController.LeftBumper().WhileTrue(std::move(pathfindingStageCommand));
+    // m_CoPilotController.LeftBumper().WhileTrue(std::move(pathfindingStageCommand));
+
+    m_CoPilotController.LeftBumper().OnTrue(
+        frc2::InstantCommand([this]() { ChooseCorrectStageCommand(); }).ToPtr());
 
     m_TurnStick.Button(7).WhileTrue(
         LeftHookManual(&m_LeftHook, frc::Preferences::GetDouble("kPourcentageManualHooks"))
@@ -154,14 +157,15 @@ void RobotContainer::ConfigureBindings() {
 
     m_CoPilotController.Y().OnTrue(
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
+                  &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
                   frc::Preferences::GetDouble("angleShooterTrap"), ScoringPositions::trap)
             .ToPtr());
-    m_CoPilotController.X().OnTrue(frc2::SequentialCommandGroup{
-        AlignWithSpeaker(&m_Base), ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake,
-                                             &m_Barre, 0, 0, ScoringPositions::speaker)}
-                                       .WithInterruptBehavior(
-                                           frc2::Command::InterruptionBehavior::kCancelIncoming));
+    m_CoPilotController.X().OnTrue(
+        frc2::SequentialCommandGroup{AlignWithSpeaker(&m_Base),
+                                     ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels,
+                                               &m_Intake, &m_Barre, &m_CoPilotController, 0, 0,
+                                               ScoringPositions::speaker)}
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
     // m_CoPilotController.X().OnTrue(
     //     frc2::SequentialCommandGroup{
     //         AlignWithSpeaker(&m_Base),
@@ -282,4 +286,38 @@ void RobotContainer::ConfigureNamedCommands() {
                                  frc::Preferences::GetDouble("kVitesseRetractionHooks"),
                                  frc::Preferences::GetDouble("kAccelerationRetractionHooks"))
                 .ToPtr()));
+}
+
+void RobotContainer::ChooseCorrectStageCommand() {
+    int leftCameraAprilTagID{m_Base.GetLeftCameraAprilTagID()};
+    int rightCameraAprilTagID{m_Base.GetRightCameraAprilTagID()};
+
+    if (leftCameraAprilTagID != rightCameraAprilTagID) {
+        return;
+    }
+    auto allianceColor = frc::DriverStation::GetAlliance();
+    std::string desiredCommand{""};
+
+    if (allianceColor.has_value()) {
+        if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+            if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
+                desiredCommand = "stage source side";
+            } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueMiddleSide) {
+                desiredCommand = "stage middle side";
+            } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSpeakerSide) {
+                desiredCommand = "stage speaker side";
+            }
+        } else {
+            if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
+                desiredCommand = "stage source side";
+            } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redMiddleSide) {
+                desiredCommand = "stage middle side";
+            } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSpeakerSide) {
+                desiredCommand = "stage speaker side";
+            }
+        }
+        if (desiredCommand != "") {
+            frc2::CommandPtr autoStageCommand{pathplanner::AutoBuilder::buildAuto(desiredCommand)};
+        }
+    }
 }

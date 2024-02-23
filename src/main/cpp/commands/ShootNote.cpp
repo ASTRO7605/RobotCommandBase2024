@@ -1,11 +1,12 @@
 #include "commands/ShootNote.h"
 
 ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
-                     Intake *p_Intake, Barre *p_Barre, double wheelSpeeds, double shooterAngle,
-                     ScoringPositions scoringPlace)
+                     Intake *p_Intake, Barre *p_Barre,
+                     frc2::CommandXboxController *p_CoPilotController, double wheelSpeeds,
+                     double shooterAngle, ScoringPositions scoringPlace)
     : m_pBase{p_Base}, m_pShooterAngle{p_ShooterAngle}, m_pShooterWheels{p_ShooterWheels},
-      m_pIntake{p_Intake}, m_pBarre{p_Barre}, targetSpeeds{wheelSpeeds},
-      finalShooterTargetAngle{shooterAngle}, scoringPlace{scoringPlace},
+      m_pIntake{p_Intake}, m_pBarre{p_Barre}, m_pCoPilotController{p_CoPilotController},
+      targetSpeeds{wheelSpeeds}, finalShooterTargetAngle{shooterAngle}, scoringPlace{scoringPlace},
       m_RedescendreBarre{
           RedescendreBarre(m_pBarre, true, (scoringPlace == ScoringPositions::trap))} {
     AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake, m_pBase});
@@ -40,6 +41,7 @@ void ShootNote::Execute() {
             // }
             currentShooterTargetAngle = finalShooterTargetAngle;
             m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
+            m_pBase->SetWheelsInXFormation();
         } else {
             if (scoringPlace == ScoringPositions::amp) {
                 targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleAmp");
@@ -52,7 +54,6 @@ void ShootNote::Execute() {
             }
             currentShooterTargetAngle = finalShooterTargetAngle;
         }
-        m_pBase->SetWheelsInXFormation();
         areWheelsAtRightSpeed = false;
         isShooterAngledRight = false;
         isPremierJointAngledRight = false;
@@ -165,6 +166,10 @@ void ShootNote::Execute() {
     frc::SmartDashboard::PutBoolean("isPremierJointAngledRight", isPremierJointAngledRight);
     frc::SmartDashboard::PutBoolean("isDeuxiemeJointAngledRight", isDeuxiemeJointAngledRight);
 
+    if (m_pCoPilotController->GetStartButton() && (scoringPlace == ScoringPositions::speaker)) {
+        m_State = ShooterConstant::ShooterState::complete;
+    }
+
     if (m_State != ShooterConstant::ShooterState::noNote) {
         m_pShooterAngle->SetShooterAngle(currentShooterTargetAngle); // to update kAF continuously
         if (scoringPlace != ScoringPositions::speaker) {
@@ -175,8 +180,8 @@ void ShootNote::Execute() {
 }
 
 bool ShootNote::IsFinished() {
-    if (m_State == ShooterConstant::ShooterState::complete ||
-        m_State == ShooterConstant::ShooterState::noNote) {
+    if ((m_State == ShooterConstant::ShooterState::complete ||
+         m_State == ShooterConstant::ShooterState::noNote)) {
         return true;
     }
     return false;

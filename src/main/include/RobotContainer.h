@@ -110,6 +110,7 @@ class RobotContainer : public frc2::SubsystemBase {
     void ConfigureAmpPathfind();
     void ConfigureStagePathfind();
     void ConfigureNamedCommands();
+    void ChooseCorrectStageCommand();
     // The robot's subsystems are defined here...
     Base m_Base;
     Barre m_Barre;
@@ -124,7 +125,7 @@ class RobotContainer : public frc2::SubsystemBase {
 
     frc2::CommandPtr shootAmp{
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
+                  &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
                   frc::Preferences::GetDouble("angleShooterAmp"), ScoringPositions::amp)
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)};
 

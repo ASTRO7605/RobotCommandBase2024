@@ -76,6 +76,8 @@ Base::Base()
 }
 
 void Base::Periodic() {
+    frc::SmartDashboard::PutNumber("leftAprilTagID", GetLeftCameraAprilTagID());
+    frc::SmartDashboard::PutNumber("rightAprilTagID", GetRightCameraAprilTagID());
     if (frc::DriverStation::GetAlliance().has_value()) {
         allianceColor = frc::DriverStation::GetAlliance().value();
     }
@@ -415,3 +417,7 @@ bool Base::IsRobotInRangeToShoot() {
 }
 
 double Base::GetRotationPIDError() { return pidControllerThetaSpeaker.GetPositionError(); }
+
+int Base::GetLeftCameraAprilTagID() { return m_VisionLeft.GetAprilTagIDInView(); }
+
+int Base::GetRightCameraAprilTagID() { return m_VisionRight.GetAprilTagIDInView(); }

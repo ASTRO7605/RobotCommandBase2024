@@ -47,7 +47,7 @@ LeftHook::LeftHook()
     isInitDone = false;
     isInitScheduled = false;
 
-    m_LeftHookMotor.BurnFlash();
+    // m_LeftHookMotor.BurnFlash();
 }
 
 void LeftHook::Periodic() {

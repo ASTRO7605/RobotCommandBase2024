@@ -102,6 +102,15 @@ constexpr double ambiguityThreshold = 0.6;
 extern const frc::Transform3d rightCameraTransform;
 extern const frc::Transform3d leftCameraTransform;
 
+enum StageAprilTagIDs {
+    redSourceSide = 11,
+    redSpeakerSide = 12,
+    redMiddleSide = 13,
+    blueMiddleSide = 14,
+    blueSpeakerSide = 15,
+    blueSourceSide = 16
+};
+
 enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 } // namespace VisionConstant
 namespace PoseEstimationConstant {

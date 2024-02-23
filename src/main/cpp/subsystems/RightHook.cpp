@@ -47,7 +47,7 @@ RightHook::RightHook()
     isInitDone = false;
     isInitScheduled = false;
 
-    m_RightHookMotor.BurnFlash();
+    // m_RightHookMotor.BurnFlash();
 }
 
 void RightHook::Periodic() {

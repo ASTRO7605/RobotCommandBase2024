@@ -37,8 +37,8 @@ Intake::Intake()
     m_TopMotor.SetSmartCurrentLimit(IntakeConstant::kCurrentLimit);
     m_BottomMotor.SetSmartCurrentLimit(IntakeConstant::kCurrentLimit);
 
-    m_TopMotor.BurnFlash();
-    m_BottomMotor.BurnFlash();
+    // m_TopMotor.BurnFlash();
+    // m_BottomMotor.BurnFlash();
 }
 
 void Intake::Periodic() { frc::SmartDashboard::PutBoolean("IsObjectInIntake", IsObjectInIntake()); }

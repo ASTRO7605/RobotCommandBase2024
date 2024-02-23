@@ -63,6 +63,8 @@ class Vision : public frc2::SubsystemBase {
 
     double GetAprilTagDistanceMeters(double XDistance, double YDistance, double ZDistance);
 
+    int GetAprilTagIDInView();
+
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
@@ -77,4 +79,6 @@ class Vision : public frc2::SubsystemBase {
     fs::path deployDirectory{frc::filesystem::GetDeployDirectory()};
     double target_distance{};
     double target_ambiguity{};
+
+    int lastAprilTagSeen{};
 };

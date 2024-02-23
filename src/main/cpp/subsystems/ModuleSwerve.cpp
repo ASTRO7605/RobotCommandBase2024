@@ -76,8 +76,8 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
     //                         .GetValue()}); // on dit aux swerves de garder leur position initiale
     hasEncoderBeenSeeded = false;
 
-    m_DrivingMotor.BurnFlash();
-    m_TurningMotor.BurnFlash();
+    // m_DrivingMotor.BurnFlash();
+    // m_TurningMotor.BurnFlash();
 }
 
 void ModuleSwerve::Periodic() {

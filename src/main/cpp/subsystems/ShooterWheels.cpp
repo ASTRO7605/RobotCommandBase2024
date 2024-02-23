@@ -61,8 +61,8 @@ ShooterWheels::ShooterWheels()
         interpolatingMapShooterWheels.insert(couple.first.value(), couple.second);
     }
 
-    m_LeftFlywheelMotor.BurnFlash();
-    m_RightFlywheelMotor.BurnFlash();
+    // m_LeftFlywheelMotor.BurnFlash();
+    // m_RightFlywheelMotor.BurnFlash();
 }
 
 void ShooterWheels::Periodic() {

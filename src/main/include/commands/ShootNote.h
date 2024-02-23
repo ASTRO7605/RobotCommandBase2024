@@ -10,6 +10,7 @@
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/button/CommandXboxController.h>
 
 class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
   private:
@@ -18,6 +19,7 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     ShooterWheels *m_pShooterWheels;
     Intake *m_pIntake;
     Barre *m_pBarre;
+    frc2::CommandXboxController *m_pCoPilotController;
     double targetSpeeds;
     double currentShooterTargetAngle;
     double finalShooterTargetAngle;
@@ -44,8 +46,9 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     /// @param shooterAngle
     /// @param scoringPlace
     explicit ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
-                       Intake *p_Intake, Barre *p_Barre, double wheelSpeeds, double shooterAngle,
-                       ScoringPositions scoringPlace);
+                       Intake *p_Intake, Barre *p_Barre,
+                       frc2::CommandXboxController *p_CoPilotController, double wheelSpeeds,
+                       double shooterAngle, ScoringPositions scoringPlace);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

@@ -32,6 +32,7 @@ void Vision::Periodic() {
     isLatestMultiResultValid = false;
     isLatestSingleResultValid = false;
     if (camera->GetLatestResult().HasTargets()) {
+        lastAprilTagSeen = camera->GetLatestResult().GetBestTarget().GetFiducialId();
         latestMultiResult = camera->GetLatestResult().MultiTagResult();
         latestSingleResult = camera->GetLatestResult().GetBestTarget();
         if (camera->GetLatestResult().MultiTagResult().result.isPresent) {
@@ -113,3 +114,5 @@ std::optional<PoseMeasurement> Vision::GetRobotPoseEstimate() {
 double Vision::GetAprilTagDistanceMeters(double XDistance, double YDistance, double ZDistance) {
     return std::sqrt(XDistance * XDistance + YDistance * YDistance + ZDistance * ZDistance);
 }
+
+int Vision::GetAprilTagIDInView() { return lastAprilTagSeen; }
