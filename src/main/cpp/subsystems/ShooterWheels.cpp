@@ -15,9 +15,6 @@ ShooterWheels::ShooterWheels()
 
     m_capteurInterieurShooter.reset(new frc::DigitalInput(ShooterConstant::capteurID));
 
-    m_LeftFlywheelMotor.RestoreFactoryDefaults();
-    m_RightFlywheelMotor.RestoreFactoryDefaults();
-
     // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
     m_LeftFlywheelMotor.SetCANTimeout(50);
     m_RightFlywheelMotor.SetCANTimeout(50);
@@ -63,6 +60,9 @@ ShooterWheels::ShooterWheels()
     for (auto couple : ShooterConstant::wheelSpeedsAccordingToDistance) {
         interpolatingMapShooterWheels.insert(couple.first.value(), couple.second);
     }
+
+    m_LeftFlywheelMotor.BurnFlash();
+    m_RightFlywheelMotor.BurnFlash();
 }
 
 void ShooterWheels::Periodic() {

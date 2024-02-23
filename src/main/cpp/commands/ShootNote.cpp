@@ -18,11 +18,11 @@ void ShootNote::Initialize() {
         m_State = ShooterConstant::ShooterState::init;
     }
     if (scoringPlace == ScoringPositions::speaker) {
-        // targetSpeeds =
+        targetSpeeds =
 
-        //     m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
-        // finalShooterTargetAngle =
-        //     m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
+            m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
+        finalShooterTargetAngle =
+            m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
     }
     frc::SmartDashboard::PutNumber("interpolatedAngle", finalShooterTargetAngle);
     frc::SmartDashboard::PutNumber("interpolatedSpeed", targetSpeeds);
@@ -46,7 +46,6 @@ void ShootNote::Execute() {
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpApproach");
                 m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
             } else if (scoringPlace == ScoringPositions::trap) {
-                // targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointStartPosition");
                 targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleTrapFinal");
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapApproach");
                 m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
@@ -77,6 +76,9 @@ void ShootNote::Execute() {
                 readyToShoot = true;
             }
         } else if (scoringPlace == ScoringPositions::amp) {
+            targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleAmp");
+            targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpApproach");
+            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
             if (m_pBarre->Is1erJointAtTargetAngle(targetPremierJoint)) {
                 isPremierJointAngledRight = true;
             }
@@ -92,6 +94,9 @@ void ShootNote::Execute() {
                 readyToShoot = true;
             }
         } else if (scoringPlace == ScoringPositions::trap) {
+            targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleTrapFinal");
+            targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapApproach");
+            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
             if (m_pShooterWheels->AreWheelsDoneAccelerating(
                     targetSpeeds, true)) { // did wheels reach their target
                 areWheelsAtRightSpeed = true;

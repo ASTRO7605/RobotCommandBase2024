@@ -7,8 +7,6 @@ LeftHook::LeftHook()
       m_LeftHookMotorEncoder{
           m_LeftHookMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_LeftHookMotorPIDController{m_LeftHookMotor.GetPIDController()} {
-    m_LeftHookMotor.RestoreFactoryDefaults();
-
     m_LeftHookMotor.SetCANTimeout(50);
 
     // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
@@ -48,6 +46,8 @@ LeftHook::LeftHook()
 
     isInitDone = false;
     isInitScheduled = false;
+
+    m_LeftHookMotor.BurnFlash();
 }
 
 void LeftHook::Periodic() {

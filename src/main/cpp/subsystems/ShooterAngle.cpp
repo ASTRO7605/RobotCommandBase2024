@@ -10,8 +10,6 @@ double computekAF(double angle) {
 
 ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
 
-    m_MoteurAngle.ConfigFactoryDefault();
-
     m_MoteurAngle.SetInverted(false);
 
     m_MoteurAngle.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
@@ -72,6 +70,8 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     for (auto couple : ShooterConstant::shooterAngleAccordingToDistance) {
         interpolatingMapShooterAngle.insert(couple.first.value(), couple.second);
     }
+
+    m_MoteurAngle.NeutralOutput();
 }
 
 void ShooterAngle::Periodic() {

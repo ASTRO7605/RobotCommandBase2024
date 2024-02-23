@@ -210,23 +210,23 @@ constexpr std::pair<units::meter_t, double> thirdDistanceShooterAngleCouple =
 constexpr std::pair<units::meter_t, double> fourthDistanceWheelSpeedsCouple =
     std::make_pair(2.20_m, 3000);
 constexpr std::pair<units::meter_t, double> fourthDistanceShooterAngleCouple =
-    std::make_pair(2.20_m, 500);
+    std::make_pair(2.20_m, 490);
 constexpr std::pair<units::meter_t, double> fifthDistanceWheelSpeedsCouple =
     std::make_pair(2.52_m, 3000);
 constexpr std::pair<units::meter_t, double> fifthDistanceShooterAngleCouple =
-    std::make_pair(2.52_m, 460);
+    std::make_pair(2.52_m, 445);
 constexpr std::pair<units::meter_t, double> sixthDistanceWheelSpeedsCouple =
     std::make_pair(2.81_m, 3000);
 constexpr std::pair<units::meter_t, double> sixthDistanceShooterAngleCouple =
-    std::make_pair(2.81_m, 450);
+    std::make_pair(2.81_m, 425);
 constexpr std::pair<units::meter_t, double> seventhDistanceWheelSpeedsCouple =
-    std::make_pair(3.11_m, 3000);
+    std::make_pair(3.11_m, 3250);
 constexpr std::pair<units::meter_t, double> seventhDistanceShooterAngleCouple =
-    std::make_pair(3.11_m, 425);
+    std::make_pair(3.11_m, 405);
 constexpr std::pair<units::meter_t, double> eighthDistanceWheelSpeedsCouple =
     std::make_pair(3.40_m, 3500);
 constexpr std::pair<units::meter_t, double> eighthDistanceShooterAngleCouple =
-    std::make_pair(3.40_m, 395);
+    std::make_pair(3.40_m, 390);
 extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance;
 extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
 } // namespace ShooterConstant

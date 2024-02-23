@@ -61,21 +61,15 @@ RobotContainer::RobotContainer()
         },
         {&m_Base}));
 
-    // m_ShooterAngle.SetDefaultCommand(frc2::RunCommand(
-    //     [this] {
-    //         m_ShooterAngle.SetShooterAngle(
-    //             m_ShooterAngle.GetInterpolatedShooterAngle(m_Base.GetDistanceToSpeaker().value()));
-    //     },
-    //     {&m_ShooterAngle}));
+    m_ShooterAngle.SetDefaultCommand(frc2::RunCommand(
+        [this] {
+            m_ShooterAngle.SetShooterAngle(
+                m_ShooterAngle.GetInterpolatedShooterAngle(m_Base.GetDistanceToSpeaker().value()));
+        },
+        {&m_ShooterAngle}));
 }
 
 void RobotContainer::Periodic() {
-    // frc::SmartDashboard::PutNumber("interpolatedAngle",
-    // m_ShooterAngle.GetInterpolatedShooterAngle(
-    //                                                         m_Base.GetDistanceToSpeaker().value()));
-    // frc::SmartDashboard::PutNumber("interpolatedSpeed",
-    // m_ShooterWheels.GetInterpolatedWheelSpeeds(
-    //                                                         m_Base.GetDistanceToSpeaker().value()));
     m_Led.SetNoteInIntake(m_Intake.IsObjectInIntake());
     m_Led.SetRobotInRange(m_Base.IsRobotInRangeToShoot());
 }
@@ -135,8 +129,6 @@ void RobotContainer::ConfigureBindings() {
                       frc::Preferences::GetDouble("k2eJointStartPosition"))
             .ToPtr());
     m_ThrottleStick.Button(10).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
-    // m_ThrottleStick.Button(11).OnTrue(ShooterPosition(&m_ShooterAngle, 350, true).ToPtr());
-    // m_ThrottleStick.Button(12).OnTrue(ShooterPosition(&m_ShooterAngle, 730, true).ToPtr());
     m_ThrottleStick.Button(11).OnTrue(frc2::cmd::Parallel(
         RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionExtended,
                               frc::Preferences::GetDouble("kVitesseExtensionHooks"),
@@ -165,19 +157,19 @@ void RobotContainer::ConfigureBindings() {
                   frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
                   frc::Preferences::GetDouble("angleShooterTrap"), ScoringPositions::trap)
             .ToPtr());
-    // m_CoPilotController.X().OnTrue(frc2::SequentialCommandGroup{
-    //     AlignWithSpeaker(&m_Base), ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels,
-    //     &m_Intake,
-    //                                          &m_Barre, 0, 0, ScoringPositions::speaker)}
-    //                                    .WithInterruptBehavior(
-    //                                        frc2::Command::InterruptionBehavior::kCancelIncoming));
-    m_CoPilotController.X().OnTrue(
-        frc2::SequentialCommandGroup{
-            AlignWithSpeaker(&m_Base),
-            ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                      frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
-                      frc::Preferences::GetDouble("testAngleShooter"), ScoringPositions::speaker)}
-            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
+    m_CoPilotController.X().OnTrue(frc2::SequentialCommandGroup{
+        AlignWithSpeaker(&m_Base), ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake,
+                                             &m_Barre, 0, 0, ScoringPositions::speaker)}
+                                       .WithInterruptBehavior(
+                                           frc2::Command::InterruptionBehavior::kCancelIncoming));
+    // m_CoPilotController.X().OnTrue(
+    //     frc2::SequentialCommandGroup{
+    //         AlignWithSpeaker(&m_Base),
+    //         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+    //                   frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
+    //                   frc::Preferences::GetDouble("testAngleShooter"),
+    //                   ScoringPositions::speaker)}
+    //         .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
     m_CoPilotController.B().WhileTrue(std::move(pathfindingAmpCommand));
     m_CoPilotController.B().WhileTrue(

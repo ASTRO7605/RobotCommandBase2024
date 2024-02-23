@@ -7,7 +7,6 @@ RightHook::RightHook()
       m_RightHookMotorEncoder{
           m_RightHookMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_RightHookMotorPIDController{m_RightHookMotor.GetPIDController()} {
-    m_RightHookMotor.RestoreFactoryDefaults();
     m_RightHookMotor.SetCANTimeout(50);
 
     // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
@@ -47,6 +46,8 @@ RightHook::RightHook()
 
     isInitDone = false;
     isInitScheduled = false;
+
+    m_RightHookMotor.BurnFlash();
 }
 
 void RightHook::Periodic() {

@@ -14,8 +14,6 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
       m_DrivingPIDController{m_DrivingMotor.GetPIDController()} /*,
        m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()}*/
 {
-    m_TurningMotor.RestoreFactoryDefaults();
-    m_DrivingMotor.RestoreFactoryDefaults();
 
     m_TurningMotor.SetCANTimeout(50);
     m_DrivingMotor.SetCANTimeout(50);
@@ -77,6 +75,9 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
     //     units::radian_t{m_TurningCANcoder.GetAbsolutePosition()
     //                         .GetValue()}); // on dit aux swerves de garder leur position initiale
     hasEncoderBeenSeeded = false;
+
+    m_DrivingMotor.BurnFlash();
+    m_TurningMotor.BurnFlash();
 }
 
 void ModuleSwerve::Periodic() {

@@ -12,9 +12,6 @@ Barre::Barre()
     : m_MoteurPremierJoint{BarreConstant::moteurPremierJointID},
       m_MoteurDeuxiemeJoint{BarreConstant::moteurDeuxiemeJointID} {
 
-    m_MoteurPremierJoint.ConfigFactoryDefault();
-    m_MoteurDeuxiemeJoint.ConfigFactoryDefault();
-
     m_MoteurPremierJoint.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
     m_MoteurDeuxiemeJoint.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
 
