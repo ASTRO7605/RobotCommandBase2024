@@ -349,22 +349,16 @@ namespace LedConstants {
 constexpr int kLedChannel = 9;
 constexpr int kNumLeds = 12;
 
-constexpr int kNumRainbowStepsPerLed = 4;
-constexpr int kNumRainbowColors = kNumRainbowStepsPerLed * kNumLeds;
-
 // moves by 1 LED each n 20-millis periods
 constexpr int kSweepPrescale = 6;
-
-// toggles LEDs each n 20-millis periods
-constexpr int kFlashPrescale = 5;
 
 // switches LEDs each n 20-millis periods
 constexpr int kAlternatePrescale = 15;
 
-constexpr int kNumRequestedFullOnLeds = 8;
+constexpr int kNumSweepFullOnLeds = 8;
 
-constexpr auto kRequestGamePieceDuration = 7.5_s;
-constexpr auto kTargetAcquiredDuration = 3_s;
+// number of LEDs for 'in position' starting indicator
+constexpr int kNumIndicatorLeds = 2;
 
 // 8-bit R, G, B
 struct Color {
