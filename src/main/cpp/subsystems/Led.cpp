@@ -19,9 +19,11 @@ void Led::Periodic() {
         // check if none
         auto alli = frc::DriverStation::GetAlliance();
         if (alli && alli.value() == frc::DriverStation::Alliance::kRed) {
-            color_sweep(LedConstants::Colors::RedAlliance);
+            color_sweep_with_indicator(LedConstants::Colors::RedAlliance,
+                                       LedConstants::Colors::RobotInRange, in_starting_position);
         } else if (alli && alli.value() == frc::DriverStation::Alliance::kBlue) {
-            color_sweep(LedConstants::Colors::BlueAlliance);
+            color_sweep_with_indicator(LedConstants::Colors::BlueAlliance,
+                                       LedConstants::Colors::RobotInRange, in_starting_position);
         } else {
             alternate(LedConstants::Colors::RedAlliance, LedConstants::Colors::BlueAlliance);
         }
@@ -64,7 +66,8 @@ void Led::alternate(LedConstants::Color color1, LedConstants::Color color2) {
     m_led.SetData(m_buffer);
 }
 
-void Led::color_sweep(LedConstants::Color color) {
+void Led::color_sweep_with_indicator(LedConstants::Color main, LedConstants::Color indicator,
+                                     bool indicator_on) {
     static double prescale_counter = 0.0;
     static int anim_counter = 0;
 
@@ -88,8 +91,8 @@ void Led::color_sweep(LedConstants::Color color) {
 
     // 'fade out' LED at beginning of sequence
     // fade out as prescale increases
-    m_buffer[led].SetRGB(color.red * (1.0 - prescale_counter), color.grn * (1.0 - prescale_counter),
-                         color.blu * (1.0 - prescale_counter));
+    m_buffer[led].SetRGB(main.red * (1.0 - prescale_counter), main.grn * (1.0 - prescale_counter),
+                         main.blu * (1.0 - prescale_counter));
 
     // next LED
     ++led;
@@ -97,9 +100,9 @@ void Led::color_sweep(LedConstants::Color color) {
         led = 0;
 
     // turn on LEDs in middle of sequence
-    for (int count = 0; count < LedConstants::kNumRequestedFullOnLeds; ++count) {
+    for (int count = 0; count < LedConstants::kNumSweepFullOnLeds; ++count) {
 
-        m_buffer[led].SetRGB(color.red, color.grn, color.blu);
+        m_buffer[led].SetRGB(main.red, main.grn, main.blu);
 
         // next LED
         ++led;
@@ -109,8 +112,8 @@ void Led::color_sweep(LedConstants::Color color) {
 
     // 'fade in' LED at end of sequence
     // fade in as prescale increases
-    m_buffer[led].SetRGB(color.red * prescale_counter, color.grn * prescale_counter,
-                         color.blu * prescale_counter);
+    m_buffer[led].SetRGB(main.red * prescale_counter, main.grn * prescale_counter,
+                         main.blu * prescale_counter);
 
     // next LED
     ++led;
@@ -118,8 +121,8 @@ void Led::color_sweep(LedConstants::Color color) {
         led = 0;
 
     // turn off LEDs past sequence
-    for (int count = 0;
-         count < (LedConstants::kNumLeds - LedConstants::kNumRequestedFullOnLeds - 2); ++count) {
+    for (int count = 0; count < (LedConstants::kNumLeds - LedConstants::kNumSweepFullOnLeds - 2);
+         ++count) {
         m_buffer[led].SetRGB(LedConstants::Colors::Off.red, LedConstants::Colors::Off.grn,
                              LedConstants::Colors::Off.blu);
 
@@ -127,6 +130,14 @@ void Led::color_sweep(LedConstants::Color color) {
         ++led;
         if (led >= LedConstants::kNumLeds)
             led = 0;
+    }
+
+    // overwrite last LEDs with indicator color if on
+    if (indicator_on) {
+        for (int i = LedConstants::kNumLeds - LedConstants::kNumIndicatorLeds;
+             i < LedConstants::kNumLeds; ++i) {
+            m_buffer[i].SetRGB(indicator.red, indicator.grn, indicator.blu);
+        }
     }
 
     m_led.SetData(m_buffer);

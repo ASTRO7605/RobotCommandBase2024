@@ -7,8 +7,7 @@
 
 #include <array>
 
-class Led : public frc2::SubsystemBase
-{
+class Led : public frc2::SubsystemBase {
   public:
     Led();
     void Periodic() override;
@@ -18,10 +17,12 @@ class Led : public frc2::SubsystemBase
 
     void SetNoteInIntake(bool in_intake) { note_in_intake = in_intake; };
     void SetRobotInRange(bool in_range) { robot_in_range = in_range; };
+    void SetInStartingPosition(bool in_position) { in_starting_position = in_position; };
 
   private:
     void rainbow();
-    void color_sweep(LedConstants::Color color);
+    void color_sweep_with_indicator(LedConstants::Color main, LedConstants::Color indicator,
+                                    bool indicator_on);
     void alternate(LedConstants::Color color1, LedConstants::Color color2);
     void split(LedConstants::Color top, LedConstants::Color bottom);
 
@@ -30,4 +31,5 @@ class Led : public frc2::SubsystemBase
     LedConstants::Animation m_currentAnim;
     bool note_in_intake;
     bool robot_in_range;
+    bool in_starting_position;
 };
