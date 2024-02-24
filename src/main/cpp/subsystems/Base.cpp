@@ -262,11 +262,14 @@ frc::ChassisSpeeds Base::GetRobotRelativeSpeeds() {
 }
 
 void Base::SetRobotPoseVisionEstimateLeft() {
+    if (!m_VisionLeft.SeesValidTarget()) {
+        // hide robot if no target in view
+        m_VisionFieldLeft.SetRobotPose(100_m, 100_m, 0_rad);
+        return;
+    }
 
     std::optional<PoseMeasurement> estimate = m_VisionLeft.GetRobotPoseEstimate();
     if (!estimate.has_value()) {
-        // Hide if not in view
-        m_VisionFieldLeft.SetRobotPose(100_m, 100_m, 0_rad);
         return;
     }
 
@@ -277,6 +280,9 @@ void Base::SetRobotPoseVisionEstimateLeft() {
     }
 
     auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeterSqared;
+    // auto dst_sq = estimate->distance.value() * estimate->distance.value();
+    // std_devs[0] *= dst_sq; // scale based on distance
+    // std_devs[1] *= dst_sq;
     std_devs[0] = estimate->ambiguity * std_devs[0] +
                   PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[0];
     std_devs[1] = estimate->ambiguity * std_devs[1] +
@@ -284,11 +290,10 @@ void Base::SetRobotPoseVisionEstimateLeft() {
     std_devs[2] = estimate->ambiguity * std_devs[2] +
                   PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[2];
 
-    auto dst2 = estimate->distance.value();
-    dst2 *= dst2;
-    std_devs[0] *= dst2; // scale based on distance^2
-    std_devs[1] *= dst2;
-    std_devs[2] *= dst2;
+    auto dst = estimate->distance.value();
+    std_devs[0] *= dst * dst; // scale based on distance
+    std_devs[1] *= dst * dst;
+    std_devs[2] *= dst * dst;
 
     frc::SmartDashboard::PutNumber("april_distance_Left", estimate->distance.value());
 
@@ -299,10 +304,15 @@ void Base::SetRobotPoseVisionEstimateLeft() {
 }
 
 void Base::SetRobotPoseVisionEstimateRight() {
+
+    if (!m_VisionRight.SeesValidTarget()) {
+        // hide robot if no target in view
+        m_VisionFieldRight.SetRobotPose(100_m, 100_m, 0_rad);
+        return;
+    }
+
     std::optional<PoseMeasurement> estimate = m_VisionRight.GetRobotPoseEstimate();
     if (!estimate.has_value()) {
-        // Hide if not in view
-        m_VisionFieldRight.SetRobotPose(100_m, 100_m, 0_rad);
         return;
     }
 
@@ -320,11 +330,10 @@ void Base::SetRobotPoseVisionEstimateRight() {
     std_devs[2] = estimate->ambiguity * std_devs[2] +
                   PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[2];
 
-    auto dst2 = estimate->distance.value();
-    dst2 *= dst2;
-    std_devs[0] *= dst2; // scale based on distance^2
-    std_devs[1] *= dst2;
-    std_devs[2] *= dst2;
+    auto dst = estimate->distance.value();
+    std_devs[0] *= dst * dst; // scale based on distance^2
+    std_devs[1] *= dst * dst;
+    std_devs[2] *= dst * dst;
 
     frc::SmartDashboard::PutNumber("april_distance_Right", estimate->distance.value());
 
@@ -409,7 +418,7 @@ bool Base::IsRobotInRangeToShoot() {
 
 double Base::GetRotationPIDError() { return pidControllerThetaSpeaker.GetPositionError(); }
 
-int Base::GetLeftCameraAprilTagID() { return m_VisionLeft.GetLastAprilTagIdSeen(); }
+int Base::GetLeftCameraAprilTagID() { return m_VisionLeft.GetAprilTagIDInView(); }
 
 int Base::GetRightCameraAprilTagID() { return m_VisionRight.GetLastAprilTagIdSeen(); }
 
