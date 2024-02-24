@@ -42,6 +42,6 @@ class Robot : public frc::TimedRobot {
     // doesn't have undefined behavior and potentially crash.
     RobotContainer m_Container;
     /* WARNING : Please, initialize an object before calling a member function */
-    frc2::CommandPtr m_autonomousCommand{m_Container.GetAutonomousCommand()};
+    frc2::CommandPtr m_autonomousCommand{frc2::InstantCommand([](){})};
     bool hasInitHooksBeenScheduled;
 };

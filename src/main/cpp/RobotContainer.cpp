@@ -4,7 +4,7 @@
 
 #include "RobotContainer.h"
 
-#include <frc2/command/PrintCommand.h>
+#include <frc/MathUtil.h>
 
 RobotContainer::RobotContainer()
     : m_ThrottleStick{OIConstant::ThrottleStickID}, m_TurnStick{OIConstant::TurnStickID},
@@ -203,7 +203,11 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    return pathplanner::AutoBuilder::buildAuto("source_2_notes");
+    if (currentAutonomous != "") {
+        return pathplanner::AutoBuilder::buildAuto(currentAutonomous);
+    } else {
+        return frc2::InstantCommand([]() {}).ToPtr();
+    }
 }
 
 void RobotContainer::ConfigureAmpPathfind() {
@@ -331,4 +335,26 @@ void RobotContainer::ChooseCorrectStageCommand() {
             pathfindingStageCommand.Schedule();
         }
     }
+}
+
+InPosition RobotContainer::IsRobotInRightPoseForAuto() {
+    std::optional<frc::Pose2d> currentPose{m_Base.GetAveragePoseFromCameras()};
+    if (!currentPose.has_value()) {
+        return InPosition{.correct_xy = false, .correct_angle = false};
+    }
+    frc::Pose2d autoStartPose{
+        pathplanner::PathPlannerAuto::getStartingPoseFromAutoFile(currentAutonomous)};
+
+    return InPosition{
+        .correct_xy = currentPose.value().Translation().Distance(autoStartPose.Translation()) <
+                      VisionConstant::kThresholdAutoLEDXY,
+        .correct_angle =
+            frc::InputModulus(
+                (currentPose.value().Rotation() - autoStartPose.Rotation()).Degrees().value(),
+                -180.0, 180.0) < VisionConstant::kThresholdAutoLEDAngle};
+}
+
+void RobotContainer::UpdateDisabledLed(InPosition in_position) {
+    m_Led.SetIsInStartingPositionXY(in_position.correct_xy);
+    m_Led.SetIsInStartingPositionAngle(in_position.correct_angle);
 }

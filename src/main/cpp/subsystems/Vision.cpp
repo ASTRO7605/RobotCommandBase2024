@@ -16,9 +16,7 @@ Vision::Vision(std::string_view table_name, frc::Transform3d cameraPose)
     camera = (m_PhotonPoseEstimator.GetCamera());
 }
 
-void Vision::Periodic() {}
-
-void Vision::UpdateRobotPoseEstimate() {
+void Vision::Periodic() {
     // Invalid if not initialized
     photon::MultiTargetPNPResult latestMultiResult;
     photon::PhotonTrackedTarget latestSingleResult;

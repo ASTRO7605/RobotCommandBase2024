@@ -52,7 +52,6 @@ class Vision : public frc2::SubsystemBase {
     // declared private and exposed only through public methods.
     // std::shared_ptr<nt::NetworkTable> m_Vision;
 
-    void UpdateRobotPoseEstimate();
     double PythagorasXYZ(double XDistance, double YDistance, double ZDistance);
 
     std::shared_ptr<photon::PhotonCamera> camera;

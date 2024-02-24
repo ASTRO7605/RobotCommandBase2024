@@ -412,3 +412,22 @@ double Base::GetRotationPIDError() { return pidControllerThetaSpeaker.GetPositio
 int Base::GetLeftCameraAprilTagID() { return m_VisionLeft.GetLastAprilTagIdSeen(); }
 
 int Base::GetRightCameraAprilTagID() { return m_VisionRight.GetLastAprilTagIdSeen(); }
+
+std::optional<frc::Pose2d> Base::GetAveragePoseFromCameras() {
+    std::optional<PoseMeasurement> leftEstimate = m_VisionLeft.GetRobotPoseEstimate();
+    std::optional<PoseMeasurement> rightEstimate = m_VisionRight.GetRobotPoseEstimate();
+    if (leftEstimate.has_value() && rightEstimate.has_value()) {
+        auto left_pose = leftEstimate->pose.ToPose2d();
+        auto right_pose = rightEstimate->pose.ToPose2d();
+        auto translation = (left_pose.Translation() + right_pose.Translation()) / 2;
+        auto rotation = (left_pose.Rotation() + right_pose.Rotation()) / 2;
+
+        return frc::Pose2d{translation, rotation};
+    } else if (leftEstimate.has_value()) {
+        return leftEstimate->pose.ToPose2d();
+    } else if (rightEstimate.has_value()) {
+        return rightEstimate->pose.ToPose2d();
+    } else {
+        return {};
+    }
+}

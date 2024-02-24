@@ -95,13 +95,17 @@ void Robot::DisabledInit() {
     m_Container.SetLedForDisabled();
 }
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+    auto status = m_Container.IsRobotInRightPoseForAuto();
+    m_Container.UpdateDisabledLed(status);
+}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    m_autonomousCommand = m_Container.GetAutonomousCommand();
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();

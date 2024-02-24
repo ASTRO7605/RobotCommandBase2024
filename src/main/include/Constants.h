@@ -101,6 +101,8 @@ constexpr std::string_view TableNameLeft = "photonvision-b";
 constexpr double ambiguityThreshold = 0.5;
 extern const frc::Transform3d rightCameraTransform;
 extern const frc::Transform3d leftCameraTransform;
+constexpr double kThresholdAutoLEDAngle = 1.0;
+constexpr auto kThresholdAutoLEDXY = 0.03_m;
 
 enum StageAprilTagIDs {
     redSourceSide = 11,
@@ -373,6 +375,8 @@ constexpr Color RedAlliance{255, 0, 0};
 constexpr Color BlueAlliance{0, 0, 255};
 constexpr Color NoteInIntake{255, 15, 0};
 constexpr Color RobotInRange{0, 255, 0};
+constexpr Color RobotInStartingPositionXY{0, 255, 0};
+constexpr Color RobotInStartingPositionAngle{255, 105, 180};
 } // namespace Colors
 
 enum Animation {

@@ -77,6 +77,11 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/Trigger.h>
 
+struct InPosition {
+    bool correct_xy;
+    bool correct_angle;
+};
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -105,6 +110,9 @@ class RobotContainer : public frc2::SubsystemBase {
     void SetLedForDisabled() { m_Led.SetAnimation(LedConstants::Animation::ALLIANCE); };
     void SetLedForEnabled() { m_Led.SetAnimation(LedConstants::Animation::SPLIT); };
 
+    InPosition IsRobotInRightPoseForAuto();
+    void UpdateDisabledLed(InPosition in_position);
+
   private:
     void ConfigureBindings();
     void ConfigureAmpPathfind();
@@ -122,6 +130,8 @@ class RobotContainer : public frc2::SubsystemBase {
     Led m_Led;
     frc2::CommandPtr pathfindingAmpCommand{frc2::RunCommand([]() {})};
     frc2::CommandPtr pathfindingStageCommand{frc2::RunCommand([]() {})};
+
+    std::string currentAutonomous{"source_2_notes"};
 
     frc2::CommandPtr shootAmp{
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,

@@ -5,8 +5,8 @@
 #include "subsystems/Led.h"
 
 Led::Led()
-    : m_currentAnim{LedConstants::Animation::ALLIANCE}, note_in_intake{false},
-      robot_in_range{true} {
+    : m_currentAnim{LedConstants::Animation::ALLIANCE}, note_in_intake{false}, robot_in_range{true},
+      in_starting_position_xy{false}, in_starting_position_angle{false} {
     m_led.SetLength(LedConstants::kNumLeds);
     m_led.SetData(m_buffer);
     m_led.Start();
@@ -19,11 +19,15 @@ void Led::Periodic() {
         // check if none
         auto alli = frc::DriverStation::GetAlliance();
         if (alli && alli.value() == frc::DriverStation::Alliance::kRed) {
-            color_sweep_with_indicator(LedConstants::Colors::RedAlliance,
-                                       LedConstants::Colors::RobotInRange, in_starting_position);
+            color_sweep_with_indicators(
+                LedConstants::Colors::RedAlliance, LedConstants::Colors::RobotInStartingPositionXY,
+                in_starting_position_xy, LedConstants::Colors::RobotInStartingPositionAngle,
+                in_starting_position_angle);
         } else if (alli && alli.value() == frc::DriverStation::Alliance::kBlue) {
-            color_sweep_with_indicator(LedConstants::Colors::BlueAlliance,
-                                       LedConstants::Colors::RobotInRange, in_starting_position);
+            color_sweep_with_indicators(
+                LedConstants::Colors::BlueAlliance, LedConstants::Colors::RobotInStartingPositionXY,
+                in_starting_position_xy, LedConstants::Colors::RobotInStartingPositionAngle,
+                in_starting_position_angle);
         } else {
             alternate(LedConstants::Colors::RedAlliance, LedConstants::Colors::BlueAlliance);
         }
@@ -66,8 +70,9 @@ void Led::alternate(LedConstants::Color color1, LedConstants::Color color2) {
     m_led.SetData(m_buffer);
 }
 
-void Led::color_sweep_with_indicator(LedConstants::Color main, LedConstants::Color indicator,
-                                     bool indicator_on) {
+void Led::color_sweep_with_indicators(LedConstants::Color main, LedConstants::Color indicator1,
+                                      bool indicator1_on, LedConstants::Color indicator2,
+                                      bool indicator2_on) {
     static double prescale_counter = 0.0;
     static int anim_counter = 0;
 
@@ -133,10 +138,17 @@ void Led::color_sweep_with_indicator(LedConstants::Color main, LedConstants::Col
     }
 
     // overwrite last LEDs with indicator color if on
-    if (indicator_on) {
+    if (indicator1_on || indicator2_on) {
+        indicator1 = indicator1_on ? indicator1 : LedConstants::Colors::Off;
+        for (int i = LedConstants::kNumLeds - 2 * LedConstants::kNumIndicatorLeds;
+             i < LedConstants::kNumLeds - LedConstants::kNumIndicatorLeds; ++i) {
+            m_buffer[i].SetRGB(indicator1.red, indicator1.grn, indicator2.blu);
+        }
+
+        indicator2 = indicator2_on ? indicator2 : LedConstants::Colors::Off;
         for (int i = LedConstants::kNumLeds - LedConstants::kNumIndicatorLeds;
              i < LedConstants::kNumLeds; ++i) {
-            m_buffer[i].SetRGB(indicator.red, indicator.grn, indicator.blu);
+            m_buffer[i].SetRGB(indicator2.red, indicator2.grn, indicator2.blu);
         }
     }
 
