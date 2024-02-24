@@ -98,7 +98,7 @@ namespace VisionConstant {
 constexpr int Pipeline = 0; // only one pipeline (AprilTags)
 constexpr std::string_view TableNameRight = "photonvision-a";
 constexpr std::string_view TableNameLeft = "photonvision-b";
-constexpr double ambiguityThreshold = 0.6;
+constexpr double ambiguityThreshold = 0.5;
 extern const frc::Transform3d rightCameraTransform;
 extern const frc::Transform3d leftCameraTransform;
 
@@ -115,9 +115,9 @@ enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 } // namespace VisionConstant
 namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
-constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.05};
+constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
 constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.05};
-constexpr std::array<double, 3> kVisionStdDevsPerMeterSquaredBase{0.2, 0.2, 0.85};
+constexpr std::array<double, 3> kVisionStdDevsPerMeterSquaredBase{0.2, 0.2, 0.95};
 constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeterSqared{0.02, 0.02, 0.02};
 constexpr frc::Translation2d blueSpeakerPoseMeters =
     frc::Translation2d{units::inch_t{-1.5}, units::inch_t{218.42}};
@@ -193,7 +193,7 @@ constexpr double kVitesseAngle = 2000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
 constexpr double angleThreshold = 7.5;      // dixieme de degre
-constexpr double kMaxAF = 0 /*.0445*/;
+constexpr double kMaxAF = 0.0445;
 constexpr double FDegToRad = std::numbers::pi / 180;
 constexpr double kPeakCurrentLimit = 20;   // amperes
 constexpr double kPeakCurrentDuration = 0; // ms

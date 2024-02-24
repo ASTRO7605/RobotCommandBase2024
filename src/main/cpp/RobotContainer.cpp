@@ -79,7 +79,10 @@ void RobotContainer::ConfigureBindings() {
     // m_ThrottleStick.Button(8).OnTrue(
     //     frc2::InstantCommand([this]() { m_Base.SwitchRobotDrivingMode(); }).ToPtr());
     // // bouton pouce
-
+    m_ThrottleStick.Button(1).OnTrue(
+        frc2::InstantCommand([this]() {
+            m_Base.ResetOdometry(frc::Pose2d{1_m, 1_m, frc::Rotation2d{90_deg}});
+        }).ToPtr());
     m_ThrottleStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }).ToPtr());
     m_TurnStick.Button(2).OnTrue(
@@ -200,10 +203,7 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    // auto path = pathplanner::PathPlannerPath::fromPathFile("1m devant");
-    // return pathplanner::AutoBuilder::followPath(path);
-
-    return pathplanner::AutoBuilder::buildAuto("amp side");
+    return pathplanner::AutoBuilder::buildAuto("source_2_notes");
 }
 
 void RobotContainer::ConfigureAmpPathfind() {
@@ -286,6 +286,17 @@ void RobotContainer::ConfigureNamedCommands() {
                                  frc::Preferences::GetDouble("kVitesseRetractionHooks"),
                                  frc::Preferences::GetDouble("kAccelerationRetractionHooks"))
                 .ToPtr()));
+    pathplanner::NamedCommands::registerCommand("start intake",
+                                                IntakeCommand(&m_Intake, false).ToPtr());
+    pathplanner::NamedCommands::registerCommand(
+        "align and shoot",
+        frc2::SequentialCommandGroup{AlignWithSpeaker(&m_Base),
+                                     ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels,
+                                               &m_Intake, &m_Barre, &m_CoPilotController, 0, 0,
+                                               ScoringPositions::speaker)}
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
+    pathplanner::NamedCommands::registerCommand(
+        "start shooter wheels", StartShooterWheels(&m_ShooterWheels, &m_Base, true, 0).ToPtr());
 }
 
 void RobotContainer::ChooseCorrectStageCommand() {
@@ -297,7 +308,6 @@ void RobotContainer::ChooseCorrectStageCommand() {
     }
     auto allianceColor = frc::DriverStation::GetAlliance();
     std::string desiredCommand{""};
-
     if (allianceColor.has_value()) {
         if (allianceColor == frc::DriverStation::Alliance::kBlue) {
             if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
@@ -317,7 +327,8 @@ void RobotContainer::ChooseCorrectStageCommand() {
             }
         }
         if (desiredCommand != "") {
-            frc2::CommandPtr autoStageCommand{pathplanner::AutoBuilder::buildAuto(desiredCommand)};
+            pathfindingStageCommand = pathplanner::AutoBuilder::buildAuto(desiredCommand);
+            pathfindingStageCommand.Schedule();
         }
     }
 }

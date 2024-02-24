@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.070885680238094,
+        "y": 2.6976221644709866
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.120885680238096,
+        "y": 2.6976221644709866
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.505031163908485,
+        "y": 3.4356694867235906
+      },
+      "prevControl": {
+        "x": 4.455031163908485,
+        "y": 3.4356694867235906
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Stage Source Approach"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "barre approach trap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 540.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Stage source side",
+  "previewStartingState": {
+    "rotation": 60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

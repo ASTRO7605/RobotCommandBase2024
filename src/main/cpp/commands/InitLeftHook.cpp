@@ -4,10 +4,7 @@ InitLeftHook::InitLeftHook(LeftHook *p_LeftHook) : m_pLeftHook{p_LeftHook} {
     AddRequirements({m_pLeftHook});
 }
 
-void InitLeftHook::Initialize() {
-    m_Timer.Restart();
-    frc2::PrintCommand("init").Schedule();
-}
+void InitLeftHook::Initialize() { m_Timer.Restart(); }
 
 void InitLeftHook::Execute() {
     m_pLeftHook->ManualLeftHook(ClimberConstant::kPourcentageInitHooks);
