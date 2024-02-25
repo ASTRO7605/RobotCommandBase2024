@@ -3,10 +3,11 @@
 ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
                      Intake *p_Intake, Barre *p_Barre,
                      frc2::CommandXboxController *p_CoPilotController, double wheelSpeeds,
-                     double shooterAngle, ScoringPositions scoringPlace)
+                     double shooterAngle, bool useInterpolatedSpeeds, ScoringPositions scoringPlace)
     : m_pBase{p_Base}, m_pShooterAngle{p_ShooterAngle}, m_pShooterWheels{p_ShooterWheels},
       m_pIntake{p_Intake}, m_pBarre{p_Barre}, m_pCoPilotController{p_CoPilotController},
-      targetSpeeds{wheelSpeeds}, finalShooterTargetAngle{shooterAngle}, scoringPlace{scoringPlace},
+      targetSpeeds{wheelSpeeds}, finalShooterTargetAngle{shooterAngle},
+      useInterpolatedSpeeds{useInterpolatedSpeeds}, scoringPlace{scoringPlace},
       m_RedescendreBarre{
           RedescendreBarre(m_pBarre, true, (scoringPlace == ScoringPositions::trap))} {
     AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake, m_pBase});
@@ -18,9 +19,8 @@ void ShootNote::Initialize() {
     } else {
         m_State = ShooterConstant::ShooterState::init;
     }
-    if (scoringPlace == ScoringPositions::speaker) {
+    if (useInterpolatedSpeeds) {
         targetSpeeds =
-
             m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
         finalShooterTargetAngle =
             m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());

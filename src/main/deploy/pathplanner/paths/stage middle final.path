@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.384654461616616,
-        "y": 4.967019010961099
+        "x": 5.89,
+        "y": 4.11
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.404971740379273,
-        "y": 4.931828451872638
+        "x": 5.849365442474687,
+        "y": 4.11
       },
       "isLocked": false,
-      "linkedName": "Stage Speaker Backup"
+      "linkedName": "Stage Middle Backup"
     },
     {
       "anchor": {
-        "x": 4.47,
-        "y": 4.83
+        "x": 5.72,
+        "y": 4.11
       },
       "prevControl": {
-        "x": 4.464233907660661,
-        "y": 4.839987164892868
+        "x": 5.731532184678676,
+        "y": 4.11
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Stage speaker side",
+  "folder": "Stage middle side",
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

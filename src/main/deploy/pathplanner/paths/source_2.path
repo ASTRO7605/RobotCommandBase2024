@@ -77,6 +77,12 @@
               "data": {
                 "name": "start shooter wheels"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjust shooter angle"
+              }
             }
           ]
         }

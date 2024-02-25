@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp_2"
+            "pathName": "amp_simple_1"
           }
         },
         {
@@ -24,22 +24,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "start intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "amp_1"
-                }
-              }
-            ]
+            "pathName": "amp_simple_2"
           }
         },
         {

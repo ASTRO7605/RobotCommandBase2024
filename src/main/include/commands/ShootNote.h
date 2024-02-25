@@ -30,6 +30,7 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     bool isPremierJointAngledRight;
     bool isDeuxiemeJointAngledRight;
     bool readyToShoot;
+    bool useInterpolatedSpeeds;
     frc::Timer timer;
     ShooterConstant::ShooterState m_State;
     ScoringPositions scoringPlace;
@@ -48,7 +49,7 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     explicit ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
                        Intake *p_Intake, Barre *p_Barre,
                        frc2::CommandXboxController *p_CoPilotController, double wheelSpeeds,
-                       double shooterAngle, ScoringPositions scoringPlace);
+                       double shooterAngle, bool useInterpolatedSpeeds, ScoringPositions scoringPlace);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;

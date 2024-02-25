@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.34,
+      "y": 7.17
+    },
+    "rotation": 180.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,42 +14,42 @@
         {
           "type": "path",
           "data": {
-            "pathName": "stage speaker approach"
+            "pathName": "amp_simple_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "align and shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "stage speaker backup"
+            "pathName": "amp_simple_2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "extend crochets trap"
+            "name": "align and shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "stage speaker final"
+            "pathName": "amp_far_3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "retract crochets trap"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "barre final and shoot trap"
+            "name": "align and shoot"
           }
         }
       ]
     }
   },
-  "folder": "Stage",
+  "folder": null,
   "choreoAuto": false
 }

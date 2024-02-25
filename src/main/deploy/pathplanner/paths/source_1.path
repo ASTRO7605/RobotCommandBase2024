@@ -12,7 +12,7 @@
         "y": 4.19582215710539
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "source_start"
     },
     {
       "anchor": {
@@ -42,6 +42,12 @@
               "type": "named",
               "data": {
                 "name": "start shooter wheels"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjust shooter angle"
               }
             }
           ]

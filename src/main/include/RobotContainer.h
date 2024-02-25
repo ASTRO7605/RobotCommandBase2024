@@ -110,8 +110,8 @@ class RobotContainer : public frc2::SubsystemBase {
     void SetLedForDisabled() { m_Led.SetAnimation(LedConstants::Animation::ALLIANCE); };
     void SetLedForEnabled() { m_Led.SetAnimation(LedConstants::Animation::SPLIT); };
 
-    InPosition IsRobotInRightPoseForAuto();
-    void UpdateDisabledLed(InPosition in_position);
+    // InPosition IsRobotInRightPoseForAuto();
+    // void UpdateDisabledLed(InPosition in_position);
 
   private:
     void ConfigureBindings();
@@ -128,19 +128,27 @@ class RobotContainer : public frc2::SubsystemBase {
     LeftHook m_LeftHook;
     RightHook m_RightHook;
     Led m_Led;
+    frc::SendableChooser<std::string> m_StartingPlaceChooser;
+    frc::SendableChooser<std::string> m_AutoChooser;
     frc2::CommandPtr pathfindingAmpCommand{frc2::RunCommand([]() {})};
     frc2::CommandPtr pathfindingStageCommand{frc2::RunCommand([]() {})};
 
-    std::string currentAutonomous{"source_2_notes"};
+    // std::string currentAutonomous{"source_2_notes"};
 
     frc2::CommandPtr shootAmp{
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
                   &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
-                  frc::Preferences::GetDouble("angleShooterAmp"), ScoringPositions::amp)
+                  frc::Preferences::GetDouble("angleShooterAmp"), false, ScoringPositions::amp)
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)};
 
     frc2::CommandPtr barreFinalTrap{
         BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
                       frc::Preferences::GetDouble("k2eJointStartPosition"))
-            .ToPtr()};
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelSelf)};
+
+    frc2::CommandPtr shootTrap{
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                  &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
+                  frc::Preferences::GetDouble("angleShooterTrap"), false, ScoringPositions::trap)
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)};
 };

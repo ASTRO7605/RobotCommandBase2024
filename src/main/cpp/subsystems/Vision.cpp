@@ -108,6 +108,11 @@ std::optional<PoseMeasurement> Vision::GetRobotPoseEstimate() {
 
     PoseMeasurement return_val{poseEstimate->estimatedPose, poseEstimate->timestamp,
                                units::meter_t{target_distance}, target_ambiguity};
+    if (std::isnan(return_val.pose.X().value()) || std::isnan(return_val.pose.Y().value()) ||
+        std::isnan(return_val.pose.Z().value()) ||
+        std::isnan(return_val.pose.Rotation().ToRotation2d().Degrees().value())) {
+        return {};
+    }
     return return_val;
 }
 

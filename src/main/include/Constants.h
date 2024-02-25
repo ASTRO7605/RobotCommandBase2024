@@ -118,9 +118,9 @@ enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
 constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
-constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.05};
-constexpr std::array<double, 3> kVisionStdDevsPerMeterSquaredBase{0.2, 0.2, 0.95};
-constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeterSqared{0.02, 0.02, 0.02};
+constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.95};
+constexpr std::array<double, 3> kVisionStdDevsPerMeterBase{0.4, 0.4, 0.95};
+constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeter{0.02, 0.02, 0.02};
 constexpr frc::Translation2d blueSpeakerPoseMeters =
     frc::Translation2d{units::inch_t{-1.5}, units::inch_t{218.42}};
 constexpr frc::Translation2d redSpeakerPoseMeters =
@@ -195,7 +195,7 @@ constexpr double kVitesseAngle = 2000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
 constexpr double angleThreshold = 7.5;      // dixieme de degre
-constexpr double kMaxAF = 0.0445;
+constexpr double kMaxAF = 0 /*.0445*/;
 constexpr double FDegToRad = std::numbers::pi / 180;
 constexpr double kPeakCurrentLimit = 20;   // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
@@ -249,7 +249,7 @@ constexpr int capteurID = 0;
 constexpr double kVoltageCompensation = 10; // volts
 constexpr double kCurrentLimit = 50;        // amperes
 constexpr double kVoltageIntakeShot = 10;   // volts
-constexpr double kVoltageIntakeCommand = 4;
+constexpr double kVoltageIntakeCommand = 6.5;
 } // namespace IntakeConstant
 
 namespace BarreConstant {
@@ -341,10 +341,10 @@ constexpr double kVitesseRetractionHooks = 100;      // 1/10 inch per second
 constexpr double kAccelerationRetractionHooks = 100; // 1/10 inch per second squared
 constexpr double kPositionInitReset = 0;
 constexpr double kPositionAfterInit = 10;
-constexpr double kForwardSoftLimit = 220;
-constexpr double kPositionRetracted = -25;
+constexpr double kForwardSoftLimit = 182.5;
+constexpr double kPositionRetracted = -15;
 constexpr double kPositionExtended = 210;
-constexpr double kPositionExtendedTrap = 180;
+constexpr double kPositionExtendedTrap = 175;
 } // namespace ClimberConstant
 
 namespace LedConstants {

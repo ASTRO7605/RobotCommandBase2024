@@ -96,8 +96,8 @@ void Robot::DisabledInit() {
 }
 
 void Robot::DisabledPeriodic() {
-    auto status = m_Container.IsRobotInRightPoseForAuto();
-    m_Container.UpdateDisabledLed(status);
+    // auto status = m_Container.IsRobotInRightPoseForAuto();
+    // m_Container.UpdateDisabledLed(status);
 }
 
 /**

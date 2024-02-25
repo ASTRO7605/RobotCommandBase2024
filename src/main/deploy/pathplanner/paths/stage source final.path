@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.384654461616616,
-        "y": 4.967019010961099
+        "x": 4.38,
+        "y": 3.22
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.404388347242215,
-        "y": 4.9314980168394005
+        "x": 4.400317278762657,
+        "y": 3.2551905590884616
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Stage Source Backup"
     },
     {
       "anchor": {
         "x": 4.47,
-        "y": 4.83
+        "y": 3.36
       },
       "prevControl": {
-        "x": 4.478335124366539,
-        "y": 4.822030245596165
+        "x": 4.464233907660661,
+        "y": 3.350012835107132
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.0,
+    "rotation": 60.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Stage source side",
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 60.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

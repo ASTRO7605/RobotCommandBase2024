@@ -279,21 +279,18 @@ void Base::SetRobotPoseVisionEstimateLeft() {
         estimate->ambiguity = 0.01;
     }
 
-    auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeterSqared;
-    // auto dst_sq = estimate->distance.value() * estimate->distance.value();
-    // std_devs[0] *= dst_sq; // scale based on distance
-    // std_devs[1] *= dst_sq;
-    std_devs[0] = estimate->ambiguity * std_devs[0] +
-                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[0];
-    std_devs[1] = estimate->ambiguity * std_devs[1] +
-                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[1];
-    std_devs[2] = estimate->ambiguity * std_devs[2] +
-                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[2];
+    auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeter;
+    std_devs[0] =
+        estimate->ambiguity * std_devs[0] + PoseEstimationConstant::kVisionStdDevsPerMeterBase[0];
+    std_devs[1] =
+        estimate->ambiguity * std_devs[1] + PoseEstimationConstant::kVisionStdDevsPerMeterBase[1];
+    std_devs[2] =
+        estimate->ambiguity * std_devs[2] + PoseEstimationConstant::kVisionStdDevsPerMeterBase[2];
 
     auto dst = estimate->distance.value();
-    std_devs[0] *= dst * dst; // scale based on distance
-    std_devs[1] *= dst * dst;
-    std_devs[2] *= dst * dst;
+    std_devs[0] *= dst; // scale based on distance
+    std_devs[1] *= dst;
+    std_devs[2] *= dst;
 
     frc::SmartDashboard::PutNumber("april_distance_Left", estimate->distance.value());
 
@@ -322,18 +319,18 @@ void Base::SetRobotPoseVisionEstimateRight() {
         estimate->ambiguity = 0.01;
     }
 
-    auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeterSqared;
-    std_devs[0] = estimate->ambiguity * std_devs[0] +
-                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[0];
-    std_devs[1] = estimate->ambiguity * std_devs[1] +
-                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[1];
-    std_devs[2] = estimate->ambiguity * std_devs[2] +
-                  PoseEstimationConstant::kVisionStdDevsPerMeterSquaredBase[2];
+    auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeter;
+    std_devs[0] =
+        estimate->ambiguity * std_devs[0] + PoseEstimationConstant::kVisionStdDevsPerMeterBase[0];
+    std_devs[1] =
+        estimate->ambiguity * std_devs[1] + PoseEstimationConstant::kVisionStdDevsPerMeterBase[1];
+    std_devs[2] =
+        estimate->ambiguity * std_devs[2] + PoseEstimationConstant::kVisionStdDevsPerMeterBase[2];
 
     auto dst = estimate->distance.value();
-    std_devs[0] *= dst * dst; // scale based on distance^2
-    std_devs[1] *= dst * dst;
-    std_devs[2] *= dst * dst;
+    std_devs[0] *= dst; // scale based on distance
+    std_devs[1] *= dst;
+    std_devs[2] *= dst;
 
     frc::SmartDashboard::PutNumber("april_distance_Right", estimate->distance.value());
 
@@ -420,7 +417,7 @@ double Base::GetRotationPIDError() { return pidControllerThetaSpeaker.GetPositio
 
 int Base::GetLeftCameraAprilTagID() { return m_VisionLeft.GetAprilTagIDInView(); }
 
-int Base::GetRightCameraAprilTagID() { return m_VisionRight.GetLastAprilTagIdSeen(); }
+int Base::GetRightCameraAprilTagID() { return m_VisionRight.GetAprilTagIDInView(); }
 
 std::optional<frc::Pose2d> Base::GetAveragePoseFromCameras() {
     std::optional<PoseMeasurement> leftEstimate = m_VisionLeft.GetRobotPoseEstimate();
