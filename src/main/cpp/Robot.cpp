@@ -121,6 +121,7 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
+    m_Container.ResetRobotOffsetFromField();
     m_Container.SetLedForEnabled();
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
     if (m_autonomousCommand.get() != nullptr) {

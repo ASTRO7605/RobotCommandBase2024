@@ -120,7 +120,8 @@ namespace PoseEstimationConstant {
 constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
 constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.95};
 constexpr std::array<double, 3> kVisionStdDevsPerMeterBase{0.4, 0.4, 0.95};
-constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeter{0.02, 0.02, 0.02};
+constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeter{
+    20.0, 20.0, 100.0}; // ambiguity is very small, so this number is quite big.
 constexpr frc::Translation2d blueSpeakerPoseMeters =
     frc::Translation2d{units::inch_t{-1.5}, units::inch_t{218.42}};
 constexpr frc::Translation2d redSpeakerPoseMeters =
@@ -225,11 +226,11 @@ constexpr std::pair<units::meter_t, double> fourthDistanceShooterAngleCouple =
 constexpr std::pair<units::meter_t, double> fifthDistanceWheelSpeedsCouple =
     std::make_pair(2.52_m, 3000);
 constexpr std::pair<units::meter_t, double> fifthDistanceShooterAngleCouple =
-    std::make_pair(2.52_m, 445);
+    std::make_pair(2.52_m, 440);
 constexpr std::pair<units::meter_t, double> sixthDistanceWheelSpeedsCouple =
     std::make_pair(2.81_m, 3000);
 constexpr std::pair<units::meter_t, double> sixthDistanceShooterAngleCouple =
-    std::make_pair(2.81_m, 425);
+    std::make_pair(2.81_m, 420);
 constexpr std::pair<units::meter_t, double> seventhDistanceWheelSpeedsCouple =
     std::make_pair(3.11_m, 3250);
 constexpr std::pair<units::meter_t, double> seventhDistanceShooterAngleCouple =

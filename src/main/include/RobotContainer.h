@@ -110,6 +110,8 @@ class RobotContainer : public frc2::SubsystemBase {
     void SetLedForDisabled() { m_Led.SetAnimation(LedConstants::Animation::ALLIANCE); };
     void SetLedForEnabled() { m_Led.SetAnimation(LedConstants::Animation::SPLIT); };
 
+    void ResetRobotOffsetFromField();
+
     // InPosition IsRobotInRightPoseForAuto();
     // void UpdateDisabledLed(InPosition in_position);
 

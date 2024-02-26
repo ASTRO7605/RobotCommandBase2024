@@ -74,6 +74,7 @@ RobotContainer::RobotContainer()
 
     m_AutoChooser.SetDefaultOption("2 notes", "2_notes");
     m_AutoChooser.AddOption("3 notes", "3_notes");
+    m_AutoChooser.AddOption("4 notes", "4_notes");
 
     frc::SmartDashboard::PutData("startingPlaceChooser", &m_StartingPlaceChooser);
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
@@ -404,3 +405,5 @@ void RobotContainer::ChooseCorrectStageCommand() {
 //     m_Led.SetIsInStartingPositionXY(in_position.correct_xy);
 //     m_Led.SetIsInStartingPositionAngle(in_position.correct_angle);
 // }
+
+void RobotContainer::ResetRobotOffsetFromField() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }

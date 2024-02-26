@@ -24,9 +24,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "amp_simple_2"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "start intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "amp_simple_2"
+                }
+              }
+            ]
           }
         },
         {

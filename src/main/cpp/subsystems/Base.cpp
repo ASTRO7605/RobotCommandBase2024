@@ -293,6 +293,7 @@ void Base::SetRobotPoseVisionEstimateLeft() {
     std_devs[2] *= dst;
 
     frc::SmartDashboard::PutNumber("april_distance_Left", estimate->distance.value());
+    frc::SmartDashboard::PutNumber("ambiguity_Left", estimate->ambiguity);
 
     m_PoseEstimator.AddVisionMeasurement(measurement2d, (estimate->timestamp), std_devs);
 
@@ -333,6 +334,7 @@ void Base::SetRobotPoseVisionEstimateRight() {
     std_devs[2] *= dst;
 
     frc::SmartDashboard::PutNumber("april_distance_Right", estimate->distance.value());
+    frc::SmartDashboard::PutNumber("ambiguity_Right", estimate->ambiguity);
 
     m_PoseEstimator.AddVisionMeasurement(measurement2d, (estimate->timestamp), std_devs);
 
