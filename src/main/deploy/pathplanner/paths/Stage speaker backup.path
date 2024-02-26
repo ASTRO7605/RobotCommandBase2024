@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.52,
+        "y": 4.74
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.494999999999999,
+        "y": 4.783301270189222
+      },
+      "isLocked": false,
+      "linkedName": "Stage Speaker Approach"
+    },
+    {
+      "anchor": {
+        "x": 4.384654461616616,
+        "y": 4.967019010961099
+      },
+      "prevControl": {
+        "x": 4.409654461616617,
+        "y": 4.9237177407718775
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Stage Speaker Backup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "barre intermediaire trap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 0.5,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 540.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Stage speaker side",
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

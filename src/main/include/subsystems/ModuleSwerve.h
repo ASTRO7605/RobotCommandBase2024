@@ -11,6 +11,7 @@
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/PrintCommand.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxPIDController.h>
@@ -44,4 +45,6 @@ class ModuleSwerve : public frc2::SubsystemBase {
     rev::SparkPIDController m_DrivingPIDController;
 
     frc::SwerveModuleState m_DesiredState;
+
+    bool hasEncoderBeenSeeded;
 };

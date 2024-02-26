@@ -1,0 +1,98 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.7194272206481696,
+        "y": 6.849844384109778
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.615337557461869,
+        "y": 6.833066609012415
+      },
+      "isLocked": false,
+      "linkedName": "amp_2"
+    },
+    {
+      "anchor": {
+        "x": 2.75,
+        "y": 5.866106213553161
+      },
+      "prevControl": {
+        "x": 2.606442565570464,
+        "y": 6.067391846893659
+      },
+      "nextControl": {
+        "x": 2.7947726340970878,
+        "y": 5.803329332325333
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.873472595956752,
+        "y": 5.284019493619764
+      },
+      "prevControl": {
+        "x": 2.8868525429358574,
+        "y": 5.310388620777241
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "amp_multi_3"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 99.89629154315966,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "start shooter wheels"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjust shooter angle"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 700.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 175.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "amp_paths",
+  "previewStartingState": {
+    "rotation": -155.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

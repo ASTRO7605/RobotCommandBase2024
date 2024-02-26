@@ -7,7 +7,16 @@ LeftHook::LeftHook()
       m_LeftHookMotorEncoder{
           m_LeftHookMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_LeftHookMotorPIDController{m_LeftHookMotor.GetPIDController()} {
-    m_LeftHookMotor.RestoreFactoryDefaults();
+    m_LeftHookMotor.SetCANTimeout(50);
+
+    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
+    // Prefer prime numbers
+
+    m_LeftHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 59);
+
+    m_LeftHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 23);
+
+    m_LeftHookMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 23);
 
     m_LeftHookMotor.SetInverted(false);
 
@@ -32,11 +41,13 @@ LeftHook::LeftHook()
     m_LeftHookMotor.SetSmartCurrentLimit(ClimberConstant::currentLimit);
 
     m_LeftHookMotor.SetSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward,
-                                 ClimberConstant::kForwardSoftLimit /
-                                     ClimberConstant::FConversionFactorPosition);
+                                 ClimberConstant::kForwardSoftLimit);
+    m_LeftHookMotor.EnableSoftLimit(rev::CANSparkBase::SoftLimitDirection::kForward, true);
 
     isInitDone = false;
     isInitScheduled = false;
+
+    // m_LeftHookMotor.BurnFlash();
 }
 
 void LeftHook::Periodic() {

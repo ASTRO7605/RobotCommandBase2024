@@ -1,11 +1,13 @@
 #include "commands/ShootNote.h"
 
 ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
-                     Intake *p_Intake, Barre *p_Barre, LeftHook *p_LeftHook, RightHook *p_RightHook,
-                     double wheelSpeeds, double shooterAngle, ScoringPositions scoringPlace)
+                     Intake *p_Intake, Barre *p_Barre,
+                     frc2::CommandXboxController *p_CoPilotController, double wheelSpeeds,
+                     double shooterAngle, bool useInterpolatedSpeeds, ScoringPositions scoringPlace)
     : m_pBase{p_Base}, m_pShooterAngle{p_ShooterAngle}, m_pShooterWheels{p_ShooterWheels},
-      m_pIntake{p_Intake}, m_pBarre{p_Barre}, m_pLeftHook{p_LeftHook}, m_pRightHook{p_RightHook},
-      targetSpeeds{wheelSpeeds}, finalShooterTargetAngle{shooterAngle}, scoringPlace{scoringPlace},
+      m_pIntake{p_Intake}, m_pBarre{p_Barre}, m_pCoPilotController{p_CoPilotController},
+      targetSpeeds{wheelSpeeds}, finalShooterTargetAngle{shooterAngle},
+      useInterpolatedSpeeds{useInterpolatedSpeeds}, scoringPlace{scoringPlace},
       m_RedescendreBarre{
           RedescendreBarre(m_pBarre, true, (scoringPlace == ScoringPositions::trap))} {
     AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake, m_pBase});
@@ -17,6 +19,14 @@ void ShootNote::Initialize() {
     } else {
         m_State = ShooterConstant::ShooterState::init;
     }
+    if (useInterpolatedSpeeds) {
+        targetSpeeds =
+            m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
+        finalShooterTargetAngle =
+            m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
+    }
+    frc::SmartDashboard::PutNumber("interpolatedAngle", finalShooterTargetAngle);
+    frc::SmartDashboard::PutNumber("interpolatedSpeed", targetSpeeds);
 }
 
 void ShootNote::Execute() {
@@ -31,24 +41,23 @@ void ShootNote::Execute() {
             // }
             currentShooterTargetAngle = finalShooterTargetAngle;
             m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
+            m_pBase->SetWheelsInXFormation();
         } else {
             if (scoringPlace == ScoringPositions::amp) {
                 targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleAmp");
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpApproach");
+                m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
             } else if (scoringPlace == ScoringPositions::trap) {
                 targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleTrapFinal");
-                targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointStartPosition");
+                targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapApproach");
+                m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
             }
             currentShooterTargetAngle = finalShooterTargetAngle;
-            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
         }
-        // m_pBase->SetWheelsInXFormation();
         areWheelsAtRightSpeed = false;
         isShooterAngledRight = false;
         isPremierJointAngledRight = false;
         isDeuxiemeJointAngledRight = false;
-        isLeftHookAtRightPose = false;
-        isRightHookAtRightPose = false;
         readyToShoot = false;
         timer.Stop();
         timer.Reset();
@@ -68,6 +77,9 @@ void ShootNote::Execute() {
                 readyToShoot = true;
             }
         } else if (scoringPlace == ScoringPositions::amp) {
+            targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleAmp");
+            targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpApproach");
+            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
             if (m_pBarre->Is1erJointAtTargetAngle(targetPremierJoint)) {
                 isPremierJointAngledRight = true;
             }
@@ -83,28 +95,27 @@ void ShootNote::Execute() {
                 readyToShoot = true;
             }
         } else if (scoringPlace == ScoringPositions::trap) {
+            targetPremierJoint = frc::Preferences::GetDouble("k1erJointAngleTrapFinal");
+            targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapApproach");
+            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
             if (m_pShooterWheels->AreWheelsDoneAccelerating(
-                    targetSpeeds, false)) { // did wheels reach their target
+                    targetSpeeds, true)) { // did wheels reach their target
                 areWheelsAtRightSpeed = true;
             }
-            if (m_pLeftHook->IsLeftHookAtTargetPosition(ClimberConstant::kPositionRetracted)) {
-                isLeftHookAtRightPose = true;
+            if (m_pBarre->Is2eJointAtTargetAngle(targetDeuxiemeJoint)) {
+                isDeuxiemeJointAngledRight = true;
             }
-            if (m_pRightHook->IsRightHookAtTargetPosition(ClimberConstant::kPositionRetracted)) {
-                isRightHookAtRightPose = true;
-            }
-            if (isShooterAngledRight && areWheelsAtRightSpeed &&
-                isLeftHookAtRightPose && isRightHookAtRightPose) {
+            if (isShooterAngledRight && areWheelsAtRightSpeed && isDeuxiemeJointAngledRight) {
                 readyToShoot = true;
             }
         }
         if (readyToShoot) {
-            if (scoringPlace == ScoringPositions::trap) {
-                targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrap");
-                m_State = ShooterConstant::ShooterState::waitingForDeuxiemeJointTrap;
-            } else {
-                m_State = ShooterConstant::ShooterState::moveNoteInShooter;
-            }
+            // if (scoringPlace == ScoringPositions::trap) {
+            // targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrap");
+            // m_State = ShooterConstant::ShooterState::waitingForDeuxiemeJointTrap;
+            // } else {
+            m_State = ShooterConstant::ShooterState::moveNoteInShooter;
+            // }
         }
         break;
     case (ShooterConstant::ShooterState::waitingForDeuxiemeJointTrap):
@@ -114,15 +125,17 @@ void ShootNote::Execute() {
         break;
     case (ShooterConstant::ShooterState::moveNoteInShooter):
         m_pIntake->SetIntake(true, false, true);
-        if (scoringPlace == ScoringPositions::speaker) { // to do the flick
-            currentShooterTargetAngle = finalShooterTargetAngle;
-        }
+        // if (scoringPlace == ScoringPositions::speaker) { // to do the flick
+        //     currentShooterTargetAngle = finalShooterTargetAngle;
+        // }
         m_State = ShooterConstant::ShooterState::waitingForNoteToEnter;
         break;
     case (ShooterConstant::ShooterState::waitingForNoteToEnter):
         if (m_pShooterWheels->IsObjectInShooter()) {
             if (scoringPlace == ScoringPositions::amp) {
                 targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleAmpFinal");
+            } else if (scoringPlace == ScoringPositions::trap) {
+                targetDeuxiemeJoint = frc::Preferences::GetDouble("k2eJointAngleTrapFinal");
             }
             isDeuxiemeJointAngledRight = false;
             m_State = ShooterConstant::ShooterState::waitingForNoteToExit;
@@ -152,8 +165,10 @@ void ShootNote::Execute() {
     frc::SmartDashboard::PutBoolean("isShooterAngledRight", isShooterAngledRight);
     frc::SmartDashboard::PutBoolean("isPremierJointAngledRight", isPremierJointAngledRight);
     frc::SmartDashboard::PutBoolean("isDeuxiemeJointAngledRight", isDeuxiemeJointAngledRight);
-    frc::SmartDashboard::PutBoolean("isLeftHookAtRightPose", isLeftHookAtRightPose);
-    frc::SmartDashboard::PutBoolean("isRightHookAtRightPose", isRightHookAtRightPose);
+
+    if (m_pCoPilotController->GetStartButton() && (scoringPlace == ScoringPositions::speaker)) {
+        m_State = ShooterConstant::ShooterState::complete;
+    }
 
     if (m_State != ShooterConstant::ShooterState::noNote) {
         m_pShooterAngle->SetShooterAngle(currentShooterTargetAngle); // to update kAF continuously
@@ -165,8 +180,8 @@ void ShootNote::Execute() {
 }
 
 bool ShootNote::IsFinished() {
-    if (m_State == ShooterConstant::ShooterState::complete ||
-        m_State == ShooterConstant::ShooterState::noNote) {
+    if ((m_State == ShooterConstant::ShooterState::complete ||
+         m_State == ShooterConstant::ShooterState::noNote)) {
         return true;
     }
     return false;

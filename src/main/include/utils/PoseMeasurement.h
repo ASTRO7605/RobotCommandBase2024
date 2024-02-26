@@ -9,4 +9,6 @@ struct PoseMeasurement {
     units::millisecond_t timestamp;
 
     units::meter_t distance;
+
+    double ambiguity;
 };

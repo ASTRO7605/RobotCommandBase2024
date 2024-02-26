@@ -1,14 +1,21 @@
 {
-  "robotWidth": 0.94,
+  "robotWidth": 0.9652,
   "robotLength": 0.86,
   "holonomicMode": true,
   "pathFolders": [
-    "Auto"
+    "Stage middle side",
+    "Stage source side",
+    "Stage speaker side",
+    "amp_paths",
+    "middle_paths",
+    "source_paths"
   ],
-  "autoFolders": [],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
-  "defaultMaxAngVel": 540.0,
-  "defaultMaxAngAccel": 720.0,
-  "maxModuleSpeed": 4.5
+  "autoFolders": [
+    "Stage"
+  ],
+  "defaultMaxVel": 3.5,
+  "defaultMaxAccel": 7.5,
+  "defaultMaxAngVel": 520.0,
+  "defaultMaxAngAccel": 1000.0,
+  "maxModuleSpeed": 4.25
 }

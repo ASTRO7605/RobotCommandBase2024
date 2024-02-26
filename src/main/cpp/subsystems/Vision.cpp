@@ -32,6 +32,7 @@ void Vision::Periodic() {
     isLatestMultiResultValid = false;
     isLatestSingleResultValid = false;
     if (camera->GetLatestResult().HasTargets()) {
+        lastAprilTagSeen = camera->GetLatestResult().GetBestTarget().GetFiducialId();
         latestMultiResult = camera->GetLatestResult().MultiTagResult();
         latestSingleResult = camera->GetLatestResult().GetBestTarget();
         if (camera->GetLatestResult().MultiTagResult().result.isPresent) {
@@ -89,8 +90,6 @@ bool Vision::SeesValidTarget() { return (isLatestMultiResultValid || isLatestSin
 
 std::optional<PoseMeasurement> Vision::GetRobotPoseEstimate() {
     auto poseEstimate = m_PhotonPoseEstimator.Update();
-    frc::SmartDashboard::PutBoolean("photonvision pose estimate has value",
-                                    poseEstimate.has_value());
     if (!poseEstimate.has_value())
         return {};
 
@@ -98,24 +97,27 @@ std::optional<PoseMeasurement> Vision::GetRobotPoseEstimate() {
         target_distance = GetAprilTagDistanceMeters(latestMultiResult.result.best.X().value(),
                                                     latestMultiResult.result.best.Y().value(),
                                                     latestMultiResult.result.best.Z().value());
+        target_ambiguity = latestMultiResult.result.ambiguity;
     } else {
         target_distance =
             GetAprilTagDistanceMeters(latestSingleResult.bestCameraToTarget.X().value(),
                                       latestSingleResult.bestCameraToTarget.Y().value(),
                                       latestSingleResult.bestCameraToTarget.Z().value());
+        target_ambiguity = latestSingleResult.poseAmbiguity;
     }
-    frc::SmartDashboard::PutNumber("Photonvision estimated pose X",
-                                   poseEstimate->estimatedPose.X().value());
-    frc::SmartDashboard::PutNumber("Photonvision estimated pose Y",
-                                   poseEstimate->estimatedPose.Y().value());
-    frc::SmartDashboard::PutNumber("Photonvision estimated pose Z",
-                                   poseEstimate->estimatedPose.Z().value());
 
     PoseMeasurement return_val{poseEstimate->estimatedPose, poseEstimate->timestamp,
-                               units::meter_t{target_distance}};
+                               units::meter_t{target_distance}, target_ambiguity};
+    if (std::isnan(return_val.pose.X().value()) || std::isnan(return_val.pose.Y().value()) ||
+        std::isnan(return_val.pose.Z().value()) ||
+        std::isnan(return_val.pose.Rotation().ToRotation2d().Degrees().value())) {
+        return {};
+    }
     return return_val;
 }
 
 double Vision::GetAprilTagDistanceMeters(double XDistance, double YDistance, double ZDistance) {
     return std::sqrt(XDistance * XDistance + YDistance * YDistance + ZDistance * ZDistance);
 }
+
+int Vision::GetAprilTagIDInView() { return lastAprilTagSeen; }

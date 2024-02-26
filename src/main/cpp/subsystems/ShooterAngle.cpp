@@ -10,8 +10,6 @@ double computekAF(double angle) {
 
 ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
 
-    m_MoteurAngle.ConfigFactoryDefault();
-
     m_MoteurAngle.SetInverted(false);
 
     m_MoteurAngle.SetNeutralMode(ctre::phoenix::motorcontrol::NeutralMode::Brake);
@@ -21,9 +19,9 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
 
     m_MoteurAngle.SetSensorPhase(false);
 
-    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 10,
+    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_13_Base_PIDF0, 101,
                                        ShooterConstant::kTimeoutMs);
-    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 10,
+    m_MoteurAngle.SetStatusFramePeriod(StatusFrameEnhanced::Status_10_MotionMagic, 101,
                                        ShooterConstant::kTimeoutMs);
 
     SeedEncoder();
@@ -68,6 +66,12 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.EnableCurrentLimit(true);
 
     isShooterAtInitPose = false;
+
+    for (auto couple : ShooterConstant::shooterAngleAccordingToDistance) {
+        interpolatingMapShooterAngle.insert(couple.first.value(), couple.second);
+    }
+
+    m_MoteurAngle.NeutralOutput();
 }
 
 void ShooterAngle::Periodic() {
@@ -128,10 +132,12 @@ void ShooterAngle::SeedEncoder() {
     m_MoteurAngle.SetSelectedSensorPosition(relativeEncoderPosition);
 }
 
-bool ShooterAngle::IsShooterAngleAtInitPose() {
-    return isShooterAtInitPose;
+bool ShooterAngle::IsShooterAngleAtInitPose() { return isShooterAtInitPose; }
+
+void ShooterAngle::SetShooterAngleAtInitPoseFlag() { isShooterAtInitPose = true; }
+
+double ShooterAngle::GetInterpolatedShooterAngle(double distanceMeters) {
+    return interpolatingMapShooterAngle[distanceMeters];
 }
 
-void ShooterAngle::SetShooterAngleAtInitPoseFlag() {
-    isShooterAtInitPose = true;
-}
+void ShooterAngle::SetMotorNeutral() { m_MoteurAngle.NeutralOutput(); }

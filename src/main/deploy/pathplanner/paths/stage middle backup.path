@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.617458261176751,
+        "y": 4.112543442270654
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.667458261176751,
+        "y": 4.112543442270654
+      },
+      "isLocked": false,
+      "linkedName": "Stage Middle Approach"
+    },
+    {
+      "anchor": {
+        "x": 5.89,
+        "y": 4.11
+      },
+      "prevControl": {
+        "x": 5.84,
+        "y": 4.11
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Stage Middle Backup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "barre intermediaire trap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 0.5,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 540.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Stage middle side",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

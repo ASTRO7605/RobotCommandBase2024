@@ -15,8 +15,15 @@ ShooterWheels::ShooterWheels()
 
     m_capteurInterieurShooter.reset(new frc::DigitalInput(ShooterConstant::capteurID));
 
-    m_LeftFlywheelMotor.RestoreFactoryDefaults();
-    m_RightFlywheelMotor.RestoreFactoryDefaults();
+    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
+    m_LeftFlywheelMotor.SetCANTimeout(50);
+    m_RightFlywheelMotor.SetCANTimeout(50);
+
+    m_LeftFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 50);
+    m_RightFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 50);
+
+    m_LeftFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 50);
+    m_RightFlywheelMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 50);
 
     m_LeftFlywheelMotor.SetInverted(false);
     m_RightFlywheelMotor.SetInverted(true);
@@ -32,15 +39,15 @@ ShooterWheels::ShooterWheels()
         ShooterConstant::FConversionFactorWheels);              // 42 counts per revolution
     m_RightFlywheelMotorEncoder.SetVelocityConversionFactor(1); // already in RPM
 
-    m_LeftFlywheelMotorPIDController.SetP(frc::Preferences::GetDouble("kPLeftFlywheel"));
-    m_LeftFlywheelMotorPIDController.SetI(frc::Preferences::GetDouble("kILeftFlywheel"));
-    m_LeftFlywheelMotorPIDController.SetD(frc::Preferences::GetDouble("kDLeftFlywheel"));
-    m_LeftFlywheelMotorPIDController.SetFF(frc::Preferences::GetDouble("kFFLeftFlywheel"));
+    m_LeftFlywheelMotorPIDController.SetP(ShooterConstant::kPLeftFlywheel);
+    m_LeftFlywheelMotorPIDController.SetI(ShooterConstant::kILeftFlywheel);
+    m_LeftFlywheelMotorPIDController.SetD(ShooterConstant::kDLeftFlywheel);
+    m_LeftFlywheelMotorPIDController.SetFF(ShooterConstant::kFFLeftFlywheel);
 
-    m_RightFlywheelMotorPIDController.SetP(frc::Preferences::GetDouble("kPRightFlywheel"));
-    m_RightFlywheelMotorPIDController.SetI(frc::Preferences::GetDouble("kIRightFlywheel"));
-    m_RightFlywheelMotorPIDController.SetD(frc::Preferences::GetDouble("kDRightFlywheel"));
-    m_RightFlywheelMotorPIDController.SetFF(frc::Preferences::GetDouble("kFFRightFlywheel"));
+    m_RightFlywheelMotorPIDController.SetP(ShooterConstant::kPRightFlywheel);
+    m_RightFlywheelMotorPIDController.SetI(ShooterConstant::kIRightFlywheel);
+    m_RightFlywheelMotorPIDController.SetD(ShooterConstant::kDRightFlywheel);
+    m_RightFlywheelMotorPIDController.SetFF(ShooterConstant::kFFRightFlywheel);
 
     m_LeftFlywheelMotor.EnableVoltageCompensation(ShooterConstant::kVoltageCompensation);
     m_RightFlywheelMotor.EnableVoltageCompensation(ShooterConstant::kVoltageCompensation);
@@ -49,6 +56,13 @@ ShooterWheels::ShooterWheels()
     m_RightFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels);
 
     areWheelsRunning = false;
+
+    for (auto couple : ShooterConstant::wheelSpeedsAccordingToDistance) {
+        interpolatingMapShooterWheels.insert(couple.first.value(), couple.second);
+    }
+
+    // m_LeftFlywheelMotor.BurnFlash();
+    // m_RightFlywheelMotor.BurnFlash();
 }
 
 void ShooterWheels::Periodic() {
@@ -103,4 +117,8 @@ bool ShooterWheels::AreWheelsDoneAccelerating(double target, bool spin) {
         return true;
     }
     return false;
+}
+
+double ShooterWheels::GetInterpolatedWheelSpeeds(double distanceMeters) {
+    return interpolatingMapShooterWheels[distanceMeters];
 }

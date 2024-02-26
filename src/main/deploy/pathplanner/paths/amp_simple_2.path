@@ -1,0 +1,76 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0449094707654805,
+        "y": 7.05683749829038
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.061907354995116,
+        "y": 6.555400032946106
+      },
+      "isLocked": false,
+      "linkedName": "amp_1"
+    },
+    {
+      "anchor": {
+        "x": 2.7194272206481696,
+        "y": 6.849844384109778
+      },
+      "prevControl": {
+        "x": 2.715061168648868,
+        "y": 6.849844384109778
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "amp_2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "start shooter wheels"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjust shooter angle"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 500.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -155.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "amp_paths",
+  "previewStartingState": {
+    "rotation": -145.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

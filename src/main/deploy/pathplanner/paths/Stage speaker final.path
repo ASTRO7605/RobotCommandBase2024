@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.412258842535703,
-        "y": 5.574556013976893
+        "x": 4.384654461616616,
+        "y": 4.967019010961099
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4122588425356937,
-        "y": 5.074556013976893
+        "x": 4.404971740379273,
+        "y": 4.931828451872638
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Stage Speaker Backup"
     },
     {
       "anchor": {
-        "x": 4.627843489921213,
-        "y": 6.36035578377463
+        "x": 4.47,
+        "y": 4.83
       },
       "prevControl": {
-        "x": 4.377843489921213,
-        "y": 7.860355783774642
+        "x": 4.464233907660661,
+        "y": 4.839987164892868
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,18 +32,21 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 0.25,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 540.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -60.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
-  "previewStartingState": null,
+  "folder": "Stage speaker side",
+  "previewStartingState": {
+    "rotation": -60.0,
+    "velocity": 0
+  },
   "useDefaultConstraints": false
 }

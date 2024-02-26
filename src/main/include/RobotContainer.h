@@ -5,7 +5,8 @@
 #pragma once
 
 #include "Constants.h"
-#include "commands/BarrePositionTest.h"
+#include "commands/AlignWithSpeaker.h"
+#include "commands/BarrePosition.h"
 #include "commands/DeuxiemeJointManual.h"
 #include "commands/InitLeftHook.h"
 #include "commands/InitRightHook.h"
@@ -19,11 +20,14 @@
 #include "commands/ShootNote.h"
 #include "commands/ShooterAngleManual.h"
 #include "commands/ShooterPosition.h"
+#include "commands/StartShooterWheels.h"
+#include "commands/StopShooterWheels.h"
 #include "commands/TestAmp.h"
 
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
+#include "subsystems/Led.h"
 #include "subsystems/LeftHook.h"
 #include "subsystems/RightHook.h"
 #include "subsystems/ShooterAngle.h"
@@ -33,6 +37,7 @@
 #include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/ScheduleCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <wpi/MemoryBuffer.h>
@@ -41,6 +46,7 @@
 #include <frc/trajectory/TrajectoryConfig.h>
 #include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc/trajectory/TrajectoryUtil.h>
+#include <frc2/command/SubsystemBase.h>
 
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
@@ -62,12 +68,19 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelDeadlineGroup.h>
+#include <frc2/command/RepeatCommand.h>
 #include <frc2/command/RunCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/button/CommandJoystick.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/Trigger.h>
+
+struct InPosition {
+    bool correct_xy;
+    bool correct_angle;
+};
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -76,9 +89,10 @@
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and trigger mappings) should be declared here.
  */
-class RobotContainer {
+class RobotContainer : public frc2::SubsystemBase {
   public:
     RobotContainer();
+    void Periodic() override;
     frc2::CommandJoystick m_ThrottleStick;
     frc2::CommandJoystick m_TurnStick;
     frc2::CommandXboxController m_CoPilotController;
@@ -91,10 +105,22 @@ class RobotContainer {
     bool IsInitHooksDone();
     void SetIdleModeSwerve(DriveConstant::IdleMode);
     void SetShooterAngleToInitPose();
+    void SetShooterAngleToNeutral();
+
+    void SetLedForDisabled() { m_Led.SetAnimation(LedConstants::Animation::ALLIANCE); };
+    void SetLedForEnabled() { m_Led.SetAnimation(LedConstants::Animation::SPLIT); };
+
+    void ResetRobotOffsetFromField();
+
+    // InPosition IsRobotInRightPoseForAuto();
+    // void UpdateDisabledLed(InPosition in_position);
 
   private:
     void ConfigureBindings();
-    void ConfigurePathfind();
+    void ConfigureAmpPathfind();
+    void ConfigureStagePathfind();
+    void ConfigureNamedCommands();
+    void ChooseCorrectStageCommand();
     // The robot's subsystems are defined here...
     Base m_Base;
     Barre m_Barre;
@@ -103,5 +129,28 @@ class RobotContainer {
     Intake m_Intake;
     LeftHook m_LeftHook;
     RightHook m_RightHook;
-    frc2::CommandPtr pathfindingCommand{frc2::RunCommand([]() {})};
+    Led m_Led;
+    frc::SendableChooser<std::string> m_StartingPlaceChooser;
+    frc::SendableChooser<std::string> m_AutoChooser;
+    frc2::CommandPtr pathfindingAmpCommand{frc2::RunCommand([]() {})};
+    frc2::CommandPtr pathfindingStageCommand{frc2::RunCommand([]() {})};
+
+    // std::string currentAutonomous{"source_2_notes"};
+
+    frc2::CommandPtr shootAmp{
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                  &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
+                  frc::Preferences::GetDouble("angleShooterAmp"), false, ScoringPositions::amp)
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)};
+
+    frc2::CommandPtr barreFinalTrap{
+        BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
+                      frc::Preferences::GetDouble("k2eJointStartPosition"))
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelSelf)};
+
+    frc2::CommandPtr shootTrap{
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                  &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
+                  frc::Preferences::GetDouble("angleShooterTrap"), false, ScoringPositions::trap)
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)};
 };

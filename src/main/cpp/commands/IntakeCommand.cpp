@@ -10,10 +10,7 @@ void IntakeCommand::Initialize() { m_pIntake->SetIntake(true, isReversed, false)
 void IntakeCommand::Execute() {}
 
 bool IntakeCommand::IsFinished() {
-    if (m_pIntake->IsObjectInIntake() && !isReversed) {
-        return true;
-    }
-    return false;
+    return (m_pIntake->IsObjectInIntake() && !isReversed);
 }
 
 void IntakeCommand::End(bool interrupted) { m_pIntake->SetIntake(false, false, false); }

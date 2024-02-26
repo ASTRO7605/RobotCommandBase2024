@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.9489849748930281,
-      "y": 6.551650026376976
-    },
-    "rotation": -120.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,13 +8,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1st, 2nd note"
+            "pathName": "approach amp"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "3rd note"
+            "name": "shoot amp"
           }
         }
       ]

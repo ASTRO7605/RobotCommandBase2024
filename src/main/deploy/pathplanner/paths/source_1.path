@@ -1,0 +1,76 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.64,
+        "y": 4.33
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.8856143896641258,
+        "y": 4.19582215710539
+      },
+      "isLocked": false,
+      "linkedName": "source_start"
+    },
+    {
+      "anchor": {
+        "x": 1.8,
+        "y": 4.02
+      },
+      "prevControl": {
+        "x": 1.3221390205694976,
+        "y": 4.089998004158633
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "source_1"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.05,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "start shooter wheels"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjust shooter angle"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 500.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 140.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "source_paths",
+  "previewStartingState": {
+    "rotation": 120.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

@@ -1,0 +1,70 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.505031163908485,
+        "y": 3.4356694867235906
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.530031163908485,
+        "y": 3.4789707569128128
+      },
+      "isLocked": false,
+      "linkedName": "Stage Source Approach"
+    },
+    {
+      "anchor": {
+        "x": 4.38,
+        "y": 3.22
+      },
+      "prevControl": {
+        "x": 4.3549999999999995,
+        "y": 3.1766987298107776
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Stage Source Backup"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.4,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "barre intermediaire trap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 0.5,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 540.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 60.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Stage source side",
+  "previewStartingState": {
+    "rotation": 60.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

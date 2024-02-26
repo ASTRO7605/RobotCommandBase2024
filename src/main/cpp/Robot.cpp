@@ -22,16 +22,6 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("angleShooterAmp", ShooterConstant::kAngleShooterAmp);
     frc::Preferences::InitDouble("angleShooterTrap", ShooterConstant::kAngleShooterTrap);
 
-    frc::Preferences::InitDouble("kPLeftFlywheel", ShooterConstant::kPLeftFlywheel);
-    frc::Preferences::InitDouble("kILeftFlywheel", ShooterConstant::kILeftFlywheel);
-    frc::Preferences::InitDouble("kDLeftFlywheel", ShooterConstant::kDLeftFlywheel);
-    frc::Preferences::InitDouble("kFFLeftFlywheel", ShooterConstant::kFFLeftFlywheel);
-
-    frc::Preferences::InitDouble("kPRightFlywheel", ShooterConstant::kPRightFlywheel);
-    frc::Preferences::InitDouble("kIRightFlywheel", ShooterConstant::kIRightFlywheel);
-    frc::Preferences::InitDouble("kDRightFlywheel", ShooterConstant::kDRightFlywheel);
-    frc::Preferences::InitDouble("kFFRightFlywheel", ShooterConstant::kFFRightFlywheel);
-
     frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
     frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);
     frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
@@ -40,26 +30,10 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kVitesseAngle", ShooterConstant::kVitesseAngle);
     frc::Preferences::InitDouble("kAccelerationAngle", ShooterConstant::kAccelerationAngle);
 
-    frc::Preferences::InitDouble("kPourcentageManualAngleLanceur",
-                                 ShooterConstant::kPercentOutputAngle);
-
-    frc::Preferences::InitDouble("kVoltageIntakeShot", IntakeConstant::kVoltageIntakeShot);
-    frc::Preferences::InitDouble("kVoltageIntakeCommand", IntakeConstant::kVoltageIntakeCommand);
-
-    frc::Preferences::InitDouble("kPMotion1erJoint", BarreConstant::kPMotion1erJoint);
-    frc::Preferences::InitDouble("kIMotion1erJoint", BarreConstant::kIMotion1erJoint);
-    frc::Preferences::InitDouble("kDMotion1erJoint", BarreConstant::kDMotion1erJoint);
-    frc::Preferences::InitDouble("kFMotion1erJoint", BarreConstant::kFMotion1erJoint);
-
     frc::Preferences::InitDouble("kPourcentageManual1erJoint",
                                  BarreConstant::kPourcentageManual1erJoint);
     frc::Preferences::InitDouble("kPourcentageManual2eJoint",
                                  BarreConstant::kPourcentageManual2eJoint);
-
-    frc::Preferences::InitDouble("kPMotion2eJoint", BarreConstant::kPMotion2eJoint);
-    frc::Preferences::InitDouble("kIMotion2eJoint", BarreConstant::kIMotion2eJoint);
-    frc::Preferences::InitDouble("kDMotion2eJoint", BarreConstant::kDMotion2eJoint);
-    frc::Preferences::InitDouble("kFMotion2eJoint", BarreConstant::kFMotion2eJoint);
 
     frc::Preferences::InitDouble("kVitesse1erJoint", BarreConstant::kVitesse1erJoint);
     frc::Preferences::InitDouble("kAcceleration1erJoint", BarreConstant::kAcceleration1erJoint);
@@ -69,9 +43,13 @@ void Robot::RobotInit() {
 
     frc::Preferences::InitDouble("k1erJointAngleTrapApproach",
                                  BarreConstant::k1erJointAngleTrapApproach);
+    frc::Preferences::InitDouble("k1erJointAngleTrapIntermediaire",
+                                 BarreConstant::k1erJointAngleTrapIntermediaire);
     frc::Preferences::InitDouble("k1erJointAngleTrapFinal", BarreConstant::k1erJointAngleTrapFinal);
     frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
-    frc::Preferences::InitDouble("k2eJointAngleTrap", BarreConstant::k2eJointAngleTrap);
+    frc::Preferences::InitDouble("k2eJointAngleTrapApproach",
+                                 BarreConstant::k2eJointAngleTrapApproach);
+    frc::Preferences::InitDouble("k2eJointAngleTrapFinal", BarreConstant::k2eJointAngleTrapFinal);
     frc::Preferences::InitDouble("k2eJointAngleAmpApproach",
                                  BarreConstant::k2eJointAngleAmpApproach);
     frc::Preferences::InitDouble("k2eJointAngleAmpFinal", BarreConstant::k2eJointAngleAmpFinal);
@@ -84,11 +62,20 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kFFHooksPosition", ClimberConstant::kFFHooksPosition);
 
     frc::Preferences::InitDouble("kPourcentageManualHooks", ClimberConstant::kPourcentageHooks);
-    frc::Preferences::InitDouble("kVitesseHooks", ClimberConstant::kVitesseHooks);
-    frc::Preferences::InitDouble("kAccelerationHooks", ClimberConstant::kAccelerationHooks);
+
+    frc::Preferences::InitDouble("kVitesseExtensionHooks", ClimberConstant::kVitesseExtensionHooks);
+    frc::Preferences::InitDouble("kAccelerationExtensionHooks",
+                                 ClimberConstant::kAccelerationExtensionHooks);
+    frc::Preferences::InitDouble("kVitesseRetractionHooks",
+                                 ClimberConstant::kVitesseRetractionHooks);
+    frc::Preferences::InitDouble("kAccelerationRetractionHooks",
+                                 ClimberConstant::kAccelerationRetractionHooks);
+
+    frc::Preferences::InitDouble("kPThetaRobot", DriveConstant::kPThetaRobot);
+    frc::Preferences::InitDouble("kIThetaRobot", DriveConstant::kIThetaRobot);
+    frc::Preferences::InitDouble("kDThetaRobot", DriveConstant::kDThetaRobot);
 
     hasInitHooksBeenScheduled = false;
-    hasShooterAngleBeenSet = false;
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,
    * teleoperated and test. * <p> This runs after the mode specific periodic
@@ -102,19 +89,28 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() { m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast); }
+void Robot::DisabledInit() {
+    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
+    m_Container.SetShooterAngleToNeutral();
+    m_Container.SetLedForDisabled();
+}
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+    // auto status = m_Container.IsRobotInRightPoseForAuto();
+    // m_Container.UpdateDisabledLed(status);
+}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+    m_autonomousCommand = m_Container.GetAutonomousCommand();
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();
     }
+    m_Container.SetLedForEnabled();
 }
 
 void Robot::AutonomousPeriodic() {
@@ -122,13 +118,11 @@ void Robot::AutonomousPeriodic() {
         m_Container.SetInitHooksScheduled();
         hasInitHooksBeenScheduled = true;
     }
-    if (!hasShooterAngleBeenSet) {
-        m_Container.SetShooterAngleToInitPose();
-        hasShooterAngleBeenSet = true;
-    }
 }
 
 void Robot::TeleopInit() {
+    m_Container.ResetRobotOffsetFromField();
+    m_Container.SetLedForEnabled();
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
@@ -142,10 +136,6 @@ void Robot::TeleopPeriodic() {
     if (!hasInitHooksBeenScheduled) {
         m_Container.SetInitHooksScheduled();
         hasInitHooksBeenScheduled = true;
-    }
-    if (!hasShooterAngleBeenSet) {
-        m_Container.SetShooterAngleToInitPose();
-        hasShooterAngleBeenSet = true;
     }
 }
 

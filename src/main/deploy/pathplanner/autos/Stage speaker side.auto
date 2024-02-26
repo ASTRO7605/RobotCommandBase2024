@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "stage speaker approach"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "stage speaker backup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "extend crochets trap"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "stage speaker final"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "retract crochets trap"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "barre final and shoot trap"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Stage",
+  "choreoAuto": false
+}

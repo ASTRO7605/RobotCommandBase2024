@@ -71,7 +71,7 @@ extern const frc::TrapezoidProfile<units::radians>::Constraints kThetaController
 constexpr double kVoltageCompensation = 10;             // volts
 constexpr double DegreesToRad = std::numbers::pi / 180; // degrees * conversion factor => rad
 constexpr int PowerDistributionHubID = 1;
-constexpr int FrontRightTurningID = 2;
+constexpr int FrontRightTurningID = 48;
 constexpr int FrontRightDrivingID = 3;
 constexpr int FrontRightCANcoderID = 4;
 constexpr int FrontLeftTurningID = 5;
@@ -83,24 +83,49 @@ constexpr int RearLeftCANcoderID = 10;
 constexpr int RearRightTurningID = 11;
 constexpr int RearRightDrivingID = 12;
 constexpr int RearRightCANcoderID = 13;
+
+constexpr double kPThetaRobot = 0;
+constexpr double kIThetaRobot = 0;
+constexpr double kDThetaRobot = 0;
+
+constexpr double kThresholdRobotAngle = 0.85;
+constexpr auto kThresholdTimer = 0.1_s;
+
+constexpr auto kThresholdInSpeakerRange = 3.35_m;
 } // namespace DriveConstant
 
 namespace VisionConstant {
 constexpr int Pipeline = 0; // only one pipeline (AprilTags)
-constexpr std::string_view TableNameFront = "limelight-front";
-constexpr std::string_view TableNameBack = "limelight-back";
-constexpr double ambiguityThreshold = 0.2;
-extern const frc::Transform3d frontCameraTransform;
-extern const frc::Transform3d backCameraTransform;
+constexpr std::string_view TableNameRight = "photonvision-a";
+constexpr std::string_view TableNameLeft = "photonvision-b";
+constexpr double ambiguityThreshold = 0.5;
+extern const frc::Transform3d rightCameraTransform;
+extern const frc::Transform3d leftCameraTransform;
+constexpr double kThresholdAutoLEDAngle = 1.0;
+constexpr auto kThresholdAutoLEDXY = 0.03_m;
+
+enum StageAprilTagIDs {
+    redSourceSide = 11,
+    redSpeakerSide = 12,
+    redMiddleSide = 13,
+    blueMiddleSide = 14,
+    blueSpeakerSide = 15,
+    blueSourceSide = 16
+};
 
 enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 } // namespace VisionConstant
 namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
-constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.001};
-constexpr std::array<double, 3> kVisionStdDevs{0.9, 0.9, 0.995};
-constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Front{2.0, 2.0, 0.999};
-constexpr std::array<double, 3> kVisionStdDevs_XYPerMeterSquared_Back{2.5, 2.5, 0.999};
+constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
+constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.95};
+constexpr std::array<double, 3> kVisionStdDevsPerMeterBase{0.4, 0.4, 0.95};
+constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeter{
+    20.0, 20.0, 100.0}; // ambiguity is very small, so this number is quite big.
+constexpr frc::Translation2d blueSpeakerPoseMeters =
+    frc::Translation2d{units::inch_t{-1.5}, units::inch_t{218.42}};
+constexpr frc::Translation2d redSpeakerPoseMeters =
+    frc::Translation2d{units::inch_t{652.73}, units::inch_t{218.42}};
 } // namespace PoseEstimationConstant
 
 namespace OIConstant {
@@ -139,7 +164,7 @@ constexpr int capteurID = 1;
 constexpr double absoluteEncoderOffset = -2078.12; // 1/10 degre
 constexpr double flywheelsSpeedSpeaker = 4500;     // RPM
 constexpr double flywheelsSpeedAmp = 550;          // RPM
-constexpr double flywheelsSpeedTrap = 0;           // RPM
+constexpr double flywheelsSpeedTrap = 1250;        // RPM
 constexpr double speedThreshold = 75;              // RPM
 constexpr auto timeThreshold = 0.2_s;
 constexpr double kPLeftFlywheel = 0.00025;
@@ -163,25 +188,59 @@ constexpr double kNominalOutputForward = 0;
 constexpr double kNominalOutputReverse = 0;
 constexpr double kPeakOutputForward = 1;
 constexpr double kPeakOutputReverse = -1;
-constexpr double kPPositionAngle = 8.75;
+constexpr double kPPositionAngle = 8.5;
 constexpr double kIPositionAngle = 0;
-constexpr double kDPositionAngle = 10.0;
-constexpr double kFPositionAngle = 4.5;
+constexpr double kDPositionAngle = 15.0;
+constexpr double kFPositionAngle = 4.25;
 constexpr double kVitesseAngle = 2000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
-constexpr double angleThreshold = 5;        // dixieme de degre
-constexpr double kMaxAF = 0.0445;
+constexpr double angleThreshold = 7.5;      // dixieme de degre
+constexpr double kMaxAF = 0 /*.0445*/;
 constexpr double FDegToRad = std::numbers::pi / 180;
-constexpr double kPeakCurrentLimit = 9;    // amperes
+constexpr double kPeakCurrentLimit = 20;   // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
-constexpr double kContinuousCurrent = 9;   // amperes
-constexpr double kForwardSoftLimit = 740;  // 1/10 degre
+constexpr double kContinuousCurrent = 20;  // amperes
+constexpr double kForwardSoftLimit = 765;  // 1/10 degre
 constexpr double kReverseSoftLimit = 200;  // 1/10 degre
 constexpr double kAngleShooterAmp = 600;
-constexpr double kAngleShooterTrap = 0;
+constexpr double kAngleShooterTrap = 730;
 constexpr double kIntermediateAngleShooter = 450;
 constexpr double kRPMDifferenceSpin = 500;
+constexpr std::pair<units::meter_t, double> firstDistanceWheelSpeedsCouple =
+    std::make_pair(1.35_m, 3000);
+constexpr std::pair<units::meter_t, double> firstDistanceShooterAngleCouple =
+    std::make_pair(1.35_m, 650);
+constexpr std::pair<units::meter_t, double> secondDistanceWheelSpeedsCouple =
+    std::make_pair(1.60_m, 3000);
+constexpr std::pair<units::meter_t, double> secondDistanceShooterAngleCouple =
+    std::make_pair(1.60_m, 600);
+constexpr std::pair<units::meter_t, double> thirdDistanceWheelSpeedsCouple =
+    std::make_pair(1.90_m, 3000);
+constexpr std::pair<units::meter_t, double> thirdDistanceShooterAngleCouple =
+    std::make_pair(1.90_m, 550);
+constexpr std::pair<units::meter_t, double> fourthDistanceWheelSpeedsCouple =
+    std::make_pair(2.20_m, 3000);
+constexpr std::pair<units::meter_t, double> fourthDistanceShooterAngleCouple =
+    std::make_pair(2.20_m, 490);
+constexpr std::pair<units::meter_t, double> fifthDistanceWheelSpeedsCouple =
+    std::make_pair(2.52_m, 3000);
+constexpr std::pair<units::meter_t, double> fifthDistanceShooterAngleCouple =
+    std::make_pair(2.52_m, 440);
+constexpr std::pair<units::meter_t, double> sixthDistanceWheelSpeedsCouple =
+    std::make_pair(2.81_m, 3000);
+constexpr std::pair<units::meter_t, double> sixthDistanceShooterAngleCouple =
+    std::make_pair(2.81_m, 420);
+constexpr std::pair<units::meter_t, double> seventhDistanceWheelSpeedsCouple =
+    std::make_pair(3.11_m, 3250);
+constexpr std::pair<units::meter_t, double> seventhDistanceShooterAngleCouple =
+    std::make_pair(3.11_m, 405);
+constexpr std::pair<units::meter_t, double> eighthDistanceWheelSpeedsCouple =
+    std::make_pair(3.40_m, 3500);
+constexpr std::pair<units::meter_t, double> eighthDistanceShooterAngleCouple =
+    std::make_pair(3.40_m, 390);
+extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance;
+extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
 } // namespace ShooterConstant
 
 namespace IntakeConstant {
@@ -190,14 +249,14 @@ constexpr int bottomMotorID = 15;
 constexpr int capteurID = 0;
 constexpr double kVoltageCompensation = 10; // volts
 constexpr double kCurrentLimit = 50;        // amperes
-constexpr double kVoltageIntakeShot = 9;    // volts
-constexpr double kVoltageIntakeCommand = 4;
+constexpr double kVoltageIntakeShot = 10;   // volts
+constexpr double kVoltageIntakeCommand = 6.5;
 } // namespace IntakeConstant
 
 namespace BarreConstant {
 constexpr int moteurPremierJointID = 19;
 constexpr int moteurDeuxiemeJointID = 20;
-constexpr int kTimeoutMs = 30;
+constexpr int kTimeoutMs = 50;
 constexpr double kNominalOutputForward = 0;
 constexpr double kNominalOutputReverse = 0;
 constexpr double kPeakOutputForward = 1;
@@ -230,7 +289,7 @@ constexpr double kDMotion2eJoint = 50;
 constexpr double kFMotion2eJoint = 0;
 constexpr double kVitesse1erJoint = 2750;
 constexpr double kAcceleration1erJoint = 12000;
-constexpr double kVitesse2eJoint = 6250;
+constexpr double kVitesse2eJoint = 6500;
 constexpr double kAcceleration2eJoint = 150000;
 constexpr double angleThreshold = 15;              // 1/10th degree
 constexpr double kForwardSoftLimit1erJoint = 1200; // 1/10 degre
@@ -240,9 +299,11 @@ constexpr double kReverseSoftLimit2eJoint = 100;   // 1/10 degre
 constexpr double kPourcentageManual1erJoint = 0.15;
 constexpr double kPourcentageManual2eJoint = 0.16;
 constexpr double k1erJointAngleTrapApproach = 350;
+constexpr double k1erJointAngleTrapIntermediaire = 900;
 constexpr double k1erJointAngleTrapFinal = 1110;
 constexpr double k1erJointAngleAmp = 1030;
-constexpr double k2eJointAngleTrap = 2700;
+constexpr double k2eJointAngleTrapApproach = 1800;
+constexpr double k2eJointAngleTrapFinal = 2700;
 constexpr double k2eJointAngleAmpApproach = 700;
 constexpr double k2eJointAngleAmpFinal = 1600;
 constexpr double k1erJointStartPosition = 80;
@@ -268,17 +329,59 @@ constexpr double currentLimit = 50;         // amperes,
 constexpr int positionPIDSlotID = 0;
 constexpr int velocityPIDSlotID = 1;
 constexpr double positionThreshold = 5; // 1/10 pouce
-constexpr double kPourcentageHooks = 0.075;
+constexpr double kPourcentageHooks = 0.25;
 constexpr double kPourcentageInitHooks = -0.075;
 constexpr double kThresholdMotorStopped = 1;
 constexpr auto kTimeDelayForInit = 0.1_s;
 constexpr double FConversionTenthInchToMeter = 0.00254;
 constexpr double FConversionTenthInchPerSecondToMeterPerSecond = 0.00254;
 constexpr double FConversionTenthInchPerSecondSquaredToMeterPerSecondSquared = 0.00254;
-constexpr double kVitesseHooks = 100;      // 1/10 inch per second
-constexpr double kAccelerationHooks = 100; // 1/10 inch per second squared
+constexpr double kVitesseExtensionHooks = 100;       // 1/10 inch per second
+constexpr double kAccelerationExtensionHooks = 100;  // 1/10 inch per second squared
+constexpr double kVitesseRetractionHooks = 100;      // 1/10 inch per second
+constexpr double kAccelerationRetractionHooks = 100; // 1/10 inch per second squared
 constexpr double kPositionInitReset = 0;
 constexpr double kPositionAfterInit = 10;
-constexpr double kForwardSoftLimit = 230;
-constexpr double kPositionRetracted = -10;
+constexpr double kForwardSoftLimit = 182.5;
+constexpr double kPositionRetracted = -15;
+constexpr double kPositionExtended = 210;
+constexpr double kPositionExtendedTrap = 175;
 } // namespace ClimberConstant
+
+namespace LedConstants {
+constexpr int kLedChannel = 9;
+constexpr int kNumLeds = 12;
+
+// moves by 1 LED each n 20-millis periods
+constexpr int kSweepPrescale = 6;
+
+// switches LEDs each n 20-millis periods
+constexpr int kAlternatePrescale = 15;
+
+constexpr int kNumSweepFullOnLeds = 8;
+
+// number of LEDs for 'in position' starting indicator
+constexpr int kNumIndicatorLeds = 2;
+
+// 8-bit R, G, B
+struct Color {
+    uint8_t red;
+    uint8_t grn;
+    uint8_t blu;
+};
+
+namespace Colors {
+constexpr Color Off{0, 0, 0};
+constexpr Color RedAlliance{255, 0, 0};
+constexpr Color BlueAlliance{0, 0, 255};
+constexpr Color NoteInIntake{255, 15, 0};
+constexpr Color RobotInRange{0, 255, 0};
+constexpr Color RobotInStartingPositionXY{0, 255, 0};
+constexpr Color RobotInStartingPositionAngle{255, 105, 180};
+} // namespace Colors
+
+enum Animation {
+    ALLIANCE,
+    SPLIT,
+};
+} // namespace LedConstants

@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.899561459607291,
-      "y": 5.550936522700434
-    },
-    "rotation": 180.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,42 +8,42 @@
         {
           "type": "path",
           "data": {
-            "pathName": "around_scene"
+            "pathName": "stage middle approach"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "around_scene"
+            "pathName": "stage middle backup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "extend crochets trap"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "around_scene"
+            "pathName": "stage middle final"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "around_scene"
+            "name": "retract crochets trap"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "around_scene"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "around_scene"
+            "name": "barre final and shoot trap"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Stage",
   "choreoAuto": false
 }

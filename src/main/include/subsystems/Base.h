@@ -24,16 +24,16 @@
 #include <frc2/command/SubsystemBase.h>
 
 #include <frc/DriverStation.h>
-#include <frc/smartdashboard/Field2d.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-
 #include <frc/SPI.h>
 #include <frc/Timer.h>
+#include <frc/controller/PIDController.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
+#include <frc/smartdashboard/Field2d.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <pathplanner/lib/auto/AutoBuilder.h>
 #include <pathplanner/lib/util/HolonomicPathFollowerConfig.h>
@@ -84,6 +84,11 @@ class Base : public frc2::SubsystemBase {
     void ResetGyroTeleopOffset();
 
     /**
+     * Realigne l'avant du field oriented sur l'orientation du robot avec PoseEstimator
+     */
+    void ResetGyroTeleopOffsetPoseEstimator();
+
+    /**
      * important to follow order: FrontRight, FrontLeft, RearLeft, RearRight
      */
     frc::SwerveDriveKinematics<4> kDriveKinematics{
@@ -98,14 +103,35 @@ class Base : public frc2::SubsystemBase {
     };
 
     /// @brief Add a pose estimate from front vision to pose estimator.
-    void SetRobotPoseVisionEstimateFront();
+    void SetRobotPoseVisionEstimateLeft();
 
     /// @brief Add a pose estimate from front vision to pose estimator.
-    void SetRobotPoseVisionEstimateBack();
+    void SetRobotPoseVisionEstimateRight();
+
+    bool IsRotationBeingControlled();
+
+    void SetRotationBeingControlledFlag(bool yesOrNo);
+
+    units::meter_t GetDistanceToSpeaker();
+
+    units::degree_t GetDesiredRotationToSpeaker();
+
+    units::degrees_per_second_t GetPIDControlledRotationSpeedToSpeaker();
+
+    bool IsRobotInRangeToShoot();
+
+    double GetRotationPIDError();
+
+    int GetLeftCameraAprilTagID();
+
+    int GetRightCameraAprilTagID();
+
+    std::optional<frc::Pose2d> GetAveragePoseFromCameras();
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
+    frc::PIDController pidControllerThetaSpeaker;
     frc::Timer m_TimerEncoder;
     AHRS m_Gyro{frc::SPI::Port::kMXP};
     ModuleSwerve m_FrontRightModule{DriveConstant::FrontRightTurningID,
@@ -127,6 +153,11 @@ class Base : public frc2::SubsystemBase {
     double m_CurrentTranslationDir = 0.0;
     double m_CurrentTranslationMag = 0.0;
     bool m_DrivingInFieldRelative;
+    bool isRotationBeingControlled;
+    frc::Translation2d currentColorSpeakerPose;
+
+    // garbage default value
+    frc::DriverStation::Alliance allianceColor = frc::DriverStation::Alliance::kRed;
 
     units::radian_t m_GyroOffset = 0_rad;
 
@@ -135,10 +166,10 @@ class Base : public frc2::SubsystemBase {
     double m_prevTime = wpi::Now() * 1e-6;
 
     // Used for SmartDashboard display of pose estimation.
-    // frc::Field2d m_VisionFieldFront;
-    // frc::Field2d m_VisionFieldBack;
+    frc::Field2d m_VisionFieldLeft;
+    frc::Field2d m_VisionFieldRight;
     frc::Field2d m_RobotField;
 
-    // Vision m_VisionFront{VisionConstant::TableNameFront, VisionConstant::frontCameraTransform};
-    // Vision m_VisionBack{VisionConstant::TableNameBack, VisionConstant::backCameraTransform};
+    Vision m_VisionLeft{VisionConstant::TableNameLeft, VisionConstant::leftCameraTransform};
+    Vision m_VisionRight{VisionConstant::TableNameRight, VisionConstant::rightCameraTransform};
 };

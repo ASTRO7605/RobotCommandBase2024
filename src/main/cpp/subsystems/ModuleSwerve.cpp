@@ -11,11 +11,21 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
                                          rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_DrivingEncoder{m_DrivingMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor)},
       m_TurningPIDController{m_TurningMotor.GetPIDController()},
-      m_DrivingPIDController{m_DrivingMotor.GetPIDController()},
-      m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()} {
+      m_DrivingPIDController{m_DrivingMotor.GetPIDController()} /*,
+       m_DesiredState{units::meters_per_second_t{0.0}, frc::Rotation2d()}*/
+{
 
-    m_TurningMotor.RestoreFactoryDefaults();
-    m_DrivingMotor.RestoreFactoryDefaults();
+    m_TurningMotor.SetCANTimeout(50);
+    m_DrivingMotor.SetCANTimeout(50);
+
+    // See https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces for docs
+    // Prefer prime numbers
+
+    m_TurningMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 47);
+    m_DrivingMotor.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 57);
+
+    m_TurningCANcoder.GetPosition().SetUpdateFrequency(20_Hz);
+    m_TurningCANcoder.OptimizeBusUtilization();
 
     m_TurningMotor.SetInverted(true);
     m_DrivingMotor.SetInverted(true);
@@ -61,18 +71,36 @@ ModuleSwerve::ModuleSwerve(int TurningMotorID, int DrivingMotorID, int CANcoderI
     m_TurningMotor.SetSmartCurrentLimit(DriveConstant::currentLimit);
 
     m_DrivingEncoder.SetPosition(0);
-    m_DesiredState.angle = frc::Rotation2d(
-        units::radian_t{m_TurningCANcoder.GetAbsolutePosition()
-                            .GetValue()}); // on dit aux swerves de garder leur position initiale
+    // m_DesiredState.angle = frc::Rotation2d(
+    //     units::radian_t{m_TurningCANcoder.GetAbsolutePosition()
+    //                         .GetValue()}); // on dit aux swerves de garder leur position initiale
+    hasEncoderBeenSeeded = false;
+
+    // m_DrivingMotor.BurnFlash();
+    // m_TurningMotor.BurnFlash();
 }
 
-void ModuleSwerve::Periodic() {}
-
-void ModuleSwerve::SeedSparkMaxEncoder() {
-    m_TurningSparkMaxEncoder.SetPosition(
-        units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}
-            .value()); // seed les spark max avec la valeur du CANcoder
+void ModuleSwerve::Periodic() {
+    if (!hasEncoderBeenSeeded) {
+        auto absoluteEncoderPose = m_TurningCANcoder.GetPosition().WaitForUpdate(1_s);
+        if (absoluteEncoderPose.GetStatus().IsOK()) {
+            if (m_TurningSparkMaxEncoder.SetPosition(
+                    units::radian_t{absoluteEncoderPose.GetValue()}.value()) ==
+                rev::REVLibError::kOk) {
+                hasEncoderBeenSeeded = true;
+            } else {
+                frc::SmartDashboard::PutString("debug", "sparkFailed");
+            }
+        } else {
+        }
+    }
 }
+
+// void ModuleSwerve::SeedSparkMaxEncoder() {
+//     m_TurningSparkMaxEncoder.SetPosition(
+//         units::radian_t{m_TurningCANcoder.GetAbsolutePosition().GetValue()}
+//             .value()); // seed les spark max avec la valeur du CANcoder
+// }
 
 frc::SwerveModuleState ModuleSwerve::GetState() {
     return {units::meters_per_second_t{m_DrivingEncoder.GetVelocity()},
@@ -98,7 +126,7 @@ void ModuleSwerve::SetDesiredState(frc::SwerveModuleState desiredState) {
     m_TurningPIDController.SetReference(optimizedDesiredState.angle.Radians().value(),
                                         rev::CANSparkMax::ControlType::kPosition);
 
-    m_DesiredState = desiredState;
+    /*m_DesiredState = desiredState;*/
 }
 
 void ModuleSwerve::ResetEncoders() { m_DrivingEncoder.SetPosition(0); }

@@ -4,14 +4,13 @@
 #include "subsystems/Barre.h"
 #include "subsystems/Base.h"
 #include "subsystems/Intake.h"
-#include "subsystems/LeftHook.h"
-#include "subsystems/RightHook.h"
 #include "subsystems/ShooterAngle.h"
 #include "subsystems/ShooterWheels.h"
 #include <frc/Timer.h>
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/button/CommandXboxController.h>
 
 class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
   private:
@@ -20,8 +19,7 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     ShooterWheels *m_pShooterWheels;
     Intake *m_pIntake;
     Barre *m_pBarre;
-    LeftHook *m_pLeftHook;
-    RightHook *m_pRightHook;
+    frc2::CommandXboxController *m_pCoPilotController;
     double targetSpeeds;
     double currentShooterTargetAngle;
     double finalShooterTargetAngle;
@@ -32,8 +30,7 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     bool isPremierJointAngledRight;
     bool isDeuxiemeJointAngledRight;
     bool readyToShoot;
-    bool isLeftHookAtRightPose;
-    bool isRightHookAtRightPose;
+    bool useInterpolatedSpeeds;
     frc::Timer timer;
     ShooterConstant::ShooterState m_State;
     ScoringPositions scoringPlace;
@@ -46,15 +43,13 @@ class ShootNote : public frc2::CommandHelper<frc2::Command, ShootNote> {
     /// @param p_ShooterWheels
     /// @param p_Intake
     /// @param p_Barre
-    /// @param p_LeftHook
-    /// @param p_RightHook
     /// @param wheelSpeeds
     /// @param shooterAngle
     /// @param scoringPlace
     explicit ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *p_ShooterWheels,
-                       Intake *p_Intake, Barre *p_Barre, LeftHook *p_LeftHook,
-                       RightHook *p_RightHook, double wheelSpeeds, double shooterAngle,
-                       ScoringPositions scoringPlace);
+                       Intake *p_Intake, Barre *p_Barre,
+                       frc2::CommandXboxController *p_CoPilotController, double wheelSpeeds,
+                       double shooterAngle, bool useInterpolatedSpeeds, ScoringPositions scoringPlace);
     void Initialize() override;
     void Execute() override;
     bool IsFinished() override;
