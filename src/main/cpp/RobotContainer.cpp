@@ -68,23 +68,20 @@ RobotContainer::RobotContainer()
         },
         {&m_ShooterAngle}));
 
-    m_StartingPlaceChooser.AddOption("Source", "source_");
-    m_StartingPlaceChooser.AddOption("Middle", "middle_");
-    m_StartingPlaceChooser.AddOption("Amp", "amp_");
+    m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
+    m_AutoChooser.AddOption("Amp 3 notes far", "amp_3_notes_far");
+    m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
-    m_AutoChooser.SetDefaultOption("2 notes", "2_notes");
-    m_AutoChooser.AddOption("3 notes", "3_notes");
-    m_AutoChooser.AddOption("4 notes", "4_notes");
-
-    frc::SmartDashboard::PutData("startingPlaceChooser", &m_StartingPlaceChooser);
+    m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
+    
+    m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
 }
 
 void RobotContainer::Periodic() {
     m_Led.SetNoteInIntake(m_Intake.IsObjectInIntake());
     m_Led.SetRobotInRange(m_Base.IsRobotInRangeToShoot());
-    frc::SmartDashboard::PutString("chosen auto", m_StartingPlaceChooser.GetSelected() +
-                                                      m_AutoChooser.GetSelected());
+    frc::SmartDashboard::PutString("chosen auto", m_AutoChooser.GetSelected());
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -226,8 +223,7 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    std::string currentAutonomous =
-        m_StartingPlaceChooser.GetSelected() + m_AutoChooser.GetSelected();
+    std::string currentAutonomous = m_AutoChooser.GetSelected();
     if (currentAutonomous != "") {
         return pathplanner::AutoBuilder::buildAuto(currentAutonomous);
     } else {

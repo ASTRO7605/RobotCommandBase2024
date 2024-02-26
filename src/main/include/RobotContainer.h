@@ -130,7 +130,6 @@ class RobotContainer : public frc2::SubsystemBase {
     LeftHook m_LeftHook;
     RightHook m_RightHook;
     Led m_Led;
-    frc::SendableChooser<std::string> m_StartingPlaceChooser;
     frc::SendableChooser<std::string> m_AutoChooser;
     frc2::CommandPtr pathfindingAmpCommand{frc2::RunCommand([]() {})};
     frc2::CommandPtr pathfindingStageCommand{frc2::RunCommand([]() {})};
