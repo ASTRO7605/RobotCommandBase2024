@@ -12,8 +12,6 @@ void Robot::RobotInit() {
     // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
     // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
-    frc::Preferences::InitDouble("flywheelSpeedsSpeakerRPM",
-                                 ShooterConstant::flywheelsSpeedSpeaker);
     frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
     frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
 
