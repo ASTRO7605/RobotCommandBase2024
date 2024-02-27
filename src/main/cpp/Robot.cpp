@@ -7,14 +7,11 @@
 #include <wpi/MemoryBuffer.h>
 
 void Robot::RobotInit() {
-    frc::CameraServer::StartAutomaticCapture();
 
     m_Container.SeedEncoders();
     // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
     // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
-    frc::Preferences::InitDouble("flywheelSpeedsSpeakerRPM",
-                                 ShooterConstant::flywheelsSpeedSpeaker);
     frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
     frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
 
@@ -74,6 +71,10 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("kPThetaRobot", DriveConstant::kPThetaRobot);
     frc::Preferences::InitDouble("kIThetaRobot", DriveConstant::kIThetaRobot);
     frc::Preferences::InitDouble("kDThetaRobot", DriveConstant::kDThetaRobot);
+
+    frc::Preferences::InitDouble("kPXYRobot", DriveConstant::kPXYRobot);
+    frc::Preferences::InitDouble("kIXYRobot", DriveConstant::kIXYRobot);
+    frc::Preferences::InitDouble("kDXYRobot", DriveConstant::kDXYRobot);
 
     hasInitHooksBeenScheduled = false;
 } /** * This function is called every 20 ms, no matter the mode. Use * this for

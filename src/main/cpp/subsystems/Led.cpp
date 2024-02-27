@@ -35,7 +35,12 @@ void Led::Periodic() {
     }
 
     case LedConstants::Animation::SPLIT: {
-        auto top = note_in_intake ? LedConstants::Colors::NoteInIntake : LedConstants::Colors::Off;
+        LedConstants::Color top = LedConstants::Colors::Off;
+        if (note_in_intake) {
+            top = LedConstants::Colors::NoteInIntake;
+        } else if (note_seen) {
+            top = LedConstants::Colors::NoteSeen;
+        }
         auto bottom =
             robot_in_range ? LedConstants::Colors::RobotInRange : LedConstants::Colors::Off;
         split(top, bottom);

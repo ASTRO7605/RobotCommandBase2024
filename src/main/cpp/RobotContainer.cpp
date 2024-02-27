@@ -68,23 +68,25 @@ RobotContainer::RobotContainer()
         },
         {&m_ShooterAngle}));
 
-    m_StartingPlaceChooser.AddOption("Source", "source_");
-    m_StartingPlaceChooser.AddOption("Middle", "middle_");
-    m_StartingPlaceChooser.AddOption("Amp", "amp_");
+    m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
+    m_AutoChooser.AddOption("Amp 3 notes far", "amp_3_notes_far");
+    m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
-    m_AutoChooser.SetDefaultOption("2 notes", "2_notes");
-    m_AutoChooser.AddOption("3 notes", "3_notes");
-    m_AutoChooser.AddOption("4 notes", "4_notes");
+    m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
 
-    frc::SmartDashboard::PutData("startingPlaceChooser", &m_StartingPlaceChooser);
+    m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
 }
 
 void RobotContainer::Periodic() {
+    if (m_Base.GetLatestLimelightTarget().has_value()) {
+        m_Led.SetNoteSeen(true);
+    } else {
+        m_Led.SetNoteSeen(false);
+    }
     m_Led.SetNoteInIntake(m_Intake.IsObjectInIntake());
     m_Led.SetRobotInRange(m_Base.IsRobotInRangeToShoot());
-    frc::SmartDashboard::PutString("chosen auto", m_StartingPlaceChooser.GetSelected() +
-                                                      m_AutoChooser.GetSelected());
+    frc::SmartDashboard::PutString("chosen auto", m_AutoChooser.GetSelected());
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -103,14 +105,14 @@ void RobotContainer::ConfigureBindings() {
     m_TurnStick.Button(10).WhileTrue(
         RightHookManual(&m_RightHook, -frc::Preferences::GetDouble("kPourcentageManualHooks"))
             .ToPtr());
-    // m_TurnStick.Button(11).WhileTrue(
-    //     PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
-    //         .ToPtr());
-    // m_TurnStick.Button(12).WhileTrue(
-    //     PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
-    //         .ToPtr());
-    m_TurnStick.Button(11).OnTrue(ShooterPosition(&m_ShooterAngle, 300, true).ToPtr());
-    m_TurnStick.Button(12).OnTrue(ShooterPosition(&m_ShooterAngle, 700, true).ToPtr());
+    m_TurnStick.Button(11).WhileTrue(
+        PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
+            .ToPtr());
+    m_TurnStick.Button(12).WhileTrue(
+        PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
+            .ToPtr());
+    // m_TurnStick.Button(11).OnTrue(ShooterPosition(&m_ShooterAngle, 300, true).ToPtr());
+    // m_TurnStick.Button(12).OnTrue(ShooterPosition(&m_ShooterAngle, 700, true).ToPtr());
 
     m_ThrottleStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }).ToPtr());
@@ -161,7 +163,7 @@ void RobotContainer::ConfigureBindings() {
     (m_CoPilotController.A() && !m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
     (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
-        .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
+        .WhileTrue(AutomaticIntake(&m_Intake, &m_Base).ToPtr());
 
     (m_CoPilotController.Y() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold) &&
      m_CoPilotController.Back())
@@ -226,8 +228,7 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    std::string currentAutonomous =
-        m_StartingPlaceChooser.GetSelected() + m_AutoChooser.GetSelected();
+    std::string currentAutonomous = m_AutoChooser.GetSelected();
     if (currentAutonomous != "") {
         return pathplanner::AutoBuilder::buildAuto(currentAutonomous);
     } else {
