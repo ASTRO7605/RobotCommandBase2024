@@ -6,6 +6,7 @@
 
 #include "Constants.h"
 #include "commands/AlignWithSpeaker.h"
+#include "commands/AutomaticIntake.h"
 #include "commands/BarrePosition.h"
 #include "commands/DeuxiemeJointManual.h"
 #include "commands/InitLeftHook.h"

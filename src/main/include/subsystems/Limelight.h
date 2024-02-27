@@ -29,11 +29,12 @@
 class Limelight : public frc2::SubsystemBase {
   public:
     /// @param table_name the NetworkTables table to use.
-    Limelight(std::string table_name);
+    Limelight(std::string_view table_name);
 
     void Periodic() override;
 
     std::optional<photon::PhotonTrackedTarget> GetLatestTarget();
+
   private:
     photon::PhotonCamera camera;
 };

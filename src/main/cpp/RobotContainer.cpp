@@ -73,12 +73,17 @@ RobotContainer::RobotContainer()
     m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
-    
+
     m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
 }
 
 void RobotContainer::Periodic() {
+    if (m_Base.GetLatestLimelightTarget().has_value()) {
+        m_Led.SetNoteSeen(true);
+    } else {
+        m_Led.SetNoteSeen(false);
+    }
     m_Led.SetNoteInIntake(m_Intake.IsObjectInIntake());
     m_Led.SetRobotInRange(m_Base.IsRobotInRangeToShoot());
     frc::SmartDashboard::PutString("chosen auto", m_AutoChooser.GetSelected());
@@ -100,14 +105,14 @@ void RobotContainer::ConfigureBindings() {
     m_TurnStick.Button(10).WhileTrue(
         RightHookManual(&m_RightHook, -frc::Preferences::GetDouble("kPourcentageManualHooks"))
             .ToPtr());
-    // m_TurnStick.Button(11).WhileTrue(
-    //     PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
-    //         .ToPtr());
-    // m_TurnStick.Button(12).WhileTrue(
-    //     PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
-    //         .ToPtr());
-    m_TurnStick.Button(11).OnTrue(ShooterPosition(&m_ShooterAngle, 300, true).ToPtr());
-    m_TurnStick.Button(12).OnTrue(ShooterPosition(&m_ShooterAngle, 700, true).ToPtr());
+    m_TurnStick.Button(11).WhileTrue(
+        PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
+            .ToPtr());
+    m_TurnStick.Button(12).WhileTrue(
+        PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
+            .ToPtr());
+    // m_TurnStick.Button(11).OnTrue(ShooterPosition(&m_ShooterAngle, 300, true).ToPtr());
+    // m_TurnStick.Button(12).OnTrue(ShooterPosition(&m_ShooterAngle, 700, true).ToPtr());
 
     m_ThrottleStick.Button(2).OnTrue(
         frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }).ToPtr());
@@ -158,7 +163,7 @@ void RobotContainer::ConfigureBindings() {
     (m_CoPilotController.A() && !m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
     (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
-        .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
+        .WhileTrue(AutomaticIntake(&m_Intake, &m_Base).ToPtr());
 
     (m_CoPilotController.Y() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold) &&
      m_CoPilotController.Back())

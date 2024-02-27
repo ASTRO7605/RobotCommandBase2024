@@ -6,6 +6,7 @@
 
 #include "Constants.h"
 
+#include "subsystems/Limelight.h"
 #include "subsystems/ModuleSwerve.h"
 #include "subsystems/Vision.h"
 #include "utils/PoseMeasurement.h"
@@ -73,6 +74,8 @@ class Base : public frc2::SubsystemBase {
 
     units::angle::degree_t GetHeadingDegrees();
 
+    void SetRobotDrivingMode(bool fieldRelative);
+
     /**
      * switch le driving mode de field relative à robot relative et vice versa
      */
@@ -128,6 +131,8 @@ class Base : public frc2::SubsystemBase {
 
     std::optional<frc::Pose2d> GetAveragePoseFromCameras();
 
+    std::optional<photon::PhotonTrackedTarget> GetLatestLimelightTarget();
+
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.
@@ -172,4 +177,5 @@ class Base : public frc2::SubsystemBase {
 
     Vision m_VisionLeft{VisionConstant::TableNameLeft, VisionConstant::leftCameraTransform};
     Vision m_VisionRight{VisionConstant::TableNameRight, VisionConstant::rightCameraTransform};
+    Limelight m_Limelight{VisionConstant::TableNameLimelight};
 };

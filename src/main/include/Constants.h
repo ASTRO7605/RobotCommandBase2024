@@ -88,6 +88,13 @@ constexpr double kPThetaRobot = 0;
 constexpr double kIThetaRobot = 0;
 constexpr double kDThetaRobot = 0;
 
+constexpr double kPXYRobot = 0;
+constexpr double kIXYRobot = 0;
+constexpr double kDXYRobot = 0;
+
+constexpr double kMaxAutoAlignSpeedY = 0.2;
+constexpr double kMaxAutoAlignSpeedX = 0.1;
+
 constexpr double kThresholdRobotAngle = 0.85;
 constexpr auto kThresholdTimer = 0.1_s;
 
@@ -98,6 +105,7 @@ namespace VisionConstant {
 constexpr int Pipeline = 0; // only one pipeline (AprilTags)
 constexpr std::string_view TableNameRight = "photonvision-a";
 constexpr std::string_view TableNameLeft = "photonvision-b";
+constexpr std::string_view TableNameLimelight = "limelight";
 constexpr double ambiguityThreshold = 0.5;
 extern const frc::Transform3d rightCameraTransform;
 extern const frc::Transform3d leftCameraTransform;
@@ -375,6 +383,7 @@ constexpr Color Off{0, 0, 0};
 constexpr Color RedAlliance{255, 0, 0};
 constexpr Color BlueAlliance{0, 0, 255};
 constexpr Color NoteInIntake{255, 15, 0};
+constexpr Color NoteSeen{255, 10, 150};
 constexpr Color RobotInRange{0, 255, 0};
 constexpr Color RobotInStartingPositionXY{0, 255, 0};
 constexpr Color RobotInStartingPositionAngle{255, 105, 180};
