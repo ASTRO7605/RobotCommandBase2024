@@ -73,8 +73,10 @@ RobotContainer::RobotContainer()
     m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
+    m_AutoChooser.AddOption("Middle 4 notes", "middle_4_notes");
 
     m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
+
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
 }
 
@@ -349,6 +351,8 @@ void RobotContainer::ConfigureNamedCommands() {
             },
             {&m_ShooterAngle})
             .Repeatedly());
+    pathplanner::NamedCommands::registerCommand("auto intake",
+                                                AutomaticIntake(&m_Intake, &m_Base).ToPtr());
 }
 
 void RobotContainer::ChooseCorrectStageCommand() {

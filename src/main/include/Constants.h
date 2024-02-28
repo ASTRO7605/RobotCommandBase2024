@@ -95,10 +95,11 @@ constexpr double kDXYRobot = 0;
 constexpr double kMaxAutoAlignSpeedY = 0.2;
 constexpr double kMaxAutoAlignSpeedX = 0.1;
 
-constexpr double kThresholdRobotAngle = 0.9;
+constexpr double kThresholdRobotAngle = 0.75;
 constexpr auto kThresholdTimer = 0.1_s;
 
 constexpr auto kThresholdInSpeakerRange = 3.35_m;
+constexpr auto kTimeBeforeBrake = 1_s;
 } // namespace DriveConstant
 
 namespace VisionConstant {
@@ -106,7 +107,7 @@ constexpr int Pipeline = 0; // only one pipeline (AprilTags)
 constexpr std::string_view TableNameRight = "photonvision-a";
 constexpr std::string_view TableNameLeft = "photonvision-b";
 constexpr std::string_view TableNameLimelight = "limelight";
-constexpr double ambiguityThreshold = 0.5;
+constexpr double ambiguityThreshold = 0.4;
 extern const frc::Transform3d rightCameraTransform;
 extern const frc::Transform3d leftCameraTransform;
 constexpr double kThresholdAutoLEDAngle = 1.0;
@@ -126,7 +127,7 @@ enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
 constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
-constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.95};
+constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.99};
 constexpr std::array<double, 3> kVisionStdDevsPerMeterBase{0.4, 0.4, 0.95};
 constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeter{
     20.0, 20.0, 100.0}; // ambiguity is very small, so this number is quite big.

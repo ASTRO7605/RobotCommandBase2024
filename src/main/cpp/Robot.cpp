@@ -91,14 +91,18 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * robot is disabled.
  */
 void Robot::DisabledInit() {
-    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
     m_Container.SetShooterAngleToNeutral();
     m_Container.SetLedForDisabled();
+    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
+    m_TimerDisabled.Restart();
+    haveWheelsBeenSetToBrake = false;
 }
 
 void Robot::DisabledPeriodic() {
-    // auto status = m_Container.IsRobotInRightPoseForAuto();
-    // m_Container.UpdateDisabledLed(status);
+    if (m_TimerDisabled.Get() >= DriveConstant::kTimeBeforeBrake && !haveWheelsBeenSetToBrake) {
+        m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
+        haveWheelsBeenSetToBrake = true;
+    }
 }
 
 /**
