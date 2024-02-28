@@ -166,7 +166,8 @@ void ShootNote::Execute() {
     frc::SmartDashboard::PutBoolean("isPremierJointAngledRight", isPremierJointAngledRight);
     frc::SmartDashboard::PutBoolean("isDeuxiemeJointAngledRight", isDeuxiemeJointAngledRight);
 
-    if (m_pCoPilotController->GetStartButton() && (scoringPlace == ScoringPositions::speaker)) {
+    if (m_pCoPilotController->GetStartButton() &&
+        (scoringPlace == ScoringPositions::speaker || scoringPlace == ScoringPositions::trap)) {
         m_State = ShooterConstant::ShooterState::complete;
     }
 

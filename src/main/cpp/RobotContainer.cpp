@@ -69,7 +69,7 @@ RobotContainer::RobotContainer()
         {&m_ShooterAngle}));
 
     m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
-    m_AutoChooser.AddOption("Amp 3 notes far", "amp_3_notes_far");
+    m_AutoChooser.AddOption("Amp 3.5 notes far", "amp_3_notes_far");
     m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
@@ -93,8 +93,12 @@ void RobotContainer::Periodic() {
 
 void RobotContainer::ConfigureBindings() {
     // Configure your trigger bindings here
-    m_TurnStick.Button(2).OnTrue(
-        frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
+    m_TurnStick.Button(5).WhileTrue(frc2::RunCommand([this]() {
+                                        auto latestCameraPose{m_Base.GetAveragePoseFromCameras()};
+                                        if (latestCameraPose.has_value()) {
+                                            m_Base.ResetOdometry(latestCameraPose.value());
+                                        }
+                                    }).ToPtr());
     m_TurnStick.Button(7).WhileTrue(
         LeftHookManual(&m_LeftHook, frc::Preferences::GetDouble("kPourcentageManualHooks"))
             .ToPtr());
@@ -113,12 +117,10 @@ void RobotContainer::ConfigureBindings() {
     m_TurnStick.Button(12).WhileTrue(
         PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
             .ToPtr());
-    // m_TurnStick.Button(11).OnTrue(ShooterPosition(&m_ShooterAngle, 300, true).ToPtr());
-    // m_TurnStick.Button(12).OnTrue(ShooterPosition(&m_ShooterAngle, 700, true).ToPtr());
 
-    m_ThrottleStick.Button(2).OnTrue(
-        frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }).ToPtr());
     m_ThrottleStick.Button(5).OnTrue(
+        frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
+    m_ThrottleStick.Button(6).OnTrue(
         frc2::InstantCommand([this]() { m_Base.SwitchRobotDrivingMode(); }).ToPtr());
     m_ThrottleStick.Button(7).OnTrue(
         BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapApproach"),

@@ -9,9 +9,19 @@
 void Robot::RobotInit() {
 
     m_Container.SeedEncoders();
-    // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
-    // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
-    // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
+
+    wpi::PortForwarder::GetInstance().Add(5800, "photonvision-limelight.local", 5800);
+    wpi::PortForwarder::GetInstance().Add(5801, "photonvision-a.local", 5800);
+    wpi::PortForwarder::GetInstance().Add(5802, "photonvision-b.local", 5800);
+
+    wpi::PortForwarder::GetInstance().Add(1181, "photonvision-limelight.local", 1181);
+    wpi::PortForwarder::GetInstance().Add(1281, "photonvision-a.local", 1181);
+    wpi::PortForwarder::GetInstance().Add(1381, "photonvision-b.local", 1181);
+
+    wpi::PortForwarder::GetInstance().Add(1182, "photonvision-limelight.local", 1182);
+    wpi::PortForwarder::GetInstance().Add(1282, "photonvision-a.local", 1182);
+    wpi::PortForwarder::GetInstance().Add(1382, "photonvision-b.local", 1182);
+
     frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
     frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
 

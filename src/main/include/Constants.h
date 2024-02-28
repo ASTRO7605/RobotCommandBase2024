@@ -84,7 +84,7 @@ constexpr int RearRightTurningID = 11;
 constexpr int RearRightDrivingID = 12;
 constexpr int RearRightCANcoderID = 13;
 
-constexpr double kPThetaRobot = 600;
+constexpr double kPThetaRobot = 580;
 constexpr double kIThetaRobot = 0.01;
 constexpr double kDThetaRobot = 60;
 
@@ -238,13 +238,13 @@ constexpr std::pair<units::meter_t, double> fifthDistanceWheelSpeedsCouple =
 constexpr std::pair<units::meter_t, double> fifthDistanceShooterAngleCouple =
     std::make_pair(2.52_m, 440);
 constexpr std::pair<units::meter_t, double> sixthDistanceWheelSpeedsCouple =
-    std::make_pair(2.81_m, 3000);
+    std::make_pair(2.81_m, 3100);
 constexpr std::pair<units::meter_t, double> sixthDistanceShooterAngleCouple =
     std::make_pair(2.81_m, 420);
 constexpr std::pair<units::meter_t, double> seventhDistanceWheelSpeedsCouple =
     std::make_pair(3.11_m, 3250);
 constexpr std::pair<units::meter_t, double> seventhDistanceShooterAngleCouple =
-    std::make_pair(3.11_m, 405);
+    std::make_pair(3.11_m, 407.5);
 constexpr std::pair<units::meter_t, double> eighthDistanceWheelSpeedsCouple =
     std::make_pair(3.40_m, 3500);
 constexpr std::pair<units::meter_t, double> eighthDistanceShooterAngleCouple =
