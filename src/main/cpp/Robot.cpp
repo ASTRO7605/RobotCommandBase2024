@@ -9,72 +9,20 @@
 void Robot::RobotInit() {
 
     m_Container.SeedEncoders();
-    // wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
-    // wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
-    // wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
-    frc::Preferences::InitDouble("flywheelSpeedsAmpRPM", ShooterConstant::flywheelsSpeedAmp);
-    frc::Preferences::InitDouble("flywheelSpeedsTrapRPM", ShooterConstant::flywheelsSpeedTrap);
 
-    frc::Preferences::InitDouble("testAngleShooter", 0);
-    frc::Preferences::InitDouble("angleShooterAmp", ShooterConstant::kAngleShooterAmp);
-    frc::Preferences::InitDouble("angleShooterTrap", ShooterConstant::kAngleShooterTrap);
+    wpi::PortForwarder::GetInstance().Add(5800, "photonvision-limelight.local", 5800);
+    wpi::PortForwarder::GetInstance().Add(5801, "photonvision-a.local", 5800);
+    wpi::PortForwarder::GetInstance().Add(5802, "photonvision-b.local", 5800);
 
-    frc::Preferences::InitDouble("kPPositionAngleLanceur", ShooterConstant::kPPositionAngle);
-    frc::Preferences::InitDouble("kIPositionAngleLanceur", ShooterConstant::kIPositionAngle);
-    frc::Preferences::InitDouble("kDPositionAngleLanceur", ShooterConstant::kDPositionAngle);
-    frc::Preferences::InitDouble("kFPositionAngleLanceur", ShooterConstant::kFPositionAngle);
+    wpi::PortForwarder::GetInstance().Add(1181, "photonvision-limelight.local", 1181);
+    wpi::PortForwarder::GetInstance().Add(1281, "photonvision-a.local", 1181);
+    wpi::PortForwarder::GetInstance().Add(1381, "photonvision-b.local", 1181);
 
-    frc::Preferences::InitDouble("kVitesseAngle", ShooterConstant::kVitesseAngle);
-    frc::Preferences::InitDouble("kAccelerationAngle", ShooterConstant::kAccelerationAngle);
+    wpi::PortForwarder::GetInstance().Add(1182, "photonvision-limelight.local", 1182);
+    wpi::PortForwarder::GetInstance().Add(1282, "photonvision-a.local", 1182);
+    wpi::PortForwarder::GetInstance().Add(1382, "photonvision-b.local", 1182);
 
-    frc::Preferences::InitDouble("kPourcentageManual1erJoint",
-                                 BarreConstant::kPourcentageManual1erJoint);
-    frc::Preferences::InitDouble("kPourcentageManual2eJoint",
-                                 BarreConstant::kPourcentageManual2eJoint);
-
-    frc::Preferences::InitDouble("kVitesse1erJoint", BarreConstant::kVitesse1erJoint);
-    frc::Preferences::InitDouble("kAcceleration1erJoint", BarreConstant::kAcceleration1erJoint);
-
-    frc::Preferences::InitDouble("kVitesse2eJoint", BarreConstant::kVitesse2eJoint);
-    frc::Preferences::InitDouble("kAcceleration2eJoint", BarreConstant::kAcceleration2eJoint);
-
-    frc::Preferences::InitDouble("k1erJointAngleTrapApproach",
-                                 BarreConstant::k1erJointAngleTrapApproach);
-    frc::Preferences::InitDouble("k1erJointAngleTrapIntermediaire",
-                                 BarreConstant::k1erJointAngleTrapIntermediaire);
-    frc::Preferences::InitDouble("k1erJointAngleTrapFinal", BarreConstant::k1erJointAngleTrapFinal);
-    frc::Preferences::InitDouble("k1erJointAngleAmp", BarreConstant::k1erJointAngleAmp);
-    frc::Preferences::InitDouble("k2eJointAngleTrapApproach",
-                                 BarreConstant::k2eJointAngleTrapApproach);
-    frc::Preferences::InitDouble("k2eJointAngleTrapFinal", BarreConstant::k2eJointAngleTrapFinal);
-    frc::Preferences::InitDouble("k2eJointAngleAmpApproach",
-                                 BarreConstant::k2eJointAngleAmpApproach);
-    frc::Preferences::InitDouble("k2eJointAngleAmpFinal", BarreConstant::k2eJointAngleAmpFinal);
-    frc::Preferences::InitDouble("k1erJointStartPosition", BarreConstant::k1erJointStartPosition);
-    frc::Preferences::InitDouble("k2eJointStartPosition", BarreConstant::k2eJointStartPosition);
-
-    frc::Preferences::InitDouble("kPHooksPosition", ClimberConstant::kPHooksPosition);
-    frc::Preferences::InitDouble("kIHooksPosition", ClimberConstant::kIHooksPosition);
-    frc::Preferences::InitDouble("kDHooksPosition", ClimberConstant::kDHooksPosition);
-    frc::Preferences::InitDouble("kFFHooksPosition", ClimberConstant::kFFHooksPosition);
-
-    frc::Preferences::InitDouble("kPourcentageManualHooks", ClimberConstant::kPourcentageHooks);
-
-    frc::Preferences::InitDouble("kVitesseExtensionHooks", ClimberConstant::kVitesseExtensionHooks);
-    frc::Preferences::InitDouble("kAccelerationExtensionHooks",
-                                 ClimberConstant::kAccelerationExtensionHooks);
-    frc::Preferences::InitDouble("kVitesseRetractionHooks",
-                                 ClimberConstant::kVitesseRetractionHooks);
-    frc::Preferences::InitDouble("kAccelerationRetractionHooks",
-                                 ClimberConstant::kAccelerationRetractionHooks);
-
-    frc::Preferences::InitDouble("kPThetaRobot", DriveConstant::kPThetaRobot);
-    frc::Preferences::InitDouble("kIThetaRobot", DriveConstant::kIThetaRobot);
-    frc::Preferences::InitDouble("kDThetaRobot", DriveConstant::kDThetaRobot);
-
-    frc::Preferences::InitDouble("kPXYRobot", DriveConstant::kPXYRobot);
-    frc::Preferences::InitDouble("kIXYRobot", DriveConstant::kIXYRobot);
-    frc::Preferences::InitDouble("kDXYRobot", DriveConstant::kDXYRobot);
+    frc::Preferences::RemoveAll();
 
     hasInitHooksBeenScheduled = false;
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
@@ -91,14 +39,18 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * robot is disabled.
  */
 void Robot::DisabledInit() {
-    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
     m_Container.SetShooterAngleToNeutral();
     m_Container.SetLedForDisabled();
+    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
+    m_TimerDisabled.Restart();
+    haveWheelsBeenSetToBrake = false;
 }
 
 void Robot::DisabledPeriodic() {
-    // auto status = m_Container.IsRobotInRightPoseForAuto();
-    // m_Container.UpdateDisabledLed(status);
+    if (m_TimerDisabled.Get() >= DriveConstant::kTimeBeforeBrake && !haveWheelsBeenSetToBrake) {
+        m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
+        haveWheelsBeenSetToBrake = true;
+    }
 }
 
 /**

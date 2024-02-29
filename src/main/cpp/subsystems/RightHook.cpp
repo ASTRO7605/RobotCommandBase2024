@@ -27,13 +27,13 @@ RightHook::RightHook()
     m_RightHookMotorEncoder.SetVelocityConversionFactor(ClimberConstant::FConversionFactorVelocity);
 
     // position
-    m_RightHookMotorPIDController.SetP(frc::Preferences::GetDouble("kPHooksPosition"),
+    m_RightHookMotorPIDController.SetP(ClimberConstant::kPHooksPosition,
                                        ClimberConstant::positionPIDSlotID);
-    m_RightHookMotorPIDController.SetI(frc::Preferences::GetDouble("kIHooksPosition"),
+    m_RightHookMotorPIDController.SetI(ClimberConstant::kIHooksPosition,
                                        ClimberConstant::positionPIDSlotID);
-    m_RightHookMotorPIDController.SetD(frc::Preferences::GetDouble("kDHooksPosition"),
+    m_RightHookMotorPIDController.SetD(ClimberConstant::kDHooksPosition,
                                        ClimberConstant::positionPIDSlotID);
-    m_RightHookMotorPIDController.SetFF(frc::Preferences::GetDouble("kFFHooksPosition"),
+    m_RightHookMotorPIDController.SetFF(ClimberConstant::kFFHooksPosition,
                                         ClimberConstant::positionPIDSlotID);
 
     m_RightHookMotor.EnableVoltageCompensation(ClimberConstant::kVoltageCompensation);

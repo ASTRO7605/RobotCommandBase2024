@@ -18,23 +18,14 @@ void AlignWithSpeaker::Execute() {
     m_pBase->Drive(units::meters_per_second_t{0}, units::meters_per_second_t{0},
                    -units::radians_per_second_t{turn}, true);
     frc::SmartDashboard::PutNumber("rotationError", m_pBase->GetRotationPIDError() * 180);
-//     if (fabs((m_pBase->GetPose().Rotation().Degrees().value() + 180) -
-//              (m_pBase->GetDesiredRotationToSpeaker().value() + 180)) <=
-//         DriveConstant::kThresholdRobotAngle) {
-//         m_Timer.Start();
-//     } else {
-//         m_Timer.Stop();
-//         m_Timer.Reset();
-//     }
-if (fabs(m_pBase->GetRotationPIDError() * 180) <=
-        DriveConstant::kThresholdRobotAngle) {
+
+    if (fabs(m_pBase->GetRotationPIDError() * 180) <= DriveConstant::kThresholdRobotAngle) {
         m_Timer.Start();
     } else {
         m_Timer.Stop();
         m_Timer.Reset();
     }
 }
-
 
 bool AlignWithSpeaker::IsFinished() {
     if (m_Timer.Get() >= DriveConstant::kThresholdTimer) {

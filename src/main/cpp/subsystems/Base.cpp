@@ -4,9 +4,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 Base::Base()
-    : pidControllerThetaSpeaker{frc::Preferences::GetDouble("kPThetaRobot"),
-                                frc::Preferences::GetDouble("kIThetaRobot"),
-                                frc::Preferences::GetDouble("kDThetaRobot")},
+    : pidControllerThetaSpeaker{DriveConstant::kPThetaRobot, DriveConstant::kIThetaRobot,
+                                DriveConstant::kDThetaRobot},
       m_PoseEstimator{kDriveKinematics,
                       m_Gyro.GetRotation2d().Radians(),
                       {m_FrontRightModule.GetPosition(), m_FrontLeftModule.GetPosition(),

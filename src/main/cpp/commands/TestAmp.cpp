@@ -7,24 +7,23 @@ TestAmp::TestAmp(Barre *p_Barre, Intake *p_Intake)
 }
 
 void TestAmp::Initialize() {
-    target2eJoint = frc::Preferences::GetDouble("k2eJointAngleAmpApproach");
+    target2eJoint = BarreConstant::k2eJointAngleAmpApproach;
     hasNoteBeenHit = false;
 }
 
 void TestAmp::Execute() {
-    if (m_pBarre->Is1erJointAtTargetAngle(frc::Preferences::GetDouble("k1erJointAngleAmp")) &&
-        m_pBarre->Is2eJointAtTargetAngle(frc::Preferences::GetDouble("k2eJointAngleAmpApproach")) &&
+    if (m_pBarre->Is1erJointAtTargetAngle(BarreConstant::k1erJointAngleAmp) &&
+        m_pBarre->Is2eJointAtTargetAngle(BarreConstant::k2eJointAngleAmpApproach) &&
         m_pIntake->IsObjectInIntake()) {
         hasNoteBeenHit = true;
-        target2eJoint = frc::Preferences::GetDouble("k2eJointAngleAmpFinal");
+        target2eJoint = BarreConstant::k2eJointAngleAmpFinal;
     }
-    m_pBarre->Set1erJointAngle(frc::Preferences::GetDouble("k1erJointAngleAmp"));
+    m_pBarre->Set1erJointAngle(BarreConstant::k1erJointAngleAmp);
     m_pBarre->Set2eJointAngle(target2eJoint);
 }
 
 bool TestAmp::IsFinished() {
-    if (hasNoteBeenHit &&
-        m_pBarre->Is2eJointAtTargetAngle(frc::Preferences::GetDouble("k2eJointAngleAmpFinal"))) {
+    if (hasNoteBeenHit && m_pBarre->Is2eJointAtTargetAngle(BarreConstant::k2eJointAngleAmpFinal)) {
         return true;
     }
     return false;

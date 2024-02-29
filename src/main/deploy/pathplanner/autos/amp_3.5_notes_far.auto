@@ -38,37 +38,6 @@
                 "data": {
                   "pathName": "amp_simple_2"
                 }
-              },
-              {
-                "type": "deadline",
-                "data": {
-                  "commands": []
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "align and shoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "amp_multi_3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "start intake"
-                }
               }
             ]
           }
@@ -82,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp_multi_4"
+            "pathName": "amp_far_3"
           }
         },
         {
@@ -94,13 +63,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "amp_multi_5"
+            "pathName": "amp_far_4"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "align and shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp_far_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp_far_6"
           }
         }
       ]

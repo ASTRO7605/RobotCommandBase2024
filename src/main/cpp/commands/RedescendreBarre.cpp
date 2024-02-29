@@ -6,8 +6,8 @@ RedescendreBarre::RedescendreBarre(Barre *p_Barre, bool needForTimer, bool onlyB
 }
 
 void RedescendreBarre::Initialize() {
-    premierJointTarget = frc::Preferences::GetDouble("k1erJointStartPosition");
-    deuxiemeJointTarget = frc::Preferences::GetDouble("k2eJointStartPosition");
+    premierJointTarget = BarreConstant::k1erJointStartPosition;
+    deuxiemeJointTarget = BarreConstant::k2eJointStartPosition;
     m_Timer.Restart();
 }
 

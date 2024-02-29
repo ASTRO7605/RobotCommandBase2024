@@ -69,12 +69,14 @@ RobotContainer::RobotContainer()
         {&m_ShooterAngle}));
 
     m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
-    m_AutoChooser.AddOption("Amp 3 notes far", "amp_3_notes_far");
+    m_AutoChooser.AddOption("Amp 3.5 notes far", "amp_3_notes_far");
     m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
+    m_AutoChooser.AddOption("Middle 4 notes", "middle_4_notes");
 
     m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
+
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
 }
 
@@ -91,64 +93,59 @@ void RobotContainer::Periodic() {
 
 void RobotContainer::ConfigureBindings() {
     // Configure your trigger bindings here
-    m_TurnStick.Button(2).OnTrue(
-        frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
+    m_TurnStick.Button(5).WhileTrue(frc2::RunCommand([this]() {
+                                        auto latestCameraPose{m_Base.GetAveragePoseFromCameras()};
+                                        if (latestCameraPose.has_value()) {
+                                            m_Base.ResetOdometry(latestCameraPose.value());
+                                        }
+                                    }).ToPtr());
     m_TurnStick.Button(7).WhileTrue(
-        LeftHookManual(&m_LeftHook, frc::Preferences::GetDouble("kPourcentageManualHooks"))
-            .ToPtr());
+        LeftHookManual(&m_LeftHook, ClimberConstant::kPourcentageManualHooks).ToPtr());
     m_TurnStick.Button(8).WhileTrue(
-        LeftHookManual(&m_LeftHook, -frc::Preferences::GetDouble("kPourcentageManualHooks"))
-            .ToPtr());
+        LeftHookManual(&m_LeftHook, -ClimberConstant::kPourcentageManualHooks).ToPtr());
     m_TurnStick.Button(9).WhileTrue(
-        RightHookManual(&m_RightHook, frc::Preferences::GetDouble("kPourcentageManualHooks"))
-            .ToPtr());
+        RightHookManual(&m_RightHook, ClimberConstant::kPourcentageManualHooks).ToPtr());
     m_TurnStick.Button(10).WhileTrue(
-        RightHookManual(&m_RightHook, -frc::Preferences::GetDouble("kPourcentageManualHooks"))
-            .ToPtr());
+        RightHookManual(&m_RightHook, -ClimberConstant::kPourcentageManualHooks).ToPtr());
     m_TurnStick.Button(11).WhileTrue(
-        PremierJointManual(&m_Barre, frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
-            .ToPtr());
+        PremierJointManual(&m_Barre, BarreConstant::kPourcentageManual1erJoint).ToPtr());
     m_TurnStick.Button(12).WhileTrue(
-        PremierJointManual(&m_Barre, -frc::Preferences::GetDouble("kPourcentageManual1erJoint"))
-            .ToPtr());
-    // m_TurnStick.Button(11).OnTrue(ShooterPosition(&m_ShooterAngle, 300, true).ToPtr());
-    // m_TurnStick.Button(12).OnTrue(ShooterPosition(&m_ShooterAngle, 700, true).ToPtr());
+        PremierJointManual(&m_Barre, -BarreConstant::kPourcentageManual1erJoint).ToPtr());
 
-    m_ThrottleStick.Button(2).OnTrue(
-        frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }).ToPtr());
     m_ThrottleStick.Button(5).OnTrue(
+        frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffset(); }).ToPtr());
+    m_ThrottleStick.Button(6).OnTrue(
         frc2::InstantCommand([this]() { m_Base.SwitchRobotDrivingMode(); }).ToPtr());
-    m_ThrottleStick.Button(7).OnTrue(
-        BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapApproach"),
-                      frc::Preferences::GetDouble("k2eJointStartPosition"))
-            .ToPtr());
-    m_ThrottleStick.Button(8).OnTrue(
-        BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapIntermediaire"),
-                      frc::Preferences::GetDouble("k2eJointStartPosition"))
-            .ToPtr());
-    m_ThrottleStick.Button(9).OnTrue(
-        BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
-                      frc::Preferences::GetDouble("k2eJointStartPosition"))
-            .ToPtr());
+    m_ThrottleStick.Button(7).OnTrue(BarrePosition(&m_Barre,
+                                                   BarreConstant::k1erJointAngleTrapApproach,
+                                                   BarreConstant::k2eJointStartPosition)
+                                         .ToPtr());
+    m_ThrottleStick.Button(8).OnTrue(BarrePosition(&m_Barre,
+                                                   BarreConstant::k1erJointAngleTrapIntermediaire,
+                                                   BarreConstant::k2eJointStartPosition)
+                                         .ToPtr());
+    m_ThrottleStick.Button(9).OnTrue(BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal,
+                                                   BarreConstant::k2eJointStartPosition)
+                                         .ToPtr());
     m_ThrottleStick.Button(10).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
     m_ThrottleStick.Button(11).OnTrue(frc2::cmd::Parallel(
         RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionExtendedTrap,
-                              frc::Preferences::GetDouble("kVitesseExtensionHooks"),
-                              frc::Preferences::GetDouble("kAccelerationExtensionHooks"))
+                              ClimberConstant::kVitesseExtensionHooks,
+                              ClimberConstant::kAccelerationExtensionHooks)
             .ToPtr(),
         LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionExtendedTrap,
-                             frc::Preferences::GetDouble("kVitesseExtensionHooks"),
-                             frc::Preferences::GetDouble("kAccelerationExtensionHooks"))
+                             ClimberConstant::kVitesseExtensionHooks,
+                             ClimberConstant::kAccelerationExtensionHooks)
             .ToPtr()));
-    m_ThrottleStick.Button(12).OnTrue(frc2::cmd::Parallel(
-        RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionRetracted,
-                              frc::Preferences::GetDouble("kVitesseRetractionHooks"),
-                              frc::Preferences::GetDouble("kAccelerationRetractionHooks"))
-            .ToPtr(),
-        LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionRetracted,
-                             frc::Preferences::GetDouble("kVitesseRetractionHooks"),
-                             frc::Preferences::GetDouble("kAccelerationRetractionHooks"))
-            .ToPtr()));
+    m_ThrottleStick.Button(12).OnTrue(
+        frc2::cmd::Parallel(RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionRetracted,
+                                                  ClimberConstant::kVitesseRetractionHooks,
+                                                  ClimberConstant::kAccelerationRetractionHooks)
+                                .ToPtr(),
+                            LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionRetracted,
+                                                 ClimberConstant::kVitesseRetractionHooks,
+                                                 ClimberConstant::kAccelerationRetractionHooks)
+                                .ToPtr()));
 
     m_CoPilotController.RightBumper().OnTrue(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(true); }, {})
@@ -171,10 +168,9 @@ void RobotContainer::ConfigureBindings() {
 
     (m_CoPilotController.Y() && m_CoPilotController.LeftTrigger(OIConstant::axisThreshold) &&
      !m_CoPilotController.Back())
-        .OnTrue(ShootNote(
-                    &m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                    &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
-                    frc::Preferences::GetDouble("angleShooterTrap"), false, ScoringPositions::trap)
+        .OnTrue(ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                          &m_CoPilotController, ShooterConstant::flywheelsSpeedTrap,
+                          ShooterConstant::kAngleShooterTrap, false, ScoringPositions::trap)
                     .ToPtr());
 
     (m_CoPilotController.X() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
@@ -186,22 +182,19 @@ void RobotContainer::ConfigureBindings() {
 
     (m_CoPilotController.X() && m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .OnTrue(ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                          &m_CoPilotController,
-                          frc::Preferences::GetDouble("flywheelSpeedsSpeakerRPM"),
-                          frc::Preferences::GetDouble("testAngleShooter"), false,
-                          ScoringPositions::speaker)
+                          &m_CoPilotController, ShooterConstant::flywheelsSpeedManualSpeaker,
+                          ShooterConstant::manualSpeakerAngle, false, ScoringPositions::speaker)
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .WhileTrue(std::move(pathfindingAmpCommand));
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .WhileTrue(
-            ShooterPosition(&m_ShooterAngle, frc::Preferences::GetDouble("angleShooterAmp"), false)
-                .ToPtr());
+            ShooterPosition(&m_ShooterAngle, ShooterConstant::kAngleShooterAmp, false).ToPtr());
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
-        .WhileTrue(StartShooterWheels(&m_ShooterWheels, &m_Base, false,
-                                      frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"))
-                       .ToPtr());
+        .WhileTrue(
+            StartShooterWheels(&m_ShooterWheels, &m_Base, false, ShooterConstant::flywheelsSpeedAmp)
+                .ToPtr());
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .OnFalse(RedescendreBarre(&m_Barre, false, false).ToPtr());
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
@@ -209,9 +202,8 @@ void RobotContainer::ConfigureBindings() {
     // manual
     (m_CoPilotController.B() && m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .OnTrue(ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                          &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
-                          frc::Preferences::GetDouble("angleShooterAmp"), false,
-                          ScoringPositions::amp)
+                          &m_CoPilotController, ShooterConstant::flywheelsSpeedAmp,
+                          ShooterConstant::kAngleShooterAmp, false, ScoringPositions::amp)
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
     frc2::Trigger([this] {
@@ -270,10 +262,9 @@ void RobotContainer::SetShooterAngleToNeutral() { m_ShooterAngle.SetMotorNeutral
 
 void RobotContainer::ConfigureNamedCommands() {
     pathplanner::NamedCommands::registerCommand(
-        "barre approach amp",
-        BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleAmp"),
-                      frc::Preferences::GetDouble("k2eJointAngleAmpApproach"))
-            .ToPtr());
+        "barre approach amp", BarrePosition(&m_Barre, BarreConstant::k1erJointAngleAmp,
+                                            BarreConstant::k2eJointAngleAmpApproach)
+                                  .ToPtr());
 
     pathplanner::NamedCommands::registerCommand(
         "shoot amp", frc2::InstantCommand([this]() { shootAmp.Schedule(); }).ToPtr());
@@ -283,17 +274,15 @@ void RobotContainer::ConfigureNamedCommands() {
 
     pathplanner::NamedCommands::registerCommand(
         "barre approach trap",
-        frc2::cmd::Parallel(BarrePosition(&m_Barre,
-                                          frc::Preferences::GetDouble("k1erJointAngleTrapApproach"),
-                                          frc::Preferences::GetDouble("k2eJointStartPosition"))
+        frc2::cmd::Parallel(BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapApproach,
+                                          BarreConstant::k2eJointStartPosition)
                                 .ToPtr()));
 
     pathplanner::NamedCommands::registerCommand(
         "barre intermediaire trap",
-        frc2::cmd::Parallel(
-            BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapIntermediaire"),
-                          frc::Preferences::GetDouble("k2eJointStartPosition"))
-                .ToPtr()));
+        frc2::cmd::Parallel(BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapIntermediaire,
+                                          BarreConstant::k2eJointStartPosition)
+                                .ToPtr()));
 
     pathplanner::NamedCommands::registerCommand(
         "barre final and shoot trap",
@@ -301,8 +290,7 @@ void RobotContainer::ConfigureNamedCommands() {
             frc2::PrintCommand("before barre"),
             frc2::ParallelDeadlineGroup(
                 frc2::WaitCommand(0.5_s),
-                BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
-                              frc::Preferences::GetDouble("k2eJointStartPosition"))),
+                BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal, BarreConstant::k2eJointStartPosition)),
             frc2::PrintCommand("after wait"),
             frc2::InstantCommand([this]() { shootTrap.Schedule(); }),
             frc2::PrintCommand("after shoot"))
@@ -311,24 +299,21 @@ void RobotContainer::ConfigureNamedCommands() {
         "extend crochets trap",
         frc2::cmd::Parallel(
             RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionExtendedTrap,
-                                  frc::Preferences::GetDouble("kVitesseExtensionHooks"),
-                                  frc::Preferences::GetDouble("kAccelerationExtensionHooks"))
+                                  ClimberConstant::kVitesseExtensionHooks, ClimberConstant::kAccelerationExtensionHooks)
                 .ToPtr(),
             LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionExtendedTrap,
-                                 frc::Preferences::GetDouble("kVitesseExtensionHooks"),
-                                 frc::Preferences::GetDouble("kAccelerationExtensionHooks"))
+                                 ClimberConstant::kVitesseExtensionHooks, ClimberConstant::kAccelerationExtensionHooks)
                 .ToPtr()));
     pathplanner::NamedCommands::registerCommand(
         "retract crochets trap",
-        frc2::cmd::Parallel(
-            RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionRetracted,
-                                  frc::Preferences::GetDouble("kVitesseRetractionHooks"),
-                                  frc::Preferences::GetDouble("kAccelerationRetractionHooks"))
-                .ToPtr(),
-            LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionRetracted,
-                                 frc::Preferences::GetDouble("kVitesseRetractionHooks"),
-                                 frc::Preferences::GetDouble("kAccelerationRetractionHooks"))
-                .ToPtr()));
+        frc2::cmd::Parallel(RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionRetracted,
+                                                  ClimberConstant::kVitesseRetractionHooks,
+                                                  ClimberConstant::kAccelerationRetractionHooks)
+                                .ToPtr(),
+                            LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionRetracted,
+                                                 ClimberConstant::kVitesseRetractionHooks,
+                                                 ClimberConstant::kAccelerationRetractionHooks)
+                                .ToPtr()));
     pathplanner::NamedCommands::registerCommand("start intake",
                                                 IntakeCommand(&m_Intake, false).ToPtr());
     pathplanner::NamedCommands::registerCommand(
@@ -349,6 +334,8 @@ void RobotContainer::ConfigureNamedCommands() {
             },
             {&m_ShooterAngle})
             .Repeatedly());
+    pathplanner::NamedCommands::registerCommand("auto intake",
+                                                AutomaticIntake(&m_Intake, &m_Base).ToPtr());
 }
 
 void RobotContainer::ChooseCorrectStageCommand() {

@@ -139,18 +139,18 @@ class RobotContainer : public frc2::SubsystemBase {
 
     frc2::CommandPtr shootAmp{
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsAmpRPM"),
-                  frc::Preferences::GetDouble("angleShooterAmp"), false, ScoringPositions::amp)
+                  &m_CoPilotController, ShooterConstant::flywheelsSpeedAmp,
+                  ShooterConstant::kAngleShooterAmp, false, ScoringPositions::amp)
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)};
 
     frc2::CommandPtr barreFinalTrap{
-        BarrePosition(&m_Barre, frc::Preferences::GetDouble("k1erJointAngleTrapFinal"),
-                      frc::Preferences::GetDouble("k2eJointStartPosition"))
+        BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal,
+                      BarreConstant::k2eJointStartPosition)
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelSelf)};
 
     frc2::CommandPtr shootTrap{
         ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                  &m_CoPilotController, frc::Preferences::GetDouble("flywheelSpeedsTrapRPM"),
-                  frc::Preferences::GetDouble("angleShooterTrap"), false, ScoringPositions::trap)
+                  &m_CoPilotController, ShooterConstant::flywheelsSpeedTrap,
+                  ShooterConstant::kAngleShooterTrap, false, ScoringPositions::trap)
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)};
 };
