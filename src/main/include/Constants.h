@@ -84,9 +84,9 @@ constexpr int RearRightTurningID = 11;
 constexpr int RearRightDrivingID = 12;
 constexpr int RearRightCANcoderID = 13;
 
-constexpr double kPThetaRobot = 580;
+constexpr double kPThetaRobot = 525;
 constexpr double kIThetaRobot = 0.01;
-constexpr double kDThetaRobot = 60;
+constexpr double kDThetaRobot = 20;
 
 constexpr double kPXYRobot = 0.0115;
 constexpr double kIXYRobot = 0;
@@ -158,7 +158,7 @@ namespace ShooterConstant {
 enum ShooterState {
     init,
     waitingForSubsystems,
-    waitingForDeuxiemeJointTrap,
+    // waitingForDeuxiemeJointTrap,
     moveNoteInShooter,
     waitingForNoteToEnter,
     waitingForNoteToExit,
@@ -201,7 +201,7 @@ constexpr double kPeakOutputReverse = -1;
 constexpr double kPPositionAngle = 7.25;
 constexpr double kIPositionAngle = 0.05;
 constexpr double kDPositionAngle = 25.0;
-constexpr double kFPositionAngle = 4.25;
+constexpr double kFPositionAngle = 0;
 constexpr double kVitesseAngle = 1000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 4000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
@@ -339,7 +339,7 @@ constexpr double currentLimit = 50;         // amperes,
 constexpr int positionPIDSlotID = 0;
 constexpr int velocityPIDSlotID = 1;
 constexpr double positionThreshold = 5; // 1/10 pouce
-constexpr double kPourcentageHooks = 0.25;
+constexpr double kPourcentageManualHooks = 0.25;
 constexpr double kPourcentageInitHooks = -0.075;
 constexpr double kThresholdMotorStopped = 1;
 constexpr auto kTimeDelayForInit = 0.1_s;

@@ -20,8 +20,8 @@ void AutomaticIntake::Execute() {
         double yawError{latestTarget.value().GetYaw()};
         double pitchError{-latestTarget.value().GetPitch()};
 
-        units::meters_per_second_t xSpeed{pitchError * frc::Preferences::GetDouble("kPXYRobot")};
-        units::meters_per_second_t ySpeed{yawError * frc::Preferences::GetDouble("kPXYRobot")};
+        units::meters_per_second_t xSpeed{pitchError * DriveConstant::kPXYRobot};
+        units::meters_per_second_t ySpeed{yawError * DriveConstant::kPXYRobot};
 
         if (ySpeed.value() > DriveConstant::kMaxAutoAlignSpeedY) {
             ySpeed = units::meters_per_second_t(DriveConstant::kMaxAutoAlignSpeedY);

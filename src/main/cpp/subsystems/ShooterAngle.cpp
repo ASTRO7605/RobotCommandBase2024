@@ -43,18 +43,14 @@ ShooterAngle::ShooterAngle() : m_MoteurAngle{ShooterConstant::angleMotorID} {
     m_MoteurAngle.ConfigReverseSoftLimitEnable(true);
 
     m_MoteurAngle.SelectProfileSlot(0, 0); // position
-    m_MoteurAngle.Config_kP(0, frc::Preferences::GetDouble("kPPositionAngleLanceur"),
-                            ShooterConstant::kTimeoutMs);
-    m_MoteurAngle.Config_kI(0, frc::Preferences::GetDouble("kIPositionAngleLanceur"),
-                            ShooterConstant::kTimeoutMs);
-    m_MoteurAngle.Config_kD(0, frc::Preferences::GetDouble("kDPositionAngleLanceur"),
-                            ShooterConstant::kTimeoutMs);
-    m_MoteurAngle.Config_kF(0, frc::Preferences::GetDouble("kFPositionAngleLanceur"),
-                            ShooterConstant::kTimeoutMs);
+    m_MoteurAngle.Config_kP(0, ShooterConstant::kPPositionAngle, ShooterConstant::kTimeoutMs);
+    m_MoteurAngle.Config_kI(0, ShooterConstant::kIPositionAngle, ShooterConstant::kTimeoutMs);
+    m_MoteurAngle.Config_kD(0, ShooterConstant::kDPositionAngle, ShooterConstant::kTimeoutMs);
+    m_MoteurAngle.Config_kF(0, ShooterConstant::kFPositionAngle, ShooterConstant::kTimeoutMs);
 
-    m_MoteurAngle.ConfigMotionAcceleration(frc::Preferences::GetDouble("kAccelerationAngle") /
+    m_MoteurAngle.ConfigMotionAcceleration(ShooterConstant::kAccelerationAngle /
                                            ShooterConstant::FConversionFactorAccelerationAngle);
-    m_MoteurAngle.ConfigMotionCruiseVelocity(frc::Preferences::GetDouble("kVitesseAngle") /
+    m_MoteurAngle.ConfigMotionCruiseVelocity(ShooterConstant::kVitesseAngle /
                                              ShooterConstant::FConversionFactorVelocityAngle);
 
     m_MoteurAngle.ConfigVoltageCompSaturation(ShooterConstant::kVoltageCompensation);

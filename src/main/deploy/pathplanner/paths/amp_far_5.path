@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7194272206481696,
-        "y": 6.849844384109778
+        "x": 2.815377088698163,
+        "y": 6.668279843339034
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.7970926711084205,
-        "y": 7.202868251890351
+        "x": 4.893042539158413,
+        "y": 7.021303711119607
       },
       "isLocked": false,
-      "linkedName": "amp_2"
+      "linkedName": "amp_far_4"
     },
     {
       "anchor": {
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.7,
+      "minWaypointRelativePos": 0.85,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 3.0,

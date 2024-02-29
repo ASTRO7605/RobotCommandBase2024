@@ -72,18 +72,15 @@ Barre::Barre()
     m_MoteurDeuxiemeJoint.Config_kF(0, BarreConstant::kFMotion2eJoint, BarreConstant::kTimeoutMs);
 
     m_MoteurPremierJoint.ConfigMotionCruiseVelocity(
-        frc::Preferences::GetDouble("kVitesse1erJoint") /
-        BarreConstant::FConversionFactorVelocity1erJoint);
+        BarreConstant::kVitesse1erJoint / BarreConstant::FConversionFactorVelocity1erJoint);
     m_MoteurPremierJoint.ConfigMotionAcceleration(
-        frc::Preferences::GetDouble("kAcceleration1erJoint") /
+        BarreConstant::kAcceleration1erJoint /
         BarreConstant::FConversionFactorAcceleration1erJoint);
 
     m_MoteurDeuxiemeJoint.ConfigMotionCruiseVelocity(
-        frc::Preferences::GetDouble("kVitesse2eJoint") /
-        BarreConstant::FConversionFactorVelocity2eJoint);
+        BarreConstant::kVitesse2eJoint / BarreConstant::FConversionFactorVelocity2eJoint);
     m_MoteurDeuxiemeJoint.ConfigMotionAcceleration(
-        frc::Preferences::GetDouble("kAcceleration2eJoint") /
-        BarreConstant::FConversionFactorAcceleration2eJoint);
+        BarreConstant::kAcceleration2eJoint / BarreConstant::FConversionFactorAcceleration2eJoint);
 
     m_MoteurPremierJoint.ConfigVoltageCompSaturation(BarreConstant::kVoltageCompensation);
     m_MoteurPremierJoint.EnableVoltageCompensation(true);

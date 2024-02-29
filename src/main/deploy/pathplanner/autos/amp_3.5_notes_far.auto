@@ -83,6 +83,12 @@
           "data": {
             "name": "auto intake"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp_far_6"
+          }
         }
       ]
     }
