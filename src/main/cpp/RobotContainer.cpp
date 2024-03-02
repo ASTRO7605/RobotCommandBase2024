@@ -99,6 +99,8 @@ void RobotContainer::ConfigureBindings() {
                                             m_Base.ResetOdometry(latestCameraPose.value());
                                         }
                                     }).ToPtr());
+    m_TurnStick.Button(6).OnTrue(
+        frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }).ToPtr());
     m_TurnStick.Button(7).WhileTrue(
         LeftHookManual(&m_LeftHook, ClimberConstant::kPourcentageManualHooks).ToPtr());
     m_TurnStick.Button(8).WhileTrue(
@@ -288,9 +290,10 @@ void RobotContainer::ConfigureNamedCommands() {
         "barre final and shoot trap",
         frc2::SequentialCommandGroup(
             frc2::PrintCommand("before barre"),
-            frc2::ParallelDeadlineGroup(
-                frc2::WaitCommand(0.5_s),
-                BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal, BarreConstant::k2eJointStartPosition)),
+            frc2::ParallelDeadlineGroup(frc2::WaitCommand(0.5_s),
+                                        BarrePosition(&m_Barre,
+                                                      BarreConstant::k1erJointAngleTrapFinal,
+                                                      BarreConstant::k2eJointStartPosition)),
             frc2::PrintCommand("after wait"),
             frc2::InstantCommand([this]() { shootTrap.Schedule(); }),
             frc2::PrintCommand("after shoot"))
@@ -299,10 +302,12 @@ void RobotContainer::ConfigureNamedCommands() {
         "extend crochets trap",
         frc2::cmd::Parallel(
             RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionExtendedTrap,
-                                  ClimberConstant::kVitesseExtensionHooks, ClimberConstant::kAccelerationExtensionHooks)
+                                  ClimberConstant::kVitesseExtensionHooks,
+                                  ClimberConstant::kAccelerationExtensionHooks)
                 .ToPtr(),
             LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionExtendedTrap,
-                                 ClimberConstant::kVitesseExtensionHooks, ClimberConstant::kAccelerationExtensionHooks)
+                                 ClimberConstant::kVitesseExtensionHooks,
+                                 ClimberConstant::kAccelerationExtensionHooks)
                 .ToPtr()));
     pathplanner::NamedCommands::registerCommand(
         "retract crochets trap",
@@ -343,12 +348,14 @@ void RobotContainer::ChooseCorrectStageCommand() {
     int rightCameraAprilTagID{m_Base.GetRightCameraAprilTagID()};
 
     if (leftCameraAprilTagID != rightCameraAprilTagID) {
+        frc2::PrintCommand("dont see 2 april tags").Schedule();
         return;
     }
     auto allianceColor = frc::DriverStation::GetAlliance();
     std::string desiredCommand{""};
     if (allianceColor.has_value()) {
         if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+            frc2::PrintCommand("in blue color");
             if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
                 desiredCommand = "stage source side";
             } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueMiddleSide) {
@@ -357,6 +364,7 @@ void RobotContainer::ChooseCorrectStageCommand() {
                 desiredCommand = "stage speaker side";
             }
         } else {
+            frc2::PrintCommand("in red color");
             if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
                 desiredCommand = "stage source side";
             } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redMiddleSide) {
