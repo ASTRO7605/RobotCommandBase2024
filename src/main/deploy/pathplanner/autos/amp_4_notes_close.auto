@@ -80,15 +80,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "amp_multi_4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "auto intake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "start intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "amp_multi_4"
+                }
+              }
+            ]
           }
         },
         {
