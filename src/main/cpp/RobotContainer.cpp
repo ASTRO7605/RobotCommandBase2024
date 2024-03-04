@@ -69,7 +69,7 @@ RobotContainer::RobotContainer()
         {&m_ShooterAngle}));
 
     m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
-    m_AutoChooser.AddOption("Amp 3.5 notes far", "amp_3_notes_far");
+    m_AutoChooser.AddOption("Amp 3.5 notes far", "amp_3.5_notes_far");
     m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
@@ -346,31 +346,75 @@ void RobotContainer::ConfigureNamedCommands() {
 void RobotContainer::ChooseCorrectStageCommand() {
     int leftCameraAprilTagID{m_Base.GetLeftCameraAprilTagID()};
     int rightCameraAprilTagID{m_Base.GetRightCameraAprilTagID()};
-
-    if (leftCameraAprilTagID != rightCameraAprilTagID) {
-        frc2::PrintCommand("dont see 2 april tags").Schedule();
-        return;
-    }
     auto allianceColor = frc::DriverStation::GetAlliance();
     std::string desiredCommand{""};
     if (allianceColor.has_value()) {
-        if (allianceColor == frc::DriverStation::Alliance::kBlue) {
-            frc2::PrintCommand("in blue color");
-            if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
-                desiredCommand = "stage source side";
-            } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueMiddleSide) {
-                desiredCommand = "stage middle side";
-            } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSpeakerSide) {
-                desiredCommand = "stage speaker side";
+        if (leftCameraAprilTagID == rightCameraAprilTagID) {
+            if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+                if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
+                    desiredCommand = "stage source side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::blueMiddleSide) {
+                    desiredCommand = "stage middle side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::blueSpeakerSide) {
+                    desiredCommand = "stage speaker side";
+                }
+            } else {
+                if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
+                    desiredCommand = "stage source side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::redMiddleSide) {
+                    desiredCommand = "stage middle side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::redSpeakerSide) {
+                    desiredCommand = "stage speaker side";
+                }
             }
         } else {
-            frc2::PrintCommand("in red color");
-            if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
-                desiredCommand = "stage source side";
-            } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redMiddleSide) {
-                desiredCommand = "stage middle side";
-            } else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSpeakerSide) {
-                desiredCommand = "stage speaker side";
+            if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+                if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
+                    desiredCommand = "stage source side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::blueMiddleSide) {
+                    desiredCommand = "stage middle side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::blueSpeakerSide) {
+                    desiredCommand = "stage speaker side";
+                }
+            } else {
+                if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
+                    desiredCommand = "stage source side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::redMiddleSide) {
+                    desiredCommand = "stage middle side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::redSpeakerSide) {
+                    desiredCommand = "stage speaker side";
+                }
+            }
+            if (desiredCommand == "") {
+                if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+                    if (rightCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
+                        desiredCommand = "stage source side";
+                    } else if (rightCameraAprilTagID ==
+                               VisionConstant::StageAprilTagIDs::blueMiddleSide) {
+                        desiredCommand = "stage middle side";
+                    } else if (rightCameraAprilTagID ==
+                               VisionConstant::StageAprilTagIDs::blueSpeakerSide) {
+                        desiredCommand = "stage speaker side";
+                    }
+                } else {
+                    if (rightCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
+                        desiredCommand = "stage source side";
+                    } else if (rightCameraAprilTagID ==
+                               VisionConstant::StageAprilTagIDs::redMiddleSide) {
+                        desiredCommand = "stage middle side";
+                    } else if (rightCameraAprilTagID ==
+                               VisionConstant::StageAprilTagIDs::redSpeakerSide) {
+                        desiredCommand = "stage speaker side";
+                    }
+                }
             }
         }
         if (desiredCommand != "") {

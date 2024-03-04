@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.061907354995116,
-        "y": 6.555400032946106
+        "x": 2.0540825697036027,
+        "y": 6.314843398917567
       },
       "isLocked": false,
       "linkedName": "amp_1"
@@ -41,12 +41,6 @@
             {
               "type": "named",
               "data": {
-                "name": "start shooter wheels"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "adjust shooter angle"
               }
             }
@@ -63,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -155.0,
+    "rotation": -150.0,
     "rotateFast": true
   },
   "reversed": false,

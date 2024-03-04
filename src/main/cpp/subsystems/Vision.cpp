@@ -7,8 +7,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 Vision::Vision(std::string_view table_name, frc::Transform3d cameraPose)
-    : 
-      robotToCam{cameraPose},
+    : robotToCam{cameraPose},
       m_PhotonPoseEstimator{frc::AprilTagFieldLayout{
                                 frc::LoadAprilTagLayoutField(frc::AprilTagField::k2024Crescendo)},
                             photon::PoseStrategy::MULTI_TAG_PNP_ON_COPROCESSOR,
@@ -33,6 +32,8 @@ void Vision::Periodic() {
                    VisionConstant::ambiguityThreshold) {
             isLatestSingleResultValid = true;
         }
+    } else {
+        lastAprilTagSeen = 0;
     }
 }
 

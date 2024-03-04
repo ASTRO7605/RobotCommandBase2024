@@ -61,22 +61,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 3.0
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "auto intake"
-                }
-              }
-            ]
+            "name": "auto intake"
           }
         },
         {

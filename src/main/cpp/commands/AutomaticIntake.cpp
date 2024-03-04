@@ -12,11 +12,16 @@ void AutomaticIntake::Initialize() {
     if (!m_pBase->GetLatestLimelightTarget().has_value()) {
         isFinished = true;
     }
+    m_TimerWithoutNoteSeen.Stop();
+    m_TimerWithoutNoteSeen.Reset();
 }
 
 void AutomaticIntake::Execute() {
     std::optional<photon::PhotonTrackedTarget> latestTarget{m_pBase->GetLatestLimelightTarget()};
     if (latestTarget.has_value()) {
+        m_TimerWithoutNoteSeen.Stop();
+        m_TimerWithoutNoteSeen.Reset();
+
         double yawError{latestTarget.value().GetYaw()};
         double pitchError{-latestTarget.value().GetPitch()};
 
@@ -32,8 +37,10 @@ void AutomaticIntake::Execute() {
         }
 
         m_pBase->Drive(xSpeed, ySpeed, 0_rad_per_s, false);
+    } else {
+        m_TimerWithoutNoteSeen.Start();
     }
-    if (m_pIntake->IsObjectInIntake()) {
+    if (m_pIntake->IsObjectInIntake() || m_TimerWithoutNoteSeen.Get() >= 3_s) {
         isFinished = true;
     }
 }
