@@ -408,7 +408,14 @@ units::degrees_per_second_t Base::GetPIDControlledRotationSpeedToSpeaker() {
 }
 
 bool Base::IsRobotInRangeToShoot() {
-    if (GetDistanceToSpeaker() <= DriveConstant::kThresholdInSpeakerRange) {
+    if (GetDistanceToSpeaker() <= DriveConstant::kThresholdSpeakerInRangeToShoot) {
+        return true;
+    }
+    return false;
+}
+
+bool Base::IsRobotInRangeToStartWheels() {
+    if (GetDistanceToSpeaker() <= DriveConstant::kThresholdSpeakerInRangeToStartWheels) {
         return true;
     }
     return false;

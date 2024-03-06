@@ -5,6 +5,7 @@
 #include <frc/Timer.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include "LimelightHelpers.h"
 
 class AutomaticIntake : public frc2::CommandHelper<frc2::Command, AutomaticIntake> {
   private:

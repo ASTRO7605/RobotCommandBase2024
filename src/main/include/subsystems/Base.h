@@ -123,6 +123,8 @@ class Base : public frc2::SubsystemBase {
 
     bool IsRobotInRangeToShoot();
 
+    bool IsRobotInRangeToStartWheels();
+
     double GetRotationPIDError();
 
     int GetLeftCameraAprilTagID();

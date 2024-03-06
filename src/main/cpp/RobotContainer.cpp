@@ -63,10 +63,21 @@ RobotContainer::RobotContainer()
 
     m_ShooterAngle.SetDefaultCommand(frc2::RunCommand(
         [this] {
-            m_ShooterAngle.SetShooterAngle(
+            if (m_Intake.IsObjectInIntake()) {
+                m_ShooterAngle.SetShooterAngle(
                 m_ShooterAngle.GetInterpolatedShooterAngle(m_Base.GetDistanceToSpeaker().value()));
+            } else {
+                m_ShooterAngle.SetShooterAngle(ShooterConstant::kIntermediateAngleShooter);
+            }
         },
         {&m_ShooterAngle}));
+    m_ShooterWheels.SetDefaultCommand(frc2::RunCommand( [this] {
+        if (m_Base.IsRobotInRangeToStartWheels()) {
+            m_ShooterWheels.SetWheelSpeeds(750, true);
+        } else {
+            m_ShooterWheels.StopWheels();
+        }
+    }));
 
     m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
     m_AutoChooser.AddOption("Amp 3.5 notes far", "amp_3.5_notes_far");
