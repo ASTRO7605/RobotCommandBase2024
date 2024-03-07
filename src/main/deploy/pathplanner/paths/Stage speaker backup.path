@@ -43,6 +43,12 @@
               "data": {
                 "name": "barre intermediaire trap"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "stop shooter wheels"
+              }
             }
           ]
         }

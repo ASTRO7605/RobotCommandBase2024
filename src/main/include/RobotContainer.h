@@ -119,7 +119,6 @@ class RobotContainer : public frc2::SubsystemBase {
   private:
     void ConfigureBindings();
     void ConfigureAmpPathfind();
-    void ConfigureStagePathfind();
     void ConfigureNamedCommands();
     void ChooseCorrectStageCommand();
     // The robot's subsystems are defined here...

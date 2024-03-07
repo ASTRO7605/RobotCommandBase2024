@@ -14,7 +14,6 @@ RobotContainer::RobotContainer()
     // Configure the button bindings
     ConfigureNamedCommands();
     ConfigureAmpPathfind();
-    ConfigureStagePathfind();
     ConfigureBindings();
 
     m_Base.SetDefaultCommand(frc2::RunCommand(
@@ -64,20 +63,22 @@ RobotContainer::RobotContainer()
     m_ShooterAngle.SetDefaultCommand(frc2::RunCommand(
         [this] {
             if (m_Intake.IsObjectInIntake()) {
-                m_ShooterAngle.SetShooterAngle(
-                m_ShooterAngle.GetInterpolatedShooterAngle(m_Base.GetDistanceToSpeaker().value()));
+                m_ShooterAngle.SetShooterAngle(m_ShooterAngle.GetInterpolatedShooterAngle(
+                    m_Base.GetDistanceToSpeaker().value()));
             } else {
                 m_ShooterAngle.SetShooterAngle(ShooterConstant::kIntermediateAngleShooter);
             }
         },
         {&m_ShooterAngle}));
-    m_ShooterWheels.SetDefaultCommand(frc2::RunCommand( [this] {
-        if (m_Base.IsRobotInRangeToStartWheels()) {
-            m_ShooterWheels.SetWheelSpeeds(750, true);
-        } else {
-            m_ShooterWheels.StopWheels();
-        }
-    }));
+    m_ShooterWheels.SetDefaultCommand(frc2::RunCommand(
+        [this] {
+            if (m_Base.IsRobotInRangeToStartWheels() && m_Intake.IsObjectInIntake()) {
+                m_ShooterWheels.SetWheelSpeeds(ShooterConstant::kStandByWheelRPM, true);
+            } else {
+                m_ShooterWheels.StopWheels();
+            }
+        },
+        {&m_ShooterWheels}));
 
     m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
     m_AutoChooser.AddOption("Amp 3.5 notes far", "amp_3.5_notes_far");
@@ -163,12 +164,12 @@ void RobotContainer::ConfigureBindings() {
     m_CoPilotController.RightBumper().OnTrue(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(true); }, {})
             .ToPtr());
-    m_CoPilotController.RightBumper().WhileTrue(
-        StartShooterWheels(&m_ShooterWheels, &m_Base, true).ToPtr());
+    // m_CoPilotController.RightBumper().WhileTrue(
+    // StartShooterWheels(&m_ShooterWheels, &m_Base, true).ToPtr());
     m_CoPilotController.RightBumper().OnFalse(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(false); }, {})
             .ToPtr());
-    m_CoPilotController.RightBumper().OnFalse(StopShooterWheels(&m_ShooterWheels).ToPtr());
+    // m_CoPilotController.RightBumper().OnFalse(StopShooterWheels(&m_ShooterWheels).ToPtr());
 
     (m_CoPilotController.A() && !m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
@@ -187,10 +188,10 @@ void RobotContainer::ConfigureBindings() {
                     .ToPtr());
 
     (m_CoPilotController.X() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
-        .OnTrue(frc2::SequentialCommandGroup{AlignWithSpeaker(&m_Base),
-                                             ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels,
-                                                       &m_Intake, &m_Barre, &m_CoPilotController, 0,
-                                                       0, true, ScoringPositions::speaker)}
+        .OnTrue(/*frc2::SequentialCommandGroup{AlignWithSpeaker(&m_Base),
+                 */
+                ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                          &m_CoPilotController, 0, 0, true, ScoringPositions::speaker) /*}*/
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
     (m_CoPilotController.X() && m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
@@ -243,10 +244,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 void RobotContainer::ConfigureAmpPathfind() {
     pathfindingAmpCommand = pathplanner::AutoBuilder::buildAuto("approach amp auto");
-}
-
-void RobotContainer::ConfigureStagePathfind() {
-    pathfindingStageCommand = pathplanner::AutoBuilder::buildAuto("stage speaker side");
 }
 
 void RobotContainer::SeedEncoders() {
@@ -340,7 +337,11 @@ void RobotContainer::ConfigureNamedCommands() {
                                                true, ScoringPositions::speaker)}
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
     pathplanner::NamedCommands::registerCommand(
-        "start shooter wheels", StartShooterWheels(&m_ShooterWheels, &m_Base, true, 0).ToPtr());
+        "start shooter wheels",
+        StartShooterWheels(&m_ShooterWheels, &m_Base, true, ShooterConstant::kStandByWheelRPM)
+            .ToPtr());
+    pathplanner::NamedCommands::registerCommand("stop shooter wheels",
+                                                StopShooterWheels(&m_ShooterWheels).ToPtr());
     pathplanner::NamedCommands::registerCommand(
         "adjust shooter angle",
         frc2::InstantCommand(

@@ -252,6 +252,7 @@ constexpr std::pair<units::meter_t, double> eighthDistanceShooterAngleCouple =
     std::make_pair(3.40_m, 390);
 extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance;
 extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
+constexpr double kStandByWheelRPM = 2000;
 } // namespace ShooterConstant
 
 namespace IntakeConstant {

@@ -10,7 +10,7 @@ ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *
       useInterpolatedSpeeds{useInterpolatedSpeeds}, scoringPlace{scoringPlace},
       m_RedescendreBarre{
           RedescendreBarre(m_pBarre, true, (scoringPlace == ScoringPositions::trap))} {
-    AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake, m_pBase});
+    AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake /*, m_pBase*/});
 }
 
 void ShootNote::Initialize() {
@@ -19,17 +19,15 @@ void ShootNote::Initialize() {
     } else {
         m_State = ShooterConstant::ShooterState::init;
     }
+}
+
+void ShootNote::Execute() {
     if (useInterpolatedSpeeds) {
         targetSpeeds =
             m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
         finalShooterTargetAngle =
             m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
     }
-    frc::SmartDashboard::PutNumber("interpolatedAngle", finalShooterTargetAngle);
-    frc::SmartDashboard::PutNumber("interpolatedSpeed", targetSpeeds);
-}
-
-void ShootNote::Execute() {
     switch (m_State) {
     case (ShooterConstant::ShooterState::init):
         if (scoringPlace == ScoringPositions::speaker) {
@@ -41,7 +39,7 @@ void ShootNote::Execute() {
             // }
             currentShooterTargetAngle = finalShooterTargetAngle;
             m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
-            m_pBase->SetWheelsInXFormation();
+            // m_pBase->SetWheelsInXFormation();
         } else {
             if (scoringPlace == ScoringPositions::amp) {
                 targetPremierJoint = BarreConstant::k1erJointAngleAmp;
