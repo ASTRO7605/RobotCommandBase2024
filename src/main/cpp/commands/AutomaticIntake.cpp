@@ -9,7 +9,7 @@ void AutomaticIntake::Initialize() {
     m_pBase->SetRobotDrivingMode(false);
     m_pIntake->SetIntake(true, false, false);
     isFinished = false;
-    if (!m_pBase->GetLatestLimelightTarget().has_value()) {
+    if (!LimelightHelpers::getTV()) {
         isFinished = true;
     }
     m_TimerWithoutNoteSeen.Stop();
@@ -17,13 +17,12 @@ void AutomaticIntake::Initialize() {
 }
 
 void AutomaticIntake::Execute() {
-    std::optional<photon::PhotonTrackedTarget> latestTarget{m_pBase->GetLatestLimelightTarget()};
-    if (latestTarget.has_value()) {
+    if (LimelightHelpers::getTV()) {
         m_TimerWithoutNoteSeen.Stop();
         m_TimerWithoutNoteSeen.Reset();
 
-        double yawError{latestTarget.value().GetYaw()};
-        double pitchError{-latestTarget.value().GetPitch()};
+        double yawError{LimelightHelpers::getTX()};
+        double pitchError{-LimelightHelpers::getTY()};
 
         units::meters_per_second_t xSpeed{pitchError * DriveConstant::kPXYRobot};
         units::meters_per_second_t ySpeed{yawError * DriveConstant::kPXYRobot};

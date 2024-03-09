@@ -93,7 +93,7 @@ RobotContainer::RobotContainer()
 }
 
 void RobotContainer::Periodic() {
-    if (m_Base.GetLatestLimelightTarget().has_value()) {
+    if (LimelightHelpers::getTV()) {
         m_Led.SetNoteSeen(true);
     } else {
         m_Led.SetNoteSeen(false);

@@ -78,6 +78,7 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/Trigger.h>
 
+#include "LimelightHelpers.h"
 struct InPosition {
     bool correct_xy;
     bool correct_angle;

@@ -446,8 +446,4 @@ std::optional<frc::Pose2d> Base::GetAveragePoseFromCameras() {
     }
 }
 
-std::optional<photon::PhotonTrackedTarget> Base::GetLatestLimelightTarget() {
-    return m_Limelight.GetLatestTarget();
-}
-
 void Base::SetRobotDrivingMode(bool fieldRelative) { m_DrivingInFieldRelative = fieldRelative; }
