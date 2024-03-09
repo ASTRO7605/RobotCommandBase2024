@@ -75,6 +75,13 @@ Base::Base()
 }
 
 void Base::Periodic() {
+    if (std::isnan(m_PoseEstimator.GetEstimatedPosition().X().value()) ||
+        std::isnan(m_PoseEstimator.GetEstimatedPosition().Y().value()) ||
+        std::isnan(m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value())) {
+        ResetOdometry(lastPoseEstimate);
+    }
+    lastPoseEstimate = m_PoseEstimator.GetEstimatedPosition();
+
     frc::SmartDashboard::PutNumber("leftAprilTagID", GetLeftCameraAprilTagID());
     frc::SmartDashboard::PutNumber("rightAprilTagID", GetRightCameraAprilTagID());
     if (frc::DriverStation::GetAlliance().has_value()) {
@@ -316,7 +323,7 @@ void Base::SetRobotPoseVisionEstimateRight() {
     frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
     if (estimate->ambiguity == 0) {
-        estimate->ambiguity = 0.01;
+        estimate->ambiguity = 0.001;
     }
 
     auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeter;

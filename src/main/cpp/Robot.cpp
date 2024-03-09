@@ -22,7 +22,8 @@ void Robot::RobotInit() {
     wpi::PortForwarder::GetInstance().Add(1282, "photonvision-a.local", 1182);
     wpi::PortForwarder::GetInstance().Add(1382, "photonvision-b.local", 1182);
 
-    frc::Preferences::RemoveAll();
+    frc::Preferences::InitDouble("TestShooterAngle", 0);
+    frc::Preferences::InitDouble("TestShooterSpeeds", 0);
 
     hasInitHooksBeenScheduled = false;
 } /** * This function is called every 20 ms, no matter the mode. Use * this for

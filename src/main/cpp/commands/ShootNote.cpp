@@ -27,6 +27,8 @@ void ShootNote::Execute() {
             m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
         finalShooterTargetAngle =
             m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
+        frc::SmartDashboard::PutNumber("interpolatedSpeeds", targetSpeeds);
+        frc::SmartDashboard::PutNumber("interpolatedAngle", finalShooterTargetAngle);
     }
     switch (m_State) {
     case (ShooterConstant::ShooterState::init):
@@ -38,7 +40,7 @@ void ShootNote::Execute() {
             //     currentShooterTargetAngle = ShooterConstant::kIntermediateAngleShooter;
             // }
             currentShooterTargetAngle = finalShooterTargetAngle;
-            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
+            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
             // m_pBase->SetWheelsInXFormation();
         } else {
             if (scoringPlace == ScoringPositions::amp) {
@@ -68,7 +70,7 @@ void ShootNote::Execute() {
         }
         if (scoringPlace == ScoringPositions::speaker) {
             if (m_pShooterWheels->AreWheelsDoneAccelerating(
-                    targetSpeeds, true)) { // did wheels reach their target
+                    targetSpeeds, false)) { // did wheels reach their target
                 areWheelsAtRightSpeed = true;
             }
             if (isShooterAngledRight && areWheelsAtRightSpeed) {

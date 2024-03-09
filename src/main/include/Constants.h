@@ -131,7 +131,7 @@ constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
 constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.99};
 constexpr std::array<double, 3> kVisionStdDevsPerMeterBase{0.4, 0.4, 0.95};
 constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeter{
-    20.0, 20.0, 100.0}; // ambiguity is very small, so this number is quite big.
+    10.0, 10.0, 250.0}; // ambiguity is very small, so this number is quite big.
 constexpr frc::Translation2d blueSpeakerPoseMeters =
     frc::Translation2d{units::inch_t{-1.5}, units::inch_t{218.42}};
 constexpr frc::Translation2d redSpeakerPoseMeters =
@@ -176,14 +176,14 @@ constexpr double flywheelsSpeedManualSpeaker = 3000; // RPM
 constexpr double manualSpeakerAngle = 650;
 constexpr double flywheelsSpeedAmp = 550;   // RPM
 constexpr double flywheelsSpeedTrap = 1650; // RPM
-constexpr double speedThreshold = 75;       // RPM
+constexpr double speedThreshold = 200;      // RPM
 constexpr auto timeThreshold = 0.2_s;
 constexpr double kPLeftFlywheel = 0.00025;
-constexpr double kILeftFlywheel = 0.000001;
+constexpr double kILeftFlywheel = 0.0000007;
 constexpr double kDLeftFlywheel = 0.01;
 constexpr double kFFLeftFlywheel = 0;
 constexpr double kPRightFlywheel = 0.00025;
-constexpr double kIRightFlywheel = 0.000001;
+constexpr double kIRightFlywheel = 0.0000007;
 constexpr double kDRightFlywheel = 0.01;
 constexpr double kFFRightFlywheel = 0;
 constexpr double FConversionFactorWheels = 1.0 / 42.0;             // ticks * F -> wheel rotations
@@ -200,13 +200,13 @@ constexpr double kNominalOutputReverse = 0;
 constexpr double kPeakOutputForward = 1;
 constexpr double kPeakOutputReverse = -1;
 constexpr double kPPositionAngle = 7.25;
-constexpr double kIPositionAngle = 0.05;
+constexpr double kIPositionAngle = 0.015;
 constexpr double kDPositionAngle = 25.0;
 constexpr double kFPositionAngle = 0;
 constexpr double kVitesseAngle = 1000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 4000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
-constexpr double angleThreshold = 7.5;      // dixieme de degre
+constexpr double angleThreshold = 12.5;     // dixieme de degre
 constexpr double kMaxAF = 0 /*.0445*/;
 constexpr double FDegToRad = std::numbers::pi / 180;
 constexpr double kPeakCurrentLimit = 20;   // amperes
@@ -229,27 +229,31 @@ constexpr std::pair<units::meter_t, double> secondDistanceShooterAngleCouple =
 constexpr std::pair<units::meter_t, double> thirdDistanceWheelSpeedsCouple =
     std::make_pair(1.90_m, 3000);
 constexpr std::pair<units::meter_t, double> thirdDistanceShooterAngleCouple =
-    std::make_pair(1.90_m, 550);
+    std::make_pair(1.90_m, 545);
 constexpr std::pair<units::meter_t, double> fourthDistanceWheelSpeedsCouple =
     std::make_pair(2.20_m, 3000);
 constexpr std::pair<units::meter_t, double> fourthDistanceShooterAngleCouple =
-    std::make_pair(2.20_m, 490);
+    std::make_pair(2.20_m, 485);
 constexpr std::pair<units::meter_t, double> fifthDistanceWheelSpeedsCouple =
     std::make_pair(2.52_m, 3000);
 constexpr std::pair<units::meter_t, double> fifthDistanceShooterAngleCouple =
     std::make_pair(2.52_m, 440);
 constexpr std::pair<units::meter_t, double> sixthDistanceWheelSpeedsCouple =
-    std::make_pair(2.81_m, 3100);
+    std::make_pair(2.81_m, 4000);
 constexpr std::pair<units::meter_t, double> sixthDistanceShooterAngleCouple =
-    std::make_pair(2.81_m, 420);
+    std::make_pair(2.81_m, 405);
 constexpr std::pair<units::meter_t, double> seventhDistanceWheelSpeedsCouple =
-    std::make_pair(3.11_m, 3250);
+    std::make_pair(3.11_m, 4500);
 constexpr std::pair<units::meter_t, double> seventhDistanceShooterAngleCouple =
-    std::make_pair(3.11_m, 407.5);
+    std::make_pair(3.11_m, 395);
 constexpr std::pair<units::meter_t, double> eighthDistanceWheelSpeedsCouple =
-    std::make_pair(3.40_m, 3500);
+    std::make_pair(3.40_m, 4500);
 constexpr std::pair<units::meter_t, double> eighthDistanceShooterAngleCouple =
-    std::make_pair(3.40_m, 390);
+    std::make_pair(3.40_m, 380);
+constexpr std::pair<units::meter_t, double> ninthDistanceWheelSpeedsCouple =
+    std::make_pair(3.90_m, 4500);
+constexpr std::pair<units::meter_t, double> ninthDistanceShooterAngleCouple =
+    std::make_pair(3.90_m, 360);
 extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance;
 extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
 constexpr double kStandByWheelRPM = 2000;

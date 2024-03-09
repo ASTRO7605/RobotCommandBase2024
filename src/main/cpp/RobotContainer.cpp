@@ -73,7 +73,9 @@ RobotContainer::RobotContainer()
     m_ShooterWheels.SetDefaultCommand(frc2::RunCommand(
         [this] {
             if (m_Base.IsRobotInRangeToStartWheels() && m_Intake.IsObjectInIntake()) {
-                m_ShooterWheels.SetWheelSpeeds(ShooterConstant::kStandByWheelRPM, true);
+                m_ShooterWheels.SetWheelSpeeds(m_ShooterWheels.GetInterpolatedWheelSpeeds(
+                                                   m_Base.GetDistanceToSpeaker().value()),
+                                               false);
             } else {
                 m_ShooterWheels.StopWheels();
             }
@@ -196,8 +198,9 @@ void RobotContainer::ConfigureBindings() {
 
     (m_CoPilotController.X() && m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .OnTrue(ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                          &m_CoPilotController, ShooterConstant::flywheelsSpeedManualSpeaker,
-                          ShooterConstant::manualSpeakerAngle, false, ScoringPositions::speaker)
+                          &m_CoPilotController, frc::Preferences::GetDouble("TestShooterSpeeds"),
+                          frc::Preferences::GetDouble("TestShooterAngle"), false,
+                          ScoringPositions::speaker)
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
@@ -337,9 +340,20 @@ void RobotContainer::ConfigureNamedCommands() {
                                                true, ScoringPositions::speaker)}
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
     pathplanner::NamedCommands::registerCommand(
+        "shoot note",
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                  &m_CoPilotController, 0, 0, true, ScoringPositions::speaker)
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
+    pathplanner::NamedCommands::registerCommand(
         "start shooter wheels",
-        StartShooterWheels(&m_ShooterWheels, &m_Base, true, ShooterConstant::kStandByWheelRPM)
-            .ToPtr());
+        frc2::InstantCommand(
+            [this] {
+                m_ShooterWheels.SetWheelSpeeds(m_ShooterWheels.GetInterpolatedWheelSpeeds(
+                                                   m_Base.GetDistanceToSpeaker().value()),
+                                               false);
+            },
+            {&m_ShooterWheels})
+            .Repeatedly());
     pathplanner::NamedCommands::registerCommand("stop shooter wheels",
                                                 StopShooterWheels(&m_ShooterWheels).ToPtr());
     pathplanner::NamedCommands::registerCommand(
