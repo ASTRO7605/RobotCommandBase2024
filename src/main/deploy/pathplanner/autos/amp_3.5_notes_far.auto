@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot note"
+            "name": "feed into shooter"
           }
         },
         {
@@ -45,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot note"
+            "name": "feed into shooter"
           }
         },
         {
@@ -82,7 +82,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "feed into shooter"
           }
         },
         {
@@ -119,7 +119,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "feed into shooter"
           }
         }
       ]

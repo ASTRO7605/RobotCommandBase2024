@@ -367,6 +367,8 @@ void RobotContainer::ConfigureNamedCommands() {
             .Repeatedly());
     pathplanner::NamedCommands::registerCommand("auto intake",
                                                 AutomaticIntake(&m_Intake, &m_Base).ToPtr());
+    pathplanner::NamedCommands::registerCommand("feed into shooter",
+                                                FeedIntoShooter(&m_Intake).ToPtr());
 }
 
 void RobotContainer::ChooseCorrectStageCommand() {

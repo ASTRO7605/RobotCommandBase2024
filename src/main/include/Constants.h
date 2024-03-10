@@ -131,7 +131,7 @@ constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
 constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.99};
 constexpr std::array<double, 3> kVisionStdDevsPerMeterBase{0.4, 0.4, 0.95};
 constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeter{
-    10.0, 10.0, 250.0}; // ambiguity is very small, so this number is quite big.
+    10.0, 10.0, 500.0}; // ambiguity is very small, so this number is quite big.
 constexpr frc::Translation2d blueSpeakerPoseMeters =
     frc::Translation2d{units::inch_t{-1.5}, units::inch_t{218.42}};
 constexpr frc::Translation2d redSpeakerPoseMeters =

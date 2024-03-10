@@ -9,6 +9,7 @@
 #include "commands/AutomaticIntake.h"
 #include "commands/BarrePosition.h"
 #include "commands/DeuxiemeJointManual.h"
+#include "commands/FeedIntoShooter.h"
 #include "commands/InitLeftHook.h"
 #include "commands/InitRightHook.h"
 #include "commands/IntakeCommand.h"
