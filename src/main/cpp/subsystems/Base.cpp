@@ -192,7 +192,6 @@ void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t y
         xSpeedCommanded = m_CurrentTranslationMag * cos(m_CurrentTranslationDir);
         ySpeedCommanded = m_CurrentTranslationMag * sin(m_CurrentTranslationDir);
         m_CurrentRotation = m_rotLimiter.Calculate(rotationSpeed.value());
-
     } else {
         xSpeedCommanded = xSpeed.value();
         ySpeedCommanded = ySpeed.value();
@@ -454,3 +453,9 @@ std::optional<frc::Pose2d> Base::GetAveragePoseFromCameras() {
 }
 
 void Base::SetRobotDrivingMode(bool fieldRelative) { m_DrivingInFieldRelative = fieldRelative; }
+
+bool Base::IsRobotAlignedToShoot() {
+    return fabs((m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees() -
+                 GetDesiredRotationToSpeaker())
+                    .value()) <= DriveConstant::kThresholdRobotAngle;
+}

@@ -42,7 +42,8 @@
 
 #include <vector>
 
-class Base : public frc2::SubsystemBase {
+class Base : public frc2::SubsystemBase
+{
   public:
     Base();
 
@@ -121,6 +122,7 @@ class Base : public frc2::SubsystemBase {
     units::degrees_per_second_t GetPIDControlledRotationSpeedToSpeaker();
 
     bool IsRobotInRangeToShoot();
+    bool IsRobotAlignedToShoot();
 
     bool IsRobotInRangeToStartWheels();
 

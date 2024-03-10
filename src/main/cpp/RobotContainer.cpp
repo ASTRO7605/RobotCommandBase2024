@@ -101,7 +101,9 @@ void RobotContainer::Periodic() {
         m_Led.SetNoteSeen(false);
     }
     m_Led.SetNoteInIntake(m_Intake.IsObjectInIntake());
+
     m_Led.SetRobotInRange(m_Base.IsRobotInRangeToShoot());
+    m_Led.SetRobotAligned(m_Base.IsRobotAlignedToShoot());
     frc::SmartDashboard::PutString("chosen auto", m_AutoChooser.GetSelected());
 }
 
