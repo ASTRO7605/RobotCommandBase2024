@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9741991947686361,
-        "y": 6.232622295154242
+        "x": 1.5256452246624446,
+        "y": 6.198910092324251
       },
       "isLocked": false,
       "linkedName": "middle_1"
     },
     {
       "anchor": {
-        "x": 2.559489643322858,
-        "y": 6.836203070225783
+        "x": 2.7194272206481696,
+        "y": 6.849844384109778
       },
       "prevControl": {
-        "x": 2.474134786242034,
-        "y": 6.7386546621334125
+        "x": 2.546239972001547,
+        "y": 6.824085791010373
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,6 +47,12 @@
             {
               "type": "named",
               "data": {
+                "name": "start intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
                 "name": "start shooter wheels"
               }
             },
@@ -54,12 +60,6 @@
               "type": "named",
               "data": {
                 "name": "adjust shooter angle"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "start intake"
               }
             }
           ]
@@ -75,7 +75,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -151.0,
+    "rotation": -155.0,
     "rotateFast": false
   },
   "reversed": false,

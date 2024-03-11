@@ -1,0 +1,86 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.36,
+      "y": 5.52
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "align and shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "start intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middle_simple_1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "align and shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle_multi_2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "align and shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle_multi_3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "auto intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle_multi_4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "align and shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Game autos",
+  "choreoAuto": false
+}
