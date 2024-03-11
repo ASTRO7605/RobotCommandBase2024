@@ -88,7 +88,7 @@ RobotContainer::RobotContainer()
 
     m_AutoChooser.AddOption("Middle 1 note", "middle_1_note");
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
-    m_AutoChooser.AddOption("Middle 4 notes", "middle_4_notes");
+    m_AutoChooser.AddOption("Middle 5 notes", "middle_5_notes");
 
     m_AutoChooser.AddOption("Source 1 note", "source_1_note");
     m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
