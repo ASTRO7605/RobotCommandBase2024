@@ -3,43 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.45,
-        "y": 5.52
+        "x": 7.14,
+        "y": 5.791895429944707
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9741991947686361,
-        "y": 6.232622295154242
+        "x": 6.273400654909417,
+        "y": 7.127666147224186
       },
       "isLocked": false,
-      "linkedName": "middle_1"
+      "linkedName": "middle_2nd_note"
     },
     {
       "anchor": {
-        "x": 2.559489643322858,
-        "y": 6.836203070225783
+        "x": 3.6804840504603855,
+        "y": 6.317279303522419
       },
       "prevControl": {
-        "x": 2.474134786242034,
-        "y": 6.7386546621334125
+        "x": 4.202587143913027,
+        "y": 6.5729839567787245
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "amp_2"
+      "linkedName": "middle_2"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.1,
+      "waypointRelativePos": 0.05,
       "command": {
         "type": "parallel",
         "data": {
@@ -55,12 +49,6 @@
               "data": {
                 "name": "adjust shooter angle"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "start intake"
-              }
             }
           ]
         }
@@ -68,14 +56,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 520.0,
-    "maxAngularAcceleration": 500.0
+    "maxAngularAcceleration": 700.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -151.0,
+    "velocity": 0.0,
+    "rotation": -165.0,
     "rotateFast": false
   },
   "reversed": false,
