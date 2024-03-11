@@ -108,7 +108,7 @@ constexpr double kMaxAutoAlignSpeedX = 0.1;
 constexpr double kThresholdRobotAngle = 1.0;
 constexpr auto kThresholdTimer = 0.1_s;
 
-constexpr auto kThresholdSpeakerInRangeToShoot = 3.4_m;
+constexpr auto kThresholdSpeakerInRangeToShoot = 3.9_m;
 constexpr auto kThresholdSpeakerInRangeToStartWheels = 5.0_m;
 constexpr auto kTimeBeforeBrake = 1_s;
 } // namespace DriveConstant

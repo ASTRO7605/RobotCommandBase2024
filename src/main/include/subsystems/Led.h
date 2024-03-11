@@ -19,7 +19,7 @@ class Led : public frc2::SubsystemBase
     void SetNoteInIntake(bool in_intake) { note_in_intake = in_intake; };
     void SetNoteSeen(bool seen) { note_seen = seen; };
     void SetRobotInRange(bool in_range) { robot_in_range = in_range; };
-    void SetRobotAligned(bool in_range) { robot_in_range = in_range; };
+    void SetRobotAligned(bool aligned) { robot_aligned = aligned; };
 
   private:
     void color_sweep(LedConstants::Color color);
