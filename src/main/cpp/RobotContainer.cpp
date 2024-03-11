@@ -36,6 +36,7 @@ RobotContainer::RobotContainer()
             }
 
             dir_r *= (dir_r * dir_r);
+            dir_r *= 0.6;
 
             double turn = 0;
 
@@ -52,6 +53,7 @@ RobotContainer::RobotContainer()
                                           DriveConstant::kControllerRotationDeadband);
 
                 turn *= (turn * turn);
+                turn *= 0.75;
             }
             // Drive by reconverting polar vector to cartesian
             m_Base.Drive(-units::meters_per_second_t{dir_r * std::sin(dir_theta)}, // forward
@@ -304,14 +306,11 @@ void RobotContainer::ConfigureNamedCommands() {
     pathplanner::NamedCommands::registerCommand(
         "barre final and shoot trap",
         frc2::SequentialCommandGroup(
-            frc2::PrintCommand("before barre"),
             frc2::ParallelDeadlineGroup(frc2::WaitCommand(0.5_s),
                                         BarrePosition(&m_Barre,
                                                       BarreConstant::k1erJointAngleTrapFinal,
                                                       BarreConstant::k2eJointStartPosition)),
-            frc2::PrintCommand("after wait"),
-            frc2::InstantCommand([this]() { shootTrap.Schedule(); }),
-            frc2::PrintCommand("after shoot"))
+            frc2::InstantCommand([this]() { shootTrap.Schedule(); }))
             .ToPtr());
     pathplanner::NamedCommands::registerCommand(
         "extend crochets trap",

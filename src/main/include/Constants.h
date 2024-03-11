@@ -12,20 +12,10 @@
 #include <units/velocity.h>
 #include <units/voltage.h>
 
-enum ScoringPositions
-{
-    speaker,
-    amp,
-    trap
-};
-namespace DriveConstant
-{
+enum ScoringPositions { speaker, amp, trap };
+namespace DriveConstant {
 constexpr auto delayBeforeSeedEncoders = 2.5_s;
-enum IdleMode
-{
-    Coast,
-    Brake
-};
+enum IdleMode { Coast, Brake };
 constexpr double kDrivingGearRatio = 6.75;
 constexpr double kTurningGearRatio = 150.0 / 7.0;
 constexpr double kWheelDiameterM = 0.09689;
@@ -105,7 +95,7 @@ constexpr double kDXYRobot = 0;
 constexpr double kMaxAutoAlignSpeedY = 0.2;
 constexpr double kMaxAutoAlignSpeedX = 0.1;
 
-constexpr double kThresholdRobotAngle = 1.0;
+constexpr double kThresholdRobotAngle = 1.5;
 constexpr auto kThresholdTimer = 0.1_s;
 
 constexpr auto kThresholdSpeakerInRangeToShoot = 3.9_m;
@@ -113,8 +103,7 @@ constexpr auto kThresholdSpeakerInRangeToStartWheels = 5.0_m;
 constexpr auto kTimeBeforeBrake = 1_s;
 } // namespace DriveConstant
 
-namespace VisionConstant
-{
+namespace VisionConstant {
 constexpr int Pipeline = 0; // only one pipeline (AprilTags)
 constexpr std::string_view TableNameRight = "photonvision-a";
 constexpr std::string_view TableNameLeft = "photonvision-b";
@@ -123,8 +112,7 @@ constexpr double ambiguityThreshold = 0.4;
 extern const frc::Transform3d rightCameraTransform;
 extern const frc::Transform3d leftCameraTransform;
 
-enum StageAprilTagIDs
-{
+enum StageAprilTagIDs {
     redSourceSide = 11,
     redSpeakerSide = 12,
     redMiddleSide = 13,
@@ -133,15 +121,9 @@ enum StageAprilTagIDs
     blueSourceSide = 16
 };
 
-enum class LedMode : int
-{
-    Off = 1,
-    Flash = 2,
-    On = 3
-};
+enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 } // namespace VisionConstant
-namespace PoseEstimationConstant
-{
+namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
 constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
 constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.99};
@@ -154,8 +136,7 @@ constexpr frc::Translation2d redSpeakerPoseMeters =
     frc::Translation2d{units::inch_t{652.73}, units::inch_t{218.42}};
 } // namespace PoseEstimationConstant
 
-namespace OIConstant
-{
+namespace OIConstant {
 constexpr int TurnStickID = 0;
 constexpr int ThrottleStickID = 1;
 constexpr int CoPilotControllerID = 2;
@@ -172,10 +153,8 @@ constexpr int CoPilot_RPush_Button = 10;
 constexpr double axisThreshold = 0.5;
 } // namespace OIConstant
 
-namespace ShooterConstant
-{
-enum ShooterState
-{
+namespace ShooterConstant {
+enum ShooterState {
     init,
     waitingForSubsystems,
     // waitingForDeuxiemeJointTrap,
@@ -278,8 +257,7 @@ extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordin
 constexpr double kStandByWheelRPM = 2000;
 } // namespace ShooterConstant
 
-namespace IntakeConstant
-{
+namespace IntakeConstant {
 constexpr int topMotorID = 14;
 constexpr int bottomMotorID = 15;
 constexpr int capteurID = 0;
@@ -289,8 +267,7 @@ constexpr double kVoltageIntakeShot = 10;   // volts
 constexpr double kVoltageIntakeCommand = 6.5;
 } // namespace IntakeConstant
 
-namespace BarreConstant
-{
+namespace BarreConstant {
 constexpr int moteurPremierJointID = 19;
 constexpr int moteurDeuxiemeJointID = 20;
 constexpr int kTimeoutMs = 50;
@@ -348,8 +325,7 @@ constexpr double k2eJointStartPosition = 900;
 constexpr auto kTimerThreshold = 0.5_s;
 } // namespace BarreConstant
 
-namespace ClimberConstant
-{
+namespace ClimberConstant {
 constexpr int leftHookMotorID = 21;
 constexpr int rightHookMotorID = 22;
 constexpr double FConversionFactorPosition =
@@ -386,8 +362,7 @@ constexpr double kPositionExtended = 210;
 constexpr double kPositionExtendedTrap = 175;
 } // namespace ClimberConstant
 
-namespace LedConstants
-{
+namespace LedConstants {
 constexpr int kLedChannel = 9;
 constexpr int kNumLeds = 12;
 
@@ -397,21 +372,22 @@ constexpr int kSweepPrescale = 6;
 // switches LEDs each n 20-millis periods
 constexpr int kAlternatePrescale = 15;
 
+// switches LEDs each n 20-millis periods
+constexpr int kFlashPrescale = 5;
+
 constexpr int kNumSweepFullOnLeds = 8;
 
 // number of LEDs for 'in position' starting indicator
 constexpr int kNumIndicatorLeds = 2;
 
 // 8-bit R, G, B
-struct Color
-{
+struct Color {
     uint8_t red;
     uint8_t grn;
     uint8_t blu;
 };
 
-namespace Colors
-{
+namespace Colors {
 constexpr Color Off{0, 0, 0};
 constexpr Color RedAlliance{255, 0, 0};
 constexpr Color BlueAlliance{0, 0, 255};
@@ -422,8 +398,7 @@ constexpr Color RobotInStartingPositionXY{0, 255, 0};
 constexpr Color RobotInStartingPositionAngle{255, 105, 180};
 } // namespace Colors
 
-enum Animation
-{
+enum Animation {
     ALLIANCE,
     SPLIT,
 };
