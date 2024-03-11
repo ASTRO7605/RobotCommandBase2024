@@ -8,19 +8,16 @@
 
 RobotContainer::RobotContainer()
     : m_ThrottleStick{OIConstant::ThrottleStickID}, m_TurnStick{OIConstant::TurnStickID},
-      m_CoPilotController{OIConstant::CoPilotControllerID}
-{
+      m_CoPilotController{OIConstant::CoPilotControllerID} {
 
     // Initialize all of your commands and subsystems here
     // Configure the button bindings
     ConfigureNamedCommands();
     ConfigureAmpPathfind();
-    ConfigureStagePathfind();
     ConfigureBindings();
 
     m_Base.SetDefaultCommand(frc2::RunCommand(
-        [this]
-        {
+        [this] {
             double dir_x = m_ThrottleStick.GetX();
             double dir_y = m_ThrottleStick.GetY();
 
@@ -29,16 +26,11 @@ RobotContainer::RobotContainer()
             double dir_theta = std::atan2(dir_y, dir_x);             // direction of vector (rad)
 
             // Cap norm and add deadband
-            if (dir_r < DriveConstant::kControllerMovementDeadband)
-            {
+            if (dir_r < DriveConstant::kControllerMovementDeadband) {
                 dir_r = 0.0;
-            }
-            else if (dir_r > 1.0)
-            {
+            } else if (dir_r > 1.0) {
                 dir_r = 1.0;
-            }
-            else
-            {
+            } else {
                 dir_r = (dir_r - DriveConstant::kControllerMovementDeadband) /
                         (1 - DriveConstant::kControllerMovementDeadband);
             }
@@ -47,21 +39,15 @@ RobotContainer::RobotContainer()
 
             double turn = 0;
 
-            if (m_Base.IsRotationBeingControlled())
-            {
+            if (m_Base.IsRotationBeingControlled()) {
                 turn = -units::radians_per_second_t{m_Base.GetPIDControlledRotationSpeedToSpeaker()}
                             .value();
-                if (turn > 1)
-                {
+                if (turn > 1) {
                     turn = 1;
-                }
-                else if (turn < -1)
-                {
+                } else if (turn < -1) {
                     turn = -1;
                 }
-            }
-            else
-            {
+            } else {
                 turn = frc::ApplyDeadband(m_TurnStick.GetX(),
                                           DriveConstant::kControllerRotationDeadband);
 
@@ -75,28 +61,47 @@ RobotContainer::RobotContainer()
         {&m_Base}));
 
     m_ShooterAngle.SetDefaultCommand(frc2::RunCommand(
-        [this]
-        {
-            m_ShooterAngle.SetShooterAngle(
-                m_ShooterAngle.GetInterpolatedShooterAngle(m_Base.GetDistanceToSpeaker().value()));
+        [this] {
+            if (m_Intake.IsObjectInIntake()) {
+                m_ShooterAngle.SetShooterAngle(m_ShooterAngle.GetInterpolatedShooterAngle(
+                    m_Base.GetDistanceToSpeaker().value()));
+            } else {
+                m_ShooterAngle.SetShooterAngle(ShooterConstant::kIntermediateAngleShooter);
+            }
         },
         {&m_ShooterAngle}));
+    m_ShooterWheels.SetDefaultCommand(frc2::RunCommand(
+        [this] {
+            if (m_Base.IsRobotInRangeToStartWheels() && m_Intake.IsObjectInIntake()) {
+                m_ShooterWheels.SetWheelSpeeds(m_ShooterWheels.GetInterpolatedWheelSpeeds(
+                                                   m_Base.GetDistanceToSpeaker().value()),
+                                               false);
+            } else {
+                m_ShooterWheels.StopWheels();
+            }
+        },
+        {&m_ShooterWheels}));
 
     m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
-    m_AutoChooser.AddOption("Amp 3.5 notes far", "amp_3_notes_far");
+    m_AutoChooser.AddOption("Amp 4 notes far", "amp_4_notes_far");
     m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
+    m_AutoChooser.AddOption("Middle 1 note", "middle_1_note");
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
     m_AutoChooser.AddOption("Middle 4 notes", "middle_4_notes");
 
+    m_AutoChooser.AddOption("Source 1 note", "source_1_note");
     m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
 
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
 }
 
-void RobotContainer::Periodic()
-{
-    m_Led.SetNoteSeen(m_Base.GetLatestLimelightTarget().has_value());
+void RobotContainer::Periodic() {
+    if (LimelightHelpers::getTV()) {
+        m_Led.SetNoteSeen(true);
+    } else {
+        m_Led.SetNoteSeen(false);
+    }
     m_Led.SetNoteInIntake(m_Intake.IsObjectInIntake());
 
     m_Led.SetRobotInRange(m_Base.IsRobotInRangeToShoot());
@@ -104,20 +109,16 @@ void RobotContainer::Periodic()
     frc::SmartDashboard::PutString("chosen auto", m_AutoChooser.GetSelected());
 }
 
-void RobotContainer::ConfigureBindings()
-{
+void RobotContainer::ConfigureBindings() {
     // Configure your trigger bindings here
-    m_TurnStick.Button(5).WhileTrue(frc2::RunCommand(
-                                        [this]()
-                                        {
-                                            auto latestCameraPose{
-                                                m_Base.GetAveragePoseFromCameras()};
-                                            if (latestCameraPose.has_value())
-                                            {
-                                                m_Base.ResetOdometry(latestCameraPose.value());
-                                            }
-                                        })
-                                        .ToPtr());
+    m_TurnStick.Button(5).WhileTrue(frc2::RunCommand([this]() {
+                                        auto latestCameraPose{m_Base.GetAveragePoseFromCameras()};
+                                        if (latestCameraPose.has_value()) {
+                                            m_Base.ResetOdometry(latestCameraPose.value());
+                                        }
+                                    }).ToPtr());
+    m_TurnStick.Button(6).OnTrue(
+        frc2::InstantCommand([this]() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }).ToPtr());
     m_TurnStick.Button(7).WhileTrue(
         LeftHookManual(&m_LeftHook, ClimberConstant::kPourcentageManualHooks).ToPtr());
     m_TurnStick.Button(8).WhileTrue(
@@ -169,12 +170,12 @@ void RobotContainer::ConfigureBindings()
     m_CoPilotController.RightBumper().OnTrue(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(true); }, {})
             .ToPtr());
-    m_CoPilotController.RightBumper().WhileTrue(
-        StartShooterWheels(&m_ShooterWheels, &m_Base, true).ToPtr());
+    // m_CoPilotController.RightBumper().WhileTrue(
+    // StartShooterWheels(&m_ShooterWheels, &m_Base, true).ToPtr());
     m_CoPilotController.RightBumper().OnFalse(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(false); }, {})
             .ToPtr());
-    m_CoPilotController.RightBumper().OnFalse(StopShooterWheels(&m_ShooterWheels).ToPtr());
+    // m_CoPilotController.RightBumper().OnFalse(StopShooterWheels(&m_ShooterWheels).ToPtr());
 
     (m_CoPilotController.A() && !m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
@@ -193,16 +194,17 @@ void RobotContainer::ConfigureBindings()
                     .ToPtr());
 
     (m_CoPilotController.X() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
-        .OnTrue(frc2::SequentialCommandGroup{AlignWithSpeaker(&m_Base),
-                                             ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels,
-                                                       &m_Intake, &m_Barre, &m_CoPilotController, 0,
-                                                       0, true, ScoringPositions::speaker)}
+        .OnTrue(/*frc2::SequentialCommandGroup{AlignWithSpeaker(&m_Base),
+                 */
+                ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                          &m_CoPilotController, 0, 0, true, ScoringPositions::speaker) /*}*/
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
     (m_CoPilotController.X() && m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .OnTrue(ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                          &m_CoPilotController, ShooterConstant::flywheelsSpeedManualSpeaker,
-                          ShooterConstant::manualSpeakerAngle, false, ScoringPositions::speaker)
+                          &m_CoPilotController, frc::Preferences::GetDouble("TestShooterSpeeds"),
+                          frc::Preferences::GetDouble("TestShooterAngle"), false,
+                          ScoringPositions::speaker)
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
@@ -225,60 +227,49 @@ void RobotContainer::ConfigureBindings()
                           ShooterConstant::kAngleShooterAmp, false, ScoringPositions::amp)
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
-    frc2::Trigger([this] { return m_RightHook.IsInitScheduled(); })
-        .OnTrue(InitRightHook(&m_RightHook).ToPtr());
+    frc2::Trigger([this] {
+        return m_RightHook.IsInitScheduled();
+    }).OnTrue(InitRightHook(&m_RightHook).ToPtr());
 
-    frc2::Trigger([this] { return m_LeftHook.IsInitScheduled(); })
-        .OnTrue(InitLeftHook(&m_LeftHook).ToPtr());
+    frc2::Trigger([this] {
+        return m_LeftHook.IsInitScheduled();
+    }).OnTrue(InitLeftHook(&m_LeftHook).ToPtr());
 
-    frc2::Trigger([this] { return (m_RightHook.IsInitDone() && (m_LeftHook.IsInitDone())); })
-        .OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
+    frc2::Trigger([this] {
+        return (m_RightHook.IsInitDone() && (m_LeftHook.IsInitDone()));
+    }).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
 }
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand()
-{
+frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     std::string currentAutonomous = m_AutoChooser.GetSelected();
-    if (currentAutonomous != "")
-    {
+    if (currentAutonomous != "") {
         return pathplanner::AutoBuilder::buildAuto(currentAutonomous);
-    }
-    else
-    {
+    } else {
         return frc2::InstantCommand([]() {}).ToPtr();
     }
 }
 
-void RobotContainer::ConfigureAmpPathfind()
-{
+void RobotContainer::ConfigureAmpPathfind() {
     pathfindingAmpCommand = pathplanner::AutoBuilder::buildAuto("approach amp auto");
 }
 
-void RobotContainer::ConfigureStagePathfind()
-{
-    pathfindingStageCommand = pathplanner::AutoBuilder::buildAuto("stage speaker side");
-}
-
-void RobotContainer::SeedEncoders()
-{
+void RobotContainer::SeedEncoders() {
     // m_Base.SeedSwerveEncoders();
     m_Barre.SeedEncoder1erJoint();
     m_Barre.SeedEncoder2eJoint();
     m_ShooterAngle.SeedEncoder();
 }
 
-void RobotContainer::SetIdleModeSwerve(DriveConstant::IdleMode idleMode)
-{
+void RobotContainer::SetIdleModeSwerve(DriveConstant::IdleMode idleMode) {
     m_Base.SetIdleMode(idleMode);
 }
 
-void RobotContainer::SetInitHooksScheduled()
-{
+void RobotContainer::SetInitHooksScheduled() {
     m_RightHook.SetInitScheduled();
     m_LeftHook.SetInitScheduled();
 }
 
-bool RobotContainer::IsInitHooksDone()
-{
+bool RobotContainer::IsInitHooksDone() {
     return (m_LeftHook.IsInitDone() && m_RightHook.IsInitDone());
 }
 
@@ -286,8 +277,7 @@ void RobotContainer::SetShooterAngleToInitPose() { m_ShooterAngle.SetShooterAngl
 
 void RobotContainer::SetShooterAngleToNeutral() { m_ShooterAngle.SetMotorNeutral(); }
 
-void RobotContainer::ConfigureNamedCommands()
-{
+void RobotContainer::ConfigureNamedCommands() {
     pathplanner::NamedCommands::registerCommand(
         "barre approach amp", BarrePosition(&m_Barre, BarreConstant::k1erJointAngleAmp,
                                             BarreConstant::k2eJointAngleAmpApproach)
@@ -354,12 +344,26 @@ void RobotContainer::ConfigureNamedCommands()
                                                true, ScoringPositions::speaker)}
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
     pathplanner::NamedCommands::registerCommand(
-        "start shooter wheels", StartShooterWheels(&m_ShooterWheels, &m_Base, true, 0).ToPtr());
+        "shoot note",
+        ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+                  &m_CoPilotController, 0, 0, true, ScoringPositions::speaker)
+            .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
+    pathplanner::NamedCommands::registerCommand(
+        "start shooter wheels",
+        frc2::InstantCommand(
+            [this] {
+                m_ShooterWheels.SetWheelSpeeds(m_ShooterWheels.GetInterpolatedWheelSpeeds(
+                                                   m_Base.GetDistanceToSpeaker().value()),
+                                               false);
+            },
+            {&m_ShooterWheels})
+            .Repeatedly());
+    pathplanner::NamedCommands::registerCommand("stop shooter wheels",
+                                                StopShooterWheels(&m_ShooterWheels).ToPtr());
     pathplanner::NamedCommands::registerCommand(
         "adjust shooter angle",
         frc2::InstantCommand(
-            [this]
-            {
+            [this] {
                 m_ShooterAngle.SetShooterAngle(m_ShooterAngle.GetInterpolatedShooterAngle(
                     m_Base.GetDistanceToSpeaker().value()));
             },
@@ -367,53 +371,85 @@ void RobotContainer::ConfigureNamedCommands()
             .Repeatedly());
     pathplanner::NamedCommands::registerCommand("auto intake",
                                                 AutomaticIntake(&m_Intake, &m_Base).ToPtr());
+    pathplanner::NamedCommands::registerCommand("feed into shooter",
+                                                FeedIntoShooter(&m_Intake).ToPtr());
 }
 
-void RobotContainer::ChooseCorrectStageCommand()
-{
+void RobotContainer::ChooseCorrectStageCommand() {
     int leftCameraAprilTagID{m_Base.GetLeftCameraAprilTagID()};
     int rightCameraAprilTagID{m_Base.GetRightCameraAprilTagID()};
-
-    if (leftCameraAprilTagID != rightCameraAprilTagID)
-    {
-        return;
-    }
     auto allianceColor = frc::DriverStation::GetAlliance();
     std::string desiredCommand{""};
-    if (allianceColor.has_value())
-    {
-        if (allianceColor == frc::DriverStation::Alliance::kBlue)
-        {
-            if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide)
-            {
-                desiredCommand = "stage source side";
+    if (allianceColor.has_value()) {
+        if (leftCameraAprilTagID == rightCameraAprilTagID) {
+            if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+                if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
+                    desiredCommand = "stage source side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::blueMiddleSide) {
+                    desiredCommand = "stage middle side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::blueSpeakerSide) {
+                    desiredCommand = "stage speaker side";
+                }
+            } else {
+                if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
+                    desiredCommand = "stage source side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::redMiddleSide) {
+                    desiredCommand = "stage middle side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::redSpeakerSide) {
+                    desiredCommand = "stage speaker side";
+                }
             }
-            else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueMiddleSide)
-            {
-                desiredCommand = "stage middle side";
+        } else {
+            if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+                if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
+                    desiredCommand = "stage source side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::blueMiddleSide) {
+                    desiredCommand = "stage middle side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::blueSpeakerSide) {
+                    desiredCommand = "stage speaker side";
+                }
+            } else {
+                if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
+                    desiredCommand = "stage source side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::redMiddleSide) {
+                    desiredCommand = "stage middle side";
+                } else if (leftCameraAprilTagID ==
+                           VisionConstant::StageAprilTagIDs::redSpeakerSide) {
+                    desiredCommand = "stage speaker side";
+                }
             }
-            else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSpeakerSide)
-            {
-                desiredCommand = "stage speaker side";
+            if (desiredCommand == "") {
+                if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+                    if (rightCameraAprilTagID == VisionConstant::StageAprilTagIDs::blueSourceSide) {
+                        desiredCommand = "stage source side";
+                    } else if (rightCameraAprilTagID ==
+                               VisionConstant::StageAprilTagIDs::blueMiddleSide) {
+                        desiredCommand = "stage middle side";
+                    } else if (rightCameraAprilTagID ==
+                               VisionConstant::StageAprilTagIDs::blueSpeakerSide) {
+                        desiredCommand = "stage speaker side";
+                    }
+                } else {
+                    if (rightCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide) {
+                        desiredCommand = "stage source side";
+                    } else if (rightCameraAprilTagID ==
+                               VisionConstant::StageAprilTagIDs::redMiddleSide) {
+                        desiredCommand = "stage middle side";
+                    } else if (rightCameraAprilTagID ==
+                               VisionConstant::StageAprilTagIDs::redSpeakerSide) {
+                        desiredCommand = "stage speaker side";
+                    }
+                }
             }
         }
-        else
-        {
-            if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSourceSide)
-            {
-                desiredCommand = "stage source side";
-            }
-            else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redMiddleSide)
-            {
-                desiredCommand = "stage middle side";
-            }
-            else if (leftCameraAprilTagID == VisionConstant::StageAprilTagIDs::redSpeakerSide)
-            {
-                desiredCommand = "stage speaker side";
-            }
-        }
-        if (desiredCommand != "")
-        {
+        if (desiredCommand != "") {
             pathfindingStageCommand = pathplanner::AutoBuilder::buildAuto(desiredCommand);
             pathfindingStageCommand.Schedule();
         }

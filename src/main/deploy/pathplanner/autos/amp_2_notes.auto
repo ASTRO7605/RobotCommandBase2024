@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "shoot note"
           }
         },
         {
@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "start intake"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "amp_simple_2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "start intake"
                 }
               }
             ]
@@ -45,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "shoot note"
           }
         }
       ]

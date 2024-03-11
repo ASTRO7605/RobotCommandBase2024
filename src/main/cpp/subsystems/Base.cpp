@@ -45,15 +45,13 @@ Base::Base()
             DriveConstant::kMaxAutoSpeed, DriveConstant::kChassisRadius,
             pathplanner::ReplanningConfig(true, true) // can be tweaked for further control
             ),
-        []()
-        {
+        []() {
             // Boolean supplier that controls when the path will be mirrored for the
             // red alliance This will flip the path being followed to the red side
             // of the field. THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
             auto alliance = frc::DriverStation::GetAlliance();
-            if (alliance)
-            {
+            if (alliance) {
                 return alliance.value() == frc::DriverStation::Alliance::kRed;
             }
             return false;
@@ -76,12 +74,17 @@ Base::Base()
     m_TimerEncoder.Restart();
 }
 
-void Base::Periodic()
-{
+void Base::Periodic() {
+    if (std::isnan(m_PoseEstimator.GetEstimatedPosition().X().value()) ||
+        std::isnan(m_PoseEstimator.GetEstimatedPosition().Y().value()) ||
+        std::isnan(m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value())) {
+        ResetOdometry(lastPoseEstimate);
+    }
+    lastPoseEstimate = m_PoseEstimator.GetEstimatedPosition();
+
     frc::SmartDashboard::PutNumber("leftAprilTagID", GetLeftCameraAprilTagID());
     frc::SmartDashboard::PutNumber("rightAprilTagID", GetRightCameraAprilTagID());
-    if (frc::DriverStation::GetAlliance().has_value())
-    {
+    if (frc::DriverStation::GetAlliance().has_value()) {
         allianceColor = frc::DriverStation::GetAlliance().value();
     }
 
@@ -120,15 +123,13 @@ void Base::Periodic()
     // }
 }
 
-void Base::SetIdleMode(DriveConstant::IdleMode idleMode)
-{
+void Base::SetIdleMode(DriveConstant::IdleMode idleMode) {
     m_FrontRightModule.SetIdleMode(idleMode);
     m_FrontLeftModule.SetIdleMode(idleMode);
     m_RearLeftModule.SetIdleMode(idleMode);
     m_RearRightModule.SetIdleMode(idleMode);
 }
-void Base::ResetEncoders()
-{
+void Base::ResetEncoders() {
     m_FrontRightModule.ResetEncoders();
     m_FrontLeftModule.ResetEncoders();
     m_RearLeftModule.ResetEncoders();
@@ -143,14 +144,12 @@ void Base::ResetEncoders()
 // }
 
 void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed,
-                 units::radians_per_second_t rotationSpeed, bool rateLimiting)
-{
+                 units::radians_per_second_t rotationSpeed, bool rateLimiting) {
     // code utilise vient de MAXSwerve, regarder en ligne
     double xSpeedCommanded;
     double ySpeedCommanded;
 
-    if (rateLimiting)
-    {
+    if (rateLimiting) {
         // Convert XY to polar for rate limiting
         double inputTranslationDir = atan2(ySpeed.value(), xSpeed.value());
         double inputTranslationMag = sqrt(pow(xSpeed.value(), 2) + pow(ySpeed.value(), 2));
@@ -158,12 +157,9 @@ void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t y
         // Calculate the direction slew rate based on an estimate of the lateral
         // acceleration
         double directionSlewRate;
-        if (m_CurrentTranslationMag != 0.0)
-        {
+        if (m_CurrentTranslationMag != 0.0) {
             directionSlewRate = abs(DriveConstant::kDirectionSlewRate / m_CurrentTranslationMag);
-        }
-        else
-        {
+        } else {
             directionSlewRate = 500.0; // some high number that means the slew rate
                                        // is effectively instantaneous
         }
@@ -172,29 +168,21 @@ void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t y
         double elapsedTime = currentTime - m_prevTime;
         double angleDif =
             SwerveUtils::AngleDifference(inputTranslationDir, m_CurrentTranslationDir);
-        if (angleDif < 0.45 * std::numbers::pi)
-        {
+        if (angleDif < 0.45 * std::numbers::pi) {
             m_CurrentTranslationDir = SwerveUtils::StepTowardsCircular(
                 m_CurrentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
             m_CurrentTranslationMag = m_magLimiter.Calculate(inputTranslationMag);
-        }
-        else if (angleDif > 0.85 * std::numbers::pi)
-        {
-            if (m_CurrentTranslationMag > 1e-4)
-            { // some small number to avoid floating-point
-              // errors with equality checking
+        } else if (angleDif > 0.85 * std::numbers::pi) {
+            if (m_CurrentTranslationMag > 1e-4) { // some small number to avoid floating-point
+                                                  // errors with equality checking
                 // keep currentTranslationDir unchanged
                 m_CurrentTranslationMag = m_magLimiter.Calculate(0.0);
-            }
-            else
-            {
+            } else {
                 m_CurrentTranslationDir =
                     SwerveUtils::WrapAngle(m_CurrentTranslationDir + std::numbers::pi);
                 m_CurrentTranslationMag = m_magLimiter.Calculate(inputTranslationMag);
             }
-        }
-        else
-        {
+        } else {
             m_CurrentTranslationDir = SwerveUtils::StepTowardsCircular(
                 m_CurrentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
             m_CurrentTranslationMag = m_magLimiter.Calculate(0.0);
@@ -204,9 +192,7 @@ void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t y
         xSpeedCommanded = m_CurrentTranslationMag * cos(m_CurrentTranslationDir);
         ySpeedCommanded = m_CurrentTranslationMag * sin(m_CurrentTranslationDir);
         m_CurrentRotation = m_rotLimiter.Calculate(rotationSpeed.value());
-    }
-    else
-    {
+    } else {
         xSpeedCommanded = xSpeed.value();
         ySpeedCommanded = ySpeed.value();
         m_CurrentRotation = rotationSpeed.value();
@@ -234,8 +220,7 @@ void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t y
     m_RearRightModule.SetDesiredState(RearRight);
 }
 
-void Base::DriveRobotRelativeChassisSpeeds(frc::ChassisSpeeds speeds)
-{
+void Base::DriveRobotRelativeChassisSpeeds(frc::ChassisSpeeds speeds) {
     auto states = kDriveKinematics.ToSwerveModuleStates(speeds);
     auto [FrontRight, FrontLeft, RearLeft, RearRight] = states;
 
@@ -245,16 +230,14 @@ void Base::DriveRobotRelativeChassisSpeeds(frc::ChassisSpeeds speeds)
     m_RearRightModule.SetDesiredState(RearRight);
 }
 
-void Base::SetWheelsFacingForward()
-{
+void Base::SetWheelsFacingForward() {
     m_FrontRightModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)});
     m_FrontLeftModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)});
     m_RearLeftModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)});
     m_RearRightModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)});
 }
 
-void Base::SetWheelsFacingSideways()
-{
+void Base::SetWheelsFacingSideways() {
     units::radian_t SidewaysPosition{std::numbers::pi * 0.5};
     m_FrontRightModule.SetDesiredState(
         frc::SwerveModuleState{0_mps, frc::Rotation2d(SidewaysPosition)});
@@ -266,8 +249,7 @@ void Base::SetWheelsFacingSideways()
         frc::SwerveModuleState{0_mps, frc::Rotation2d(SidewaysPosition)});
 }
 
-void Base::SetWheelsInXFormation()
-{
+void Base::SetWheelsInXFormation() {
     m_FrontRightModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(-45_deg)});
     m_FrontLeftModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(45_deg)});
     m_RearLeftModule.SetDesiredState(frc::SwerveModuleState{0_mps, frc::Rotation2d(-45_deg)});
@@ -278,32 +260,27 @@ units::angle::degree_t Base::GetHeadingDegrees() { return m_Gyro.GetRotation2d()
 
 frc::Pose2d Base::GetPose() { return m_PoseEstimator.GetEstimatedPosition(); }
 
-frc::ChassisSpeeds Base::GetRobotRelativeSpeeds()
-{
+frc::ChassisSpeeds Base::GetRobotRelativeSpeeds() {
     return kDriveKinematics.ToChassisSpeeds(
         m_FrontRightModule.GetState(), m_FrontLeftModule.GetState(), m_RearLeftModule.GetState(),
         m_RearRightModule.GetState());
 }
 
-void Base::SetRobotPoseVisionEstimateLeft()
-{
-    if (!m_VisionLeft.SeesValidTarget())
-    {
+void Base::SetRobotPoseVisionEstimateLeft() {
+    if (!m_VisionLeft.SeesValidTarget()) {
         // hide robot if no target in view
         m_VisionFieldLeft.SetRobotPose(100_m, 100_m, 0_rad);
         return;
     }
 
     std::optional<PoseMeasurement> estimate = m_VisionLeft.GetRobotPoseEstimate();
-    if (!estimate.has_value())
-    {
+    if (!estimate.has_value()) {
         return;
     }
 
     frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
-    if (estimate->ambiguity == 0)
-    {
+    if (estimate->ambiguity == 0) {
         estimate->ambiguity = 0.01;
     }
 
@@ -329,27 +306,23 @@ void Base::SetRobotPoseVisionEstimateLeft()
     m_VisionFieldLeft.SetRobotPose(measurement2d);
 }
 
-void Base::SetRobotPoseVisionEstimateRight()
-{
+void Base::SetRobotPoseVisionEstimateRight() {
 
-    if (!m_VisionRight.SeesValidTarget())
-    {
+    if (!m_VisionRight.SeesValidTarget()) {
         // hide robot if no target in view
         m_VisionFieldRight.SetRobotPose(100_m, 100_m, 0_rad);
         return;
     }
 
     std::optional<PoseMeasurement> estimate = m_VisionRight.GetRobotPoseEstimate();
-    if (!estimate.has_value())
-    {
+    if (!estimate.has_value()) {
         return;
     }
 
     frc::Pose2d measurement2d{estimate->pose.ToPose2d()};
 
-    if (estimate->ambiguity == 0)
-    {
-        estimate->ambiguity = 0.01;
+    if (estimate->ambiguity == 0) {
+        estimate->ambiguity = 0.001;
     }
 
     auto std_devs = PoseEstimationConstant::kVisionStdDevsPerAmbiguityPerMeter;
@@ -374,8 +347,7 @@ void Base::SetRobotPoseVisionEstimateRight()
     m_VisionFieldRight.SetRobotPose(measurement2d);
 }
 
-void Base::ResetOdometry(frc::Pose2d desiredPose)
-{
+void Base::ResetOdometry(frc::Pose2d desiredPose) {
     m_PoseEstimator.ResetPosition(GetHeadingDegrees(),
                                   {m_FrontRightModule.GetPosition(),
                                    m_FrontLeftModule.GetPosition(), m_RearLeftModule.GetPosition(),
@@ -387,8 +359,7 @@ void Base::SwitchRobotDrivingMode() { m_DrivingInFieldRelative = !m_DrivingInFie
 
 void Base::ResetGyroTeleopOffset() { m_GyroOffset = m_Gyro.GetRotation2d().Radians(); }
 
-void Base::ResetGyroTeleopOffsetPoseEstimator()
-{
+void Base::ResetGyroTeleopOffsetPoseEstimator() {
     units::degree_t current_heading = m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees();
     units::degree_t current_gyro = m_Gyro.GetRotation2d().Degrees();
 
@@ -404,14 +375,10 @@ bool Base::IsRotationBeingControlled() { return isRotationBeingControlled; }
 
 void Base::SetRotationBeingControlledFlag(bool yesOrNo) { isRotationBeingControlled = yesOrNo; }
 
-units::meter_t Base::GetDistanceToSpeaker()
-{
-    if (allianceColor == frc::DriverStation::Alliance::kBlue)
-    {
+units::meter_t Base::GetDistanceToSpeaker() {
+    if (allianceColor == frc::DriverStation::Alliance::kBlue) {
         currentColorSpeakerPose = PoseEstimationConstant::blueSpeakerPoseMeters;
-    }
-    else if (allianceColor == frc::DriverStation::Alliance::kRed)
-    {
+    } else if (allianceColor == frc::DriverStation::Alliance::kRed) {
         currentColorSpeakerPose = PoseEstimationConstant::redSpeakerPoseMeters;
     }
     auto poseToSpeaker{m_PoseEstimator.GetEstimatedPosition().Translation() -
@@ -420,14 +387,10 @@ units::meter_t Base::GetDistanceToSpeaker()
                                     poseToSpeaker.Y().value() * poseToSpeaker.Y().value())};
 }
 
-units::degree_t Base::GetDesiredRotationToSpeaker()
-{
-    if (allianceColor == frc::DriverStation::Alliance::kBlue)
-    {
+units::degree_t Base::GetDesiredRotationToSpeaker() {
+    if (allianceColor == frc::DriverStation::Alliance::kBlue) {
         currentColorSpeakerPose = PoseEstimationConstant::blueSpeakerPoseMeters;
-    }
-    else if (allianceColor == frc::DriverStation::Alliance::kRed)
-    {
+    } else if (allianceColor == frc::DriverStation::Alliance::kRed) {
         currentColorSpeakerPose = PoseEstimationConstant::redSpeakerPoseMeters;
     }
     auto poseToSpeaker{m_PoseEstimator.GetEstimatedPosition().Translation() -
@@ -436,34 +399,32 @@ units::degree_t Base::GetDesiredRotationToSpeaker()
     frc::SmartDashboard::PutNumber("poseToSpeakerY", poseToSpeaker.Y().value());
     double desiredRotation = std::atan2(poseToSpeaker.Y().value(), poseToSpeaker.X().value()) /
                              DriveConstant::DegreesToRad;
-    if (desiredRotation < 0)
-    {
+    if (desiredRotation < 0) {
         desiredRotation = 180 + desiredRotation;
-    }
-    else
-    {
+    } else {
         desiredRotation = -180 + desiredRotation;
     }
     return units::degree_t{desiredRotation};
 }
 
-units::degrees_per_second_t Base::GetPIDControlledRotationSpeedToSpeaker()
-{
+units::degrees_per_second_t Base::GetPIDControlledRotationSpeedToSpeaker() {
     return units::degrees_per_second_t{pidControllerThetaSpeaker.Calculate(
         m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value() / 180,
         GetDesiredRotationToSpeaker().value() / 180)};
 }
 
-bool Base::IsRobotInRangeToShoot()
-{
-    return GetDistanceToSpeaker() <= DriveConstant::kThresholdInSpeakerRange;
+bool Base::IsRobotInRangeToShoot() {
+    if (GetDistanceToSpeaker() <= DriveConstant::kThresholdSpeakerInRangeToShoot) {
+        return true;
+    }
+    return false;
 }
 
-bool Base::IsRobotAlignedToShoot()
-{
-    return fabs((m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees() -
-                 GetDesiredRotationToSpeaker())
-                    .value()) <= DriveConstant::kThresholdRobotAngle;
+bool Base::IsRobotInRangeToStartWheels() {
+    if (GetDistanceToSpeaker() <= DriveConstant::kThresholdSpeakerInRangeToStartWheels) {
+        return true;
+    }
+    return false;
 }
 
 double Base::GetRotationPIDError() { return pidControllerThetaSpeaker.GetPositionError(); }
@@ -472,36 +433,29 @@ int Base::GetLeftCameraAprilTagID() { return m_VisionLeft.GetAprilTagIDInView();
 
 int Base::GetRightCameraAprilTagID() { return m_VisionRight.GetAprilTagIDInView(); }
 
-std::optional<frc::Pose2d> Base::GetAveragePoseFromCameras()
-{
+std::optional<frc::Pose2d> Base::GetAveragePoseFromCameras() {
     std::optional<PoseMeasurement> leftEstimate = m_VisionLeft.GetRobotPoseEstimate();
     std::optional<PoseMeasurement> rightEstimate = m_VisionRight.GetRobotPoseEstimate();
-    if (leftEstimate.has_value() && rightEstimate.has_value())
-    {
+    if (leftEstimate.has_value() && rightEstimate.has_value()) {
         auto left_pose = leftEstimate->pose.ToPose2d();
         auto right_pose = rightEstimate->pose.ToPose2d();
         auto translation = (left_pose.Translation() + right_pose.Translation()) / 2;
         auto rotation = (left_pose.Rotation() + right_pose.Rotation()) / 2;
 
         return frc::Pose2d{translation, rotation};
-    }
-    else if (leftEstimate.has_value())
-    {
+    } else if (leftEstimate.has_value()) {
         return leftEstimate->pose.ToPose2d();
-    }
-    else if (rightEstimate.has_value())
-    {
+    } else if (rightEstimate.has_value()) {
         return rightEstimate->pose.ToPose2d();
-    }
-    else
-    {
+    } else {
         return {};
     }
 }
 
-std::optional<photon::PhotonTrackedTarget> Base::GetLatestLimelightTarget()
-{
-    return m_Limelight.GetLatestTarget();
-}
-
 void Base::SetRobotDrivingMode(bool fieldRelative) { m_DrivingInFieldRelative = fieldRelative; }
+
+bool Base::IsRobotAlignedToShoot() {
+    return fabs((m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees() -
+                 GetDesiredRotationToSpeaker())
+                    .value()) <= DriveConstant::kThresholdRobotAngle;
+}

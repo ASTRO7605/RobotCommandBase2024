@@ -9,6 +9,7 @@
 #include "commands/AutomaticIntake.h"
 #include "commands/BarrePosition.h"
 #include "commands/DeuxiemeJointManual.h"
+#include "commands/FeedIntoShooter.h"
 #include "commands/InitLeftHook.h"
 #include "commands/InitRightHook.h"
 #include "commands/IntakeCommand.h"
@@ -78,6 +79,7 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/Trigger.h>
 
+#include "LimelightHelpers.h"
 struct InPosition {
     bool correct_xy;
     bool correct_angle;
@@ -119,7 +121,6 @@ class RobotContainer : public frc2::SubsystemBase {
   private:
     void ConfigureBindings();
     void ConfigureAmpPathfind();
-    void ConfigureStagePathfind();
     void ConfigureNamedCommands();
     void ChooseCorrectStageCommand();
     // The robot's subsystems are defined here...

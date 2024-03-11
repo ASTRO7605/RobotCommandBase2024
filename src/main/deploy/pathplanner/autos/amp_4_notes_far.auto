@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "feed into shooter"
           }
         },
         {
@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "start intake"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "amp_simple_2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "start intake"
                 }
               }
             ]
@@ -45,7 +45,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "feed into shooter"
           }
         },
         {
@@ -55,9 +55,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "auto intake"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -69,7 +82,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "feed into shooter"
           }
         },
         {
@@ -79,15 +92,34 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "auto intake"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto intake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "amp_far_6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed into shooter"
           }
         }
       ]

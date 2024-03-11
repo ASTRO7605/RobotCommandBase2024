@@ -10,7 +10,7 @@ ShootNote::ShootNote(Base *p_Base, ShooterAngle *p_ShooterAngle, ShooterWheels *
       useInterpolatedSpeeds{useInterpolatedSpeeds}, scoringPlace{scoringPlace},
       m_RedescendreBarre{
           RedescendreBarre(m_pBarre, true, (scoringPlace == ScoringPositions::trap))} {
-    AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake, m_pBase});
+    AddRequirements({m_pShooterAngle, m_pShooterWheels, m_pIntake /*, m_pBase*/});
 }
 
 void ShootNote::Initialize() {
@@ -19,17 +19,17 @@ void ShootNote::Initialize() {
     } else {
         m_State = ShooterConstant::ShooterState::init;
     }
+}
+
+void ShootNote::Execute() {
     if (useInterpolatedSpeeds) {
         targetSpeeds =
             m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value());
         finalShooterTargetAngle =
             m_pShooterAngle->GetInterpolatedShooterAngle(m_pBase->GetDistanceToSpeaker().value());
+        frc::SmartDashboard::PutNumber("interpolatedSpeeds", targetSpeeds);
+        frc::SmartDashboard::PutNumber("interpolatedAngle", finalShooterTargetAngle);
     }
-    frc::SmartDashboard::PutNumber("interpolatedAngle", finalShooterTargetAngle);
-    frc::SmartDashboard::PutNumber("interpolatedSpeed", targetSpeeds);
-}
-
-void ShootNote::Execute() {
     switch (m_State) {
     case (ShooterConstant::ShooterState::init):
         if (scoringPlace == ScoringPositions::speaker) {
@@ -40,8 +40,8 @@ void ShootNote::Execute() {
             //     currentShooterTargetAngle = ShooterConstant::kIntermediateAngleShooter;
             // }
             currentShooterTargetAngle = finalShooterTargetAngle;
-            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
-            m_pBase->SetWheelsInXFormation();
+            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
+            // m_pBase->SetWheelsInXFormation();
         } else {
             if (scoringPlace == ScoringPositions::amp) {
                 targetPremierJoint = BarreConstant::k1erJointAngleAmp;
@@ -70,7 +70,7 @@ void ShootNote::Execute() {
         }
         if (scoringPlace == ScoringPositions::speaker) {
             if (m_pShooterWheels->AreWheelsDoneAccelerating(
-                    targetSpeeds, true)) { // did wheels reach their target
+                    targetSpeeds, false)) { // did wheels reach their target
                 areWheelsAtRightSpeed = true;
             }
             if (isShooterAngledRight && areWheelsAtRightSpeed) {
@@ -166,8 +166,7 @@ void ShootNote::Execute() {
     frc::SmartDashboard::PutBoolean("isPremierJointAngledRight", isPremierJointAngledRight);
     frc::SmartDashboard::PutBoolean("isDeuxiemeJointAngledRight", isDeuxiemeJointAngledRight);
 
-    if (m_pCoPilotController->GetStartButton() &&
-        (scoringPlace == ScoringPositions::speaker || scoringPlace == ScoringPositions::trap)) {
+    if (m_pCoPilotController->GetStartButton()) {
         m_State = ShooterConstant::ShooterState::complete;
     }
 

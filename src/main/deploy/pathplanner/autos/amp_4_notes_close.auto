@@ -28,21 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "start intake"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "amp_simple_2"
                 }
               },
               {
-                "type": "deadline",
+                "type": "named",
                 "data": {
-                  "commands": []
+                  "name": "start intake"
                 }
               }
             ]
@@ -80,15 +74,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "amp_multi_4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "auto intake"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "amp_multi_4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "start intake"
+                }
+              }
+            ]
           }
         },
         {

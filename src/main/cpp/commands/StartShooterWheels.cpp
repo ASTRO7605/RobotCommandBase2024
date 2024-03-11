@@ -11,13 +11,14 @@ StartShooterWheels::StartShooterWheels(ShooterWheels *p_ShooterWheels, Base *p_B
 void StartShooterWheels::Initialize() {}
 
 void StartShooterWheels::Execute() {
-    if (shootInSpeaker) {
-        m_pShooterWheels->SetWheelSpeeds(
-            m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value()),
-            true);
-    } else {
-        m_pShooterWheels->SetWheelSpeeds(desiredWheelSpeeds, false);
-    }
+    // if (shootInSpeaker) {
+    //     m_pShooterWheels->SetWheelSpeeds(
+    //         m_pShooterWheels->GetInterpolatedWheelSpeeds(m_pBase->GetDistanceToSpeaker().value()),
+    //         true);
+    // } else {
+    //     m_pShooterWheels->SetWheelSpeeds(desiredWheelSpeeds, false);
+    // }
+    m_pShooterWheels->SetWheelSpeeds(desiredWheelSpeeds, shootInSpeaker);
 }
 
 bool StartShooterWheels::IsFinished() { return false; }

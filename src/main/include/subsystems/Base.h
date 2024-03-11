@@ -6,7 +6,6 @@
 
 #include "Constants.h"
 
-#include "subsystems/Limelight.h"
 #include "subsystems/ModuleSwerve.h"
 #include "subsystems/Vision.h"
 #include "utils/PoseMeasurement.h"
@@ -125,6 +124,8 @@ class Base : public frc2::SubsystemBase
     bool IsRobotInRangeToShoot();
     bool IsRobotAlignedToShoot();
 
+    bool IsRobotInRangeToStartWheels();
+
     double GetRotationPIDError();
 
     int GetLeftCameraAprilTagID();
@@ -132,8 +133,6 @@ class Base : public frc2::SubsystemBase
     int GetRightCameraAprilTagID();
 
     std::optional<frc::Pose2d> GetAveragePoseFromCameras();
-
-    std::optional<photon::PhotonTrackedTarget> GetLatestLimelightTarget();
 
   private:
     // Components (e.g. motor controllers and sensors) should generally be
@@ -179,5 +178,6 @@ class Base : public frc2::SubsystemBase
 
     Vision m_VisionLeft{VisionConstant::TableNameLeft, VisionConstant::leftCameraTransform};
     Vision m_VisionRight{VisionConstant::TableNameRight, VisionConstant::rightCameraTransform};
-    Limelight m_Limelight{VisionConstant::TableNameLimelight};
+
+    frc::Pose2d lastPoseEstimate{};
 };

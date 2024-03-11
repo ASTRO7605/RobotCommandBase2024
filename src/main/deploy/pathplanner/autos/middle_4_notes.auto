@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "shoot note"
           }
         },
         {
@@ -22,15 +22,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "start intake"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "middle_simple_1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "start intake"
                 }
               }
             ]
@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "feed into shooter"
           }
         },
         {
@@ -51,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "feed into shooter"
           }
         },
         {
@@ -61,9 +61,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "auto intake"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -75,7 +88,7 @@
         {
           "type": "named",
           "data": {
-            "name": "align and shoot"
+            "name": "feed into shooter"
           }
         }
       ]
