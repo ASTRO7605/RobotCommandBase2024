@@ -1,0 +1,56 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.34,
+      "y": 7.17
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp_simple_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed into shooter"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "amp_simple_2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "start intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "amp_far_3"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Game autos",
+  "choreoAuto": false
+}

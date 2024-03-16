@@ -136,6 +136,8 @@ class RobotContainer : public frc2::SubsystemBase {
     frc2::CommandPtr pathfindingAmpCommand{frc2::RunCommand([]() {})};
     frc2::CommandPtr pathfindingStageCommand{frc2::RunCommand([]() {})};
 
+    bool flagForExtensionHooks;
+
     // std::string currentAutonomous{"source_2_notes"};
 
     frc2::CommandPtr shootAmp{

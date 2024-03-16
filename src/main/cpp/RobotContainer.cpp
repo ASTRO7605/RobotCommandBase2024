@@ -88,12 +88,14 @@ RobotContainer::RobotContainer()
 
     m_AutoChooser.AddOption("Middle 1 note", "middle_1_note");
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
-    m_AutoChooser.AddOption("Middle 4 notes", "middle_4_notes");
+    m_AutoChooser.AddOption("Middle 5 notes", "middle_5_notes");
 
     m_AutoChooser.AddOption("Source 1 note", "source_1_note");
     m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
 
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
+
+    flagForExtensionHooks = false;
 }
 
 void RobotContainer::Periodic() {
@@ -167,15 +169,21 @@ void RobotContainer::ConfigureBindings() {
                                                  ClimberConstant::kAccelerationRetractionHooks)
                                 .ToPtr()));
 
+    (m_CoPilotController.LeftBumper() && m_CoPilotController.Back())
+        .OnTrue(BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal,
+                              BarreConstant::k2eJointStartPosition)
+                    .ToPtr());
+    (m_CoPilotController.LeftBumper() && m_CoPilotController.Back())
+        .OnTrue(
+            frc2::InstantCommand([this]() { flagForExtensionHooks = !flagForExtensionHooks; }, {})
+                .ToPtr());
+
     m_CoPilotController.RightBumper().OnTrue(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(true); }, {})
             .ToPtr());
-    // m_CoPilotController.RightBumper().WhileTrue(
-    // StartShooterWheels(&m_ShooterWheels, &m_Base, true).ToPtr());
     m_CoPilotController.RightBumper().OnFalse(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(false); }, {})
             .ToPtr());
-    // m_CoPilotController.RightBumper().OnFalse(StopShooterWheels(&m_ShooterWheels).ToPtr());
 
     (m_CoPilotController.A() && !m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
@@ -194,9 +202,7 @@ void RobotContainer::ConfigureBindings() {
                     .ToPtr());
 
     (m_CoPilotController.X() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
-        .OnTrue(/*frc2::SequentialCommandGroup{AlignWithSpeaker(&m_Base),
-                 */
-                ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
+        .OnTrue(ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
                           &m_CoPilotController, 0, 0, true, ScoringPositions::speaker) /*}*/
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
@@ -238,6 +244,34 @@ void RobotContainer::ConfigureBindings() {
     frc2::Trigger([this] {
         return (m_RightHook.IsInitDone() && (m_LeftHook.IsInitDone()));
     }).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
+
+    frc2::Trigger([this] { return (flagForExtensionHooks); })
+        .OnTrue(frc2::cmd::Parallel(
+                    RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionExtendedTrap,
+                                          ClimberConstant::kVitesseExtensionHooks,
+                                          ClimberConstant::kAccelerationExtensionHooks)
+                        .ToPtr(),
+                    LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionExtendedTrap,
+                                         ClimberConstant::kVitesseExtensionHooks,
+                                         ClimberConstant::kAccelerationExtensionHooks)
+                        .ToPtr())
+                    .OnlyIf([this]() {
+                        return (m_RightHook.IsInitDone() && m_LeftHook.IsInitDone());
+                    }));
+
+    frc2::Trigger([this] { return (flagForExtensionHooks); })
+        .OnFalse(frc2::cmd::Parallel(
+                     RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionRetracted,
+                                           ClimberConstant::kVitesseRetractionHooks,
+                                           ClimberConstant::kAccelerationRetractionHooks)
+                         .ToPtr(),
+                     LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionRetracted,
+                                          ClimberConstant::kVitesseRetractionHooks,
+                                          ClimberConstant::kAccelerationRetractionHooks)
+                         .ToPtr())
+                     .OnlyIf([this]() {
+                         return (m_RightHook.IsInitDone() && m_LeftHook.IsInitDone());
+                     }));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -247,6 +281,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     } else {
         return frc2::InstantCommand([]() {}).ToPtr();
     }
+    // return pathplanner::AutoBuilder::buildAuto("test");
 }
 
 void RobotContainer::ConfigureAmpPathfind() {
@@ -304,14 +339,11 @@ void RobotContainer::ConfigureNamedCommands() {
     pathplanner::NamedCommands::registerCommand(
         "barre final and shoot trap",
         frc2::SequentialCommandGroup(
-            frc2::PrintCommand("before barre"),
             frc2::ParallelDeadlineGroup(frc2::WaitCommand(0.5_s),
                                         BarrePosition(&m_Barre,
                                                       BarreConstant::k1erJointAngleTrapFinal,
                                                       BarreConstant::k2eJointStartPosition)),
-            frc2::PrintCommand("after wait"),
-            frc2::InstantCommand([this]() { shootTrap.Schedule(); }),
-            frc2::PrintCommand("after shoot"))
+            frc2::InstantCommand([this]() { shootTrap.Schedule(); }))
             .ToPtr());
     pathplanner::NamedCommands::registerCommand(
         "extend crochets trap",

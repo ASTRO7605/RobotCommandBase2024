@@ -3,49 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0794730783542335,
-        "y": 5.496580989493135
+        "x": 1.34,
+        "y": 7.17
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.104473078354236,
-        "y": 5.45327971930391
+        "x": 2.34,
+        "y": 7.17
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "amp_start"
     },
     {
       "anchor": {
-        "x": 4.52,
-        "y": 4.74
+        "x": 3.5,
+        "y": 7.17
       },
       "prevControl": {
-        "x": 4.495,
-        "y": 4.783301270189222
+        "x": 2.5,
+        "y": 7.17
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Stage Speaker Approach"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 540.0
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 520.0,
+    "maxAngularAcceleration": 1000.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -60.0,
+    "velocity": 0.75,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Stage speaker side",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -60.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

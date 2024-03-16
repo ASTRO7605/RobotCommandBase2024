@@ -10,17 +10,21 @@ void Robot::RobotInit() {
 
     m_Container.SeedEncoders();
 
-    wpi::PortForwarder::GetInstance().Add(5800, "photonvision-limelight.local", 5800);
-    wpi::PortForwarder::GetInstance().Add(5801, "photonvision-a.local", 5800);
-    wpi::PortForwarder::GetInstance().Add(5802, "photonvision-b.local", 5800);
+    wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
+    wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
+    wpi::PortForwarder::GetInstance().Add(5802, "limelight.local", 5802);
+    wpi::PortForwarder::GetInstance().Add(5803, "limelight.local", 5803);
+    wpi::PortForwarder::GetInstance().Add(5804, "limelight.local", 5804);
+    wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
 
-    wpi::PortForwarder::GetInstance().Add(1181, "photonvision-limelight.local", 1181);
-    wpi::PortForwarder::GetInstance().Add(1281, "photonvision-a.local", 1181);
-    wpi::PortForwarder::GetInstance().Add(1381, "photonvision-b.local", 1181);
+    wpi::PortForwarder::GetInstance().Add(5806, "photonvision-a.local", 5800);
+    wpi::PortForwarder::GetInstance().Add(5807, "photonvision-b.local", 5800);
 
-    wpi::PortForwarder::GetInstance().Add(1182, "photonvision-limelight.local", 1182);
-    wpi::PortForwarder::GetInstance().Add(1282, "photonvision-a.local", 1182);
-    wpi::PortForwarder::GetInstance().Add(1382, "photonvision-b.local", 1182);
+    wpi::PortForwarder::GetInstance().Add(1181, "photonvision-a.local", 1181);
+    wpi::PortForwarder::GetInstance().Add(1281, "photonvision-b.local", 1181);
+
+    wpi::PortForwarder::GetInstance().Add(1182, "photonvision-a.local", 1182);
+    wpi::PortForwarder::GetInstance().Add(1282, "photonvision-b.local", 1182);
 
     frc::Preferences::InitDouble("TestShooterAngle", 0);
     frc::Preferences::InitDouble("TestShooterSpeeds", 0);
@@ -60,7 +64,7 @@ void Robot::DisabledPeriodic() {
  */
 void Robot::AutonomousInit() {
     m_autonomousCommand = m_Container.GetAutonomousCommand();
-    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
+    m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();
     }

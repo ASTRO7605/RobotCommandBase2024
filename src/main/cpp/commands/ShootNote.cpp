@@ -40,7 +40,6 @@ void ShootNote::Execute() {
             //     currentShooterTargetAngle = ShooterConstant::kIntermediateAngleShooter;
             // }
             currentShooterTargetAngle = finalShooterTargetAngle;
-            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
             // m_pBase->SetWheelsInXFormation();
         } else {
             if (scoringPlace == ScoringPositions::amp) {
@@ -172,6 +171,7 @@ void ShootNote::Execute() {
 
     if (m_State != ShooterConstant::ShooterState::noNote) {
         m_pShooterAngle->SetShooterAngle(currentShooterTargetAngle); // to update kAF continuously
+        m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
         if (scoringPlace != ScoringPositions::speaker) {
             m_pBarre->Set1erJointAngle(targetPremierJoint); // to update kAF continuously
             m_pBarre->Set2eJointAngle(targetDeuxiemeJoint); // to update kAF continuously
