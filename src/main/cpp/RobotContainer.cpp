@@ -275,13 +275,13 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    std::string currentAutonomous = m_AutoChooser.GetSelected();
-    if (currentAutonomous != "") {
-        return pathplanner::AutoBuilder::buildAuto(currentAutonomous);
-    } else {
-        return frc2::InstantCommand([]() {}).ToPtr();
-    }
-    // return pathplanner::AutoBuilder::buildAuto("test");
+    // std::string currentAutonomous = m_AutoChooser.GetSelected();
+    // if (currentAutonomous != "") {
+    //     return pathplanner::AutoBuilder::buildAuto(currentAutonomous);
+    // } else {
+    //     return frc2::InstantCommand([]() {}).ToPtr();
+    // }
+    return pathplanner::AutoBuilder::buildAuto("test");
 }
 
 void RobotContainer::ConfigureAmpPathfind() {
@@ -289,7 +289,6 @@ void RobotContainer::ConfigureAmpPathfind() {
 }
 
 void RobotContainer::SeedEncoders() {
-    // m_Base.SeedSwerveEncoders();
     m_Barre.SeedEncoder1erJoint();
     m_Barre.SeedEncoder2eJoint();
     m_ShooterAngle.SeedEncoder();
@@ -405,6 +404,10 @@ void RobotContainer::ConfigureNamedCommands() {
                                                 AutomaticIntake(&m_Intake, &m_Base).ToPtr());
     pathplanner::NamedCommands::registerCommand("feed into shooter",
                                                 FeedIntoShooter(&m_Intake).ToPtr());
+    pathplanner::NamedCommands::registerCommand(
+        "run intake continuously",
+        frc2::InstantCommand([this]() { m_Intake.SetIntake(true, false, true); }, {&m_Intake})
+            .Repeatedly());
 }
 
 void RobotContainer::ChooseCorrectStageCommand() {

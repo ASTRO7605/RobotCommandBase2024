@@ -386,7 +386,7 @@ units::meter_t Base::GetDistanceToSpeaker() {
         currentColorSpeakerPose = PoseEstimationConstant::redSpeakerPoseMeters;
     }
     frc::Translation2d currentPose{m_PoseEstimator.GetEstimatedPosition().Translation()};
-    currentPose = currentPose + GetProjectedPositionOffset();
+    currentPose = currentPose + GetProjectedPositionOffset(true);
     auto poseToSpeaker{currentPose - currentColorSpeakerPose};
     return units::meter_t{std::sqrt(poseToSpeaker.X().value() * poseToSpeaker.X().value() +
                                     poseToSpeaker.Y().value() * poseToSpeaker.Y().value())};
@@ -399,7 +399,7 @@ units::degree_t Base::GetDesiredRotationToSpeaker() {
         currentColorSpeakerPose = PoseEstimationConstant::redSpeakerPoseMeters;
     }
     frc::Translation2d currentPose{m_PoseEstimator.GetEstimatedPosition().Translation()};
-    currentPose = currentPose + GetProjectedPositionOffset();
+    currentPose = currentPose + GetProjectedPositionOffset(false);
     auto poseToSpeaker{currentPose - currentColorSpeakerPose};
     frc::SmartDashboard::PutNumber("poseToSpeakerX", poseToSpeaker.X().value());
     frc::SmartDashboard::PutNumber("poseToSpeakerY", poseToSpeaker.Y().value());
@@ -466,9 +466,14 @@ bool Base::IsRobotAlignedToShoot() {
                     .value()) <= DriveConstant::kThresholdRobotAngle;
 }
 
-frc::Translation2d Base::GetProjectedPositionOffset() {
+frc::Translation2d Base::GetProjectedPositionOffset(bool usedForDistance) {
     frc::ChassisSpeeds currentRobotSpeeds{GetFieldRelativeSpeeds()};
-    return frc::Translation2d{
-        units::meter_t{currentRobotSpeeds.vx() * DriveConstant::kTimeForProjectionInFuture},
-        units::meter_t{currentRobotSpeeds.vy() * DriveConstant::kTimeForProjectionInFuture}};
+    double timeForProjectionInFuture{};
+    if (usedForDistance) {
+        timeForProjectionInFuture = DriveConstant::kTimeForProjectionInFutureDistance;
+    } else {
+        timeForProjectionInFuture = DriveConstant::kTimeForProjectionInFutureRotation;
+    }
+    return frc::Translation2d{units::meter_t{currentRobotSpeeds.vx() * timeForProjectionInFuture},
+                              units::meter_t{currentRobotSpeeds.vy() * timeForProjectionInFuture}};
 }

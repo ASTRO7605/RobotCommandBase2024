@@ -71,7 +71,7 @@ class Base : public frc2::SubsystemBase {
 
     frc::ChassisSpeeds GetFieldRelativeSpeeds();
 
-    frc::Translation2d GetProjectedPositionOffset();
+    frc::Translation2d GetProjectedPositionOffset(bool usedForDistance);
 
     void ResetOdometry(frc::Pose2d desiredPose);
 

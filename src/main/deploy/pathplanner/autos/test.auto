@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.34,
-      "y": 7.17
+      "x": 1.36,
+      "y": 5.52
     },
     "rotation": 180.0
   },
@@ -12,40 +12,34 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "amp_simple_1"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "feed into shooter"
+            "name": "shoot note"
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
+          "data": {
+            "pathName": "middle_multi_test_1"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "wait",
                 "data": {
-                  "pathName": "amp_simple_2"
+                  "waitTime": 2.5
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "start intake"
+                  "name": "auto intake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "amp_far_3"
           }
         }
       ]
