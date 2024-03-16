@@ -116,11 +116,8 @@ void Base::Periodic() {
 
     // for SmartDashboard
     m_RobotField.SetRobotPose(m_PoseEstimator.GetEstimatedPosition());
-    // if (m_TimerEncoder.Get() >= DriveConstant::delayBeforeSeedEncoders) {
-    //     m_TimerEncoder.Stop();
-    //     m_TimerEncoder.Reset();
-    //     SeedSwerveEncoders();
-    // }
+    frc::SmartDashboard::PutNumber("fieldXSpeed", GetFieldRelativeSpeeds().vx());
+    frc::SmartDashboard::PutNumber("fieldYSpeed", GetFieldRelativeSpeeds().vy());
 }
 
 void Base::SetIdleMode(DriveConstant::IdleMode idleMode) {
@@ -266,6 +263,13 @@ frc::ChassisSpeeds Base::GetRobotRelativeSpeeds() {
         m_RearRightModule.GetState());
 }
 
+frc::ChassisSpeeds Base::GetFieldRelativeSpeeds() {
+    frc::ChassisSpeeds robotRelativeSpeeds{GetRobotRelativeSpeeds()};
+
+    return frc::ChassisSpeeds::FromRobotRelativeSpeeds(
+        robotRelativeSpeeds, m_Gyro.GetRotation2d().Radians() - m_GyroOffset);
+}
+
 void Base::SetRobotPoseVisionEstimateLeft() {
     if (!m_VisionLeft.SeesValidTarget()) {
         // hide robot if no target in view
@@ -381,8 +385,9 @@ units::meter_t Base::GetDistanceToSpeaker() {
     } else if (allianceColor == frc::DriverStation::Alliance::kRed) {
         currentColorSpeakerPose = PoseEstimationConstant::redSpeakerPoseMeters;
     }
-    auto poseToSpeaker{m_PoseEstimator.GetEstimatedPosition().Translation() -
-                       currentColorSpeakerPose};
+    frc::Translation2d currentPose{m_PoseEstimator.GetEstimatedPosition().Translation()};
+    currentPose = currentPose + GetProjectedPositionOffset();
+    auto poseToSpeaker{currentPose - currentColorSpeakerPose};
     return units::meter_t{std::sqrt(poseToSpeaker.X().value() * poseToSpeaker.X().value() +
                                     poseToSpeaker.Y().value() * poseToSpeaker.Y().value())};
 }
@@ -393,8 +398,9 @@ units::degree_t Base::GetDesiredRotationToSpeaker() {
     } else if (allianceColor == frc::DriverStation::Alliance::kRed) {
         currentColorSpeakerPose = PoseEstimationConstant::redSpeakerPoseMeters;
     }
-    auto poseToSpeaker{m_PoseEstimator.GetEstimatedPosition().Translation() -
-                       currentColorSpeakerPose};
+    frc::Translation2d currentPose{m_PoseEstimator.GetEstimatedPosition().Translation()};
+    currentPose = currentPose + GetProjectedPositionOffset();
+    auto poseToSpeaker{currentPose - currentColorSpeakerPose};
     frc::SmartDashboard::PutNumber("poseToSpeakerX", poseToSpeaker.X().value());
     frc::SmartDashboard::PutNumber("poseToSpeakerY", poseToSpeaker.Y().value());
     double desiredRotation = std::atan2(poseToSpeaker.Y().value(), poseToSpeaker.X().value()) /
@@ -458,4 +464,11 @@ bool Base::IsRobotAlignedToShoot() {
     return fabs((m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees() -
                  GetDesiredRotationToSpeaker())
                     .value()) <= DriveConstant::kThresholdRobotAngle;
+}
+
+frc::Translation2d Base::GetProjectedPositionOffset() {
+    frc::ChassisSpeeds currentRobotSpeeds{GetFieldRelativeSpeeds()};
+    return frc::Translation2d{
+        units::meter_t{currentRobotSpeeds.vx() * DriveConstant::kTimeForProjectionInFuture},
+        units::meter_t{currentRobotSpeeds.vy() * DriveConstant::kTimeForProjectionInFuture}};
 }

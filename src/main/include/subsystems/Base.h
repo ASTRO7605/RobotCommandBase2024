@@ -42,8 +42,7 @@
 
 #include <vector>
 
-class Base : public frc2::SubsystemBase
-{
+class Base : public frc2::SubsystemBase {
   public:
     Base();
 
@@ -69,6 +68,10 @@ class Base : public frc2::SubsystemBase
     frc::Pose2d GetPose();
 
     frc::ChassisSpeeds GetRobotRelativeSpeeds();
+
+    frc::ChassisSpeeds GetFieldRelativeSpeeds();
+
+    frc::Translation2d GetProjectedPositionOffset();
 
     void ResetOdometry(frc::Pose2d desiredPose);
 

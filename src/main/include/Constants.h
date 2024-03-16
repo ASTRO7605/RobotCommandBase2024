@@ -101,6 +101,8 @@ constexpr auto kThresholdTimer = 0.1_s;
 constexpr auto kThresholdSpeakerInRangeToShoot = 3.9_m;
 constexpr auto kThresholdSpeakerInRangeToStartWheels = 6.0_m;
 constexpr auto kTimeBeforeBrake = 1_s;
+
+constexpr double kTimeForProjectionInFuture = 0.3;
 } // namespace DriveConstant
 
 namespace VisionConstant {
