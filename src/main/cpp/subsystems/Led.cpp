@@ -37,7 +37,7 @@ void Led::Periodic() {
         }
         auto bottom =
             robot_in_range ? LedConstants::Colors::RobotInRange : LedConstants::Colors::Off;
-        split_with_bottom_blink(top, bottom, robot_aligned);
+        split_with_blink(top, note_in_intake, bottom, robot_aligned);
 
         break;
     }
@@ -137,20 +137,24 @@ void Led::color_sweep(LedConstants::Color color) {
     m_led.SetData(m_buffer);
 }
 
-void Led::split_with_bottom_blink(LedConstants::Color top, LedConstants::Color bottom,
-                                  bool bottom_blink) {
+void Led::split_with_blink(LedConstants::Color top, bool top_blink, LedConstants::Color bottom,
+                           bool bottom_blink) {
     static int prescale_counter = 0;
-    static bool bottom_on = true;
+    static bool blink_clock = true;
 
     ++prescale_counter;
 
     if (prescale_counter >= LedConstants::kFlashPrescale) {
         prescale_counter = 0;
-        bottom_on = !bottom_on;
+        blink_clock = !blink_clock;
     }
 
-    if (bottom_blink && !bottom_on) {
+    if (bottom_blink && !blink_clock) {
         bottom = LedConstants::Colors::Off;
+    }
+
+    if (top_blink && !blink_clock) {
+        top = LedConstants::Colors::Off;
     }
 
     for (int led = 0; led < (LedConstants::kNumLeds / 2); ++led) {

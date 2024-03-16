@@ -7,8 +7,7 @@
 
 #include <array>
 
-class Led : public frc2::SubsystemBase
-{
+class Led : public frc2::SubsystemBase {
   public:
     Led();
     void Periodic() override;
@@ -24,8 +23,8 @@ class Led : public frc2::SubsystemBase
   private:
     void color_sweep(LedConstants::Color color);
     void alternate(LedConstants::Color color1, LedConstants::Color color2);
-    void split_with_bottom_blink(LedConstants::Color top, LedConstants::Color bottom,
-                                 bool bottom_blink);
+    void split_with_blink(LedConstants::Color top, bool top_blink, LedConstants::Color bottom,
+                          bool bottom_blink);
 
     frc::AddressableLED m_led{LedConstants::kLedChannel};
     std::array<frc::AddressableLED::LEDData, LedConstants::kNumLeds> m_buffer;

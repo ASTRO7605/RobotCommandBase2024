@@ -99,7 +99,7 @@ constexpr double kThresholdRobotAngle = 1.5;
 constexpr auto kThresholdTimer = 0.1_s;
 
 constexpr auto kThresholdSpeakerInRangeToShoot = 3.9_m;
-constexpr auto kThresholdSpeakerInRangeToStartWheels = 5.0_m;
+constexpr auto kThresholdSpeakerInRangeToStartWheels = 6.0_m;
 constexpr auto kTimeBeforeBrake = 1_s;
 } // namespace DriveConstant
 
@@ -125,7 +125,7 @@ enum class LedMode : int { Off = 1, Flash = 2, On = 3 };
 } // namespace VisionConstant
 namespace PoseEstimationConstant {
 // x(m), y(m), theta(rad)
-constexpr std::array<double, 3> kStateStdDevs{0.1, 0.1, 0.008};
+constexpr std::array<double, 3> kStateStdDevs{0.12, 0.12, 0.008};
 constexpr std::array<double, 3> kVisionStdDevsDefault{0.8, 0.8, 0.99};
 constexpr std::array<double, 3> kVisionStdDevsPerMeterBase{0.4, 0.4, 0.95};
 constexpr std::array<double, 3> kVisionStdDevsPerAmbiguityPerMeter{
@@ -174,14 +174,14 @@ constexpr double flywheelsSpeedManualSpeaker = 3000; // RPM
 constexpr double manualSpeakerAngle = 650;
 constexpr double flywheelsSpeedAmp = 550;   // RPM
 constexpr double flywheelsSpeedTrap = 1650; // RPM
-constexpr double speedThreshold = 200;      // RPM
+constexpr double speedThreshold = 100;      // RPM
 constexpr auto timeThreshold = 0.2_s;
 constexpr double kPLeftFlywheel = 0.00025;
-constexpr double kILeftFlywheel = 0.0000007;
+constexpr double kILeftFlywheel = 0.000001;
 constexpr double kDLeftFlywheel = 0.01;
 constexpr double kFFLeftFlywheel = 0;
 constexpr double kPRightFlywheel = 0.00025;
-constexpr double kIRightFlywheel = 0.0000007;
+constexpr double kIRightFlywheel = 0.000001;
 constexpr double kDRightFlywheel = 0.01;
 constexpr double kFFRightFlywheel = 0;
 constexpr double FConversionFactorWheels = 1.0 / 42.0;             // ticks * F -> wheel rotations
@@ -204,7 +204,7 @@ constexpr double kFPositionAngle = 0;
 constexpr double kVitesseAngle = 1000;      // 1/10 degre par seconde
 constexpr double kAccelerationAngle = 4000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
-constexpr double angleThreshold = 12.5;     // dixieme de degre
+constexpr double angleThreshold = 7.5;      // dixieme de degre
 constexpr double kMaxAF = 0 /*.0445*/;
 constexpr double FDegToRad = std::numbers::pi / 180;
 constexpr double kPeakCurrentLimit = 20;   // amperes

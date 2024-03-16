@@ -36,7 +36,6 @@ RobotContainer::RobotContainer()
             }
 
             dir_r *= (dir_r * dir_r);
-            dir_r *= 0.6;
 
             double turn = 0;
 
@@ -53,7 +52,6 @@ RobotContainer::RobotContainer()
                                           DriveConstant::kControllerRotationDeadband);
 
                 turn *= (turn * turn);
-                turn *= 0.75;
             }
             // Drive by reconverting polar vector to cartesian
             m_Base.Drive(-units::meters_per_second_t{dir_r * std::sin(dir_theta)}, // forward
@@ -171,11 +169,14 @@ void RobotContainer::ConfigureBindings() {
                                                  ClimberConstant::kAccelerationRetractionHooks)
                                 .ToPtr()));
 
-    m_CoPilotController.LeftBumper().OnTrue(frc2::InstantCommand([this]() { 
-                                                    BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal,
-                                                        BarreConstant::k2eJointStartPosition); 
-                                                    }, {}).ToPtr());
-    m_CoPilotController.LeftBumper().OnTrue(frc2::InstantCommand([this]() { flagForExtensionHooks = !flagForExtensionHooks; }, {}).ToPtr());
+    (m_CoPilotController.LeftBumper() && m_CoPilotController.Back())
+        .OnTrue(BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal,
+                              BarreConstant::k2eJointStartPosition)
+                    .ToPtr());
+    (m_CoPilotController.LeftBumper() && m_CoPilotController.Back())
+        .OnTrue(
+            frc2::InstantCommand([this]() { flagForExtensionHooks = !flagForExtensionHooks; }, {})
+                .ToPtr());
 
     m_CoPilotController.RightBumper().OnTrue(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(true); }, {})
@@ -244,29 +245,33 @@ void RobotContainer::ConfigureBindings() {
         return (m_RightHook.IsInitDone() && (m_LeftHook.IsInitDone()));
     }).OnTrue(RedescendreBarre(&m_Barre, false, false).ToPtr());
 
-    frc2::Trigger([this] {
-        return (flagForExtensionHooks);
-    }).OnTrue(frc2::cmd::Parallel(
-        RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionExtendedTrap,
-                              ClimberConstant::kVitesseExtensionHooks,
-                              ClimberConstant::kAccelerationExtensionHooks)
-            .ToPtr(),
-        LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionExtendedTrap,
-                             ClimberConstant::kVitesseExtensionHooks,
-                             ClimberConstant::kAccelerationExtensionHooks)
-            .ToPtr())
-                .OnlyIf([this] () {return (m_RightHook.IsInitDone() && m_LeftHook.IsInitDone());}));
+    frc2::Trigger([this] { return (flagForExtensionHooks); })
+        .OnTrue(frc2::cmd::Parallel(
+                    RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionExtendedTrap,
+                                          ClimberConstant::kVitesseExtensionHooks,
+                                          ClimberConstant::kAccelerationExtensionHooks)
+                        .ToPtr(),
+                    LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionExtendedTrap,
+                                         ClimberConstant::kVitesseExtensionHooks,
+                                         ClimberConstant::kAccelerationExtensionHooks)
+                        .ToPtr())
+                    .OnlyIf([this]() {
+                        return (m_RightHook.IsInitDone() && m_LeftHook.IsInitDone());
+                    }));
 
-    frc2::Trigger([this] {
-        return (flagForExtensionHooks);
-    }).OnFalse(frc2::cmd::Parallel(RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionRetracted,
-                                                  ClimberConstant::kVitesseRetractionHooks,
-                                                  ClimberConstant::kAccelerationRetractionHooks)
-                                .ToPtr(),
-                            LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionRetracted,
-                                                 ClimberConstant::kVitesseRetractionHooks,
-                                                 ClimberConstant::kAccelerationRetractionHooks).ToPtr())
-                .OnlyIf([this] () {return (m_RightHook.IsInitDone() && m_LeftHook.IsInitDone());}));
+    frc2::Trigger([this] { return (flagForExtensionHooks); })
+        .OnFalse(frc2::cmd::Parallel(
+                     RightHookPositionTest(&m_RightHook, ClimberConstant::kPositionRetracted,
+                                           ClimberConstant::kVitesseRetractionHooks,
+                                           ClimberConstant::kAccelerationRetractionHooks)
+                         .ToPtr(),
+                     LeftHookPositionTest(&m_LeftHook, ClimberConstant::kPositionRetracted,
+                                          ClimberConstant::kVitesseRetractionHooks,
+                                          ClimberConstant::kAccelerationRetractionHooks)
+                         .ToPtr())
+                     .OnlyIf([this]() {
+                         return (m_RightHook.IsInitDone() && m_LeftHook.IsInitDone());
+                     }));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -276,6 +281,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     } else {
         return frc2::InstantCommand([]() {}).ToPtr();
     }
+    // return pathplanner::AutoBuilder::buildAuto("test");
 }
 
 void RobotContainer::ConfigureAmpPathfind() {

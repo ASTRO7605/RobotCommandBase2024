@@ -110,10 +110,12 @@ bool ShooterWheels::AreWheelsDoneAccelerating(double target, bool spin) {
     if (spin) {
         leftTarget = rightTarget - ShooterConstant::kRPMDifferenceSpin;
     }
-    if ((fabs(m_LeftFlywheelMotorEncoder.GetVelocity() - leftTarget) <=
-         ShooterConstant::speedThreshold) &&
-        fabs((m_RightFlywheelMotorEncoder.GetVelocity() - rightTarget) <=
-             ShooterConstant::speedThreshold)) {
+    if (((m_LeftFlywheelMotorEncoder.GetVelocity() > leftTarget) &&
+         (m_RightFlywheelMotorEncoder.GetVelocity() > rightTarget)) ||
+        ((fabs(m_LeftFlywheelMotorEncoder.GetVelocity() - leftTarget) <=
+          ShooterConstant::speedThreshold) &&
+         (fabs(m_RightFlywheelMotorEncoder.GetVelocity() - rightTarget) <=
+          ShooterConstant::speedThreshold))) {
         return true;
     }
     return false;
