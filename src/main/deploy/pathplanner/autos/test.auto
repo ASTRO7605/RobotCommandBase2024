@@ -12,15 +12,28 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "shoot note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "shoot note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "middle_multi_test_1"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "middle_multi_test_1"
+            "pathName": "middle_multi_test_2"
           }
         },
         {

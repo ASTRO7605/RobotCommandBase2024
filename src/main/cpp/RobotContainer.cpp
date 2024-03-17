@@ -1,6 +1,6 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright(c) FIRST and other WPILib contributors.
+//  Open Source Software; you can modify and/or share it under the terms of
+//  the WPILib BSD license file in the root directory of this project.
 
 #include "RobotContainer.h"
 
@@ -35,12 +35,12 @@ RobotContainer::RobotContainer()
                         (1 - DriveConstant::kControllerMovementDeadband);
             }
 
-            dir_r *= (dir_r * dir_r);
-
+            dir_r *= dir_r;
             double turn = 0;
 
             if (m_Base.IsRotationBeingControlled()) {
-                turn = -units::radians_per_second_t{m_Base.GetPIDControlledRotationSpeedToSpeaker()}
+                turn = -units::radians_per_second_t{m_Base.GetPIDControlledRotationSpeed(
+                                                        m_Base.IsRobotInRangeToStartWheels())}
                             .value();
                 if (turn > 1) {
                     turn = 1;
@@ -51,7 +51,7 @@ RobotContainer::RobotContainer()
                 turn = frc::ApplyDeadband(m_TurnStick.GetX(),
                                           DriveConstant::kControllerRotationDeadband);
 
-                turn *= (turn * turn);
+                turn *= (turn < 0) ? -turn : turn;
             }
             // Drive by reconverting polar vector to cartesian
             m_Base.Drive(-units::meters_per_second_t{dir_r * std::sin(dir_theta)}, // forward
@@ -109,6 +109,7 @@ void RobotContainer::Periodic() {
     m_Led.SetRobotInRange(m_Base.IsRobotInRangeToShoot());
     m_Led.SetRobotAligned(m_Base.IsRobotAlignedToShoot());
     frc::SmartDashboard::PutString("chosen auto", m_AutoChooser.GetSelected());
+    frc::SmartDashboard::PutBoolean("IsNoteSeen", LimelightHelpers::getTV());
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -208,9 +209,8 @@ void RobotContainer::ConfigureBindings() {
 
     (m_CoPilotController.X() && m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .OnTrue(ShootNote(&m_Base, &m_ShooterAngle, &m_ShooterWheels, &m_Intake, &m_Barre,
-                          &m_CoPilotController, frc::Preferences::GetDouble("TestShooterSpeeds"),
-                          frc::Preferences::GetDouble("TestShooterAngle"), false,
-                          ScoringPositions::speaker)
+                          &m_CoPilotController, ShooterConstant::flywheelsSpeedManualSpeaker,
+                          ShooterConstant::manualSpeakerAngle, false, ScoringPositions::speaker)
                     .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
 
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
@@ -275,13 +275,13 @@ void RobotContainer::ConfigureBindings() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-    // std::string currentAutonomous = m_AutoChooser.GetSelected();
-    // if (currentAutonomous != "") {
-    //     return pathplanner::AutoBuilder::buildAuto(currentAutonomous);
-    // } else {
-    //     return frc2::InstantCommand([]() {}).ToPtr();
-    // }
-    return pathplanner::AutoBuilder::buildAuto("test");
+    std::string currentAutonomous = m_AutoChooser.GetSelected();
+    if (currentAutonomous != "") {
+        return pathplanner::AutoBuilder::buildAuto(currentAutonomous);
+    } else {
+        return frc2::InstantCommand([]() {}).ToPtr();
+    }
+    // return pathplanner::AutoBuilder::buildAuto("test");
 }
 
 void RobotContainer::ConfigureAmpPathfind() {

@@ -413,10 +413,22 @@ units::degree_t Base::GetDesiredRotationToSpeaker() {
     return units::degree_t{desiredRotation};
 }
 
-units::degrees_per_second_t Base::GetPIDControlledRotationSpeedToSpeaker() {
-    return units::degrees_per_second_t{pidControllerThetaSpeaker.Calculate(
-        m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value() / 180,
-        GetDesiredRotationToSpeaker().value() / 180)};
+units::degrees_per_second_t Base::GetPIDControlledRotationSpeed(bool alignToSpeaker) {
+    if (alignToSpeaker) {
+        return units::degrees_per_second_t{pidControllerThetaSpeaker.Calculate(
+            m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value() / 180,
+            GetDesiredRotationToSpeaker().value() / 180)};
+    } else {
+        double sourceAngleTarget{};
+        if (allianceColor == frc::DriverStation::Alliance::kBlue) {
+            sourceAngleTarget = DriveConstant::kBlueSourceApproachAngle.value();
+        } else if (allianceColor == frc::DriverStation::Alliance::kRed) {
+            sourceAngleTarget = DriveConstant::kRedSourceApproachAngle.value();
+        }
+        return units::degrees_per_second_t{pidControllerThetaSpeaker.Calculate(
+            m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value() / 180,
+            sourceAngleTarget / 180)};
+    }
 }
 
 bool Base::IsRobotInRangeToShoot() {

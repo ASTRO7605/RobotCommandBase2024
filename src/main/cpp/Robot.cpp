@@ -85,6 +85,7 @@ void Robot::TeleopInit() {
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
     }
+    frc2::PrintCommand("Fais des points caliss").Schedule();
 }
 
 /**

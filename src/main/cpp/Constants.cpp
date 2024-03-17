@@ -20,6 +20,8 @@ const std::vector<std::pair<units::meter_t, double>>
         ShooterConstant::seventhDistanceWheelSpeedsCouple,
         ShooterConstant::eighthDistanceWheelSpeedsCouple,
         ShooterConstant::ninthDistanceWheelSpeedsCouple,
+        ShooterConstant::tenthDistanceWheelSpeedsCouple,
+        ShooterConstant::eleventhDistanceWheelSpeedsCouple,
     };
 
 const std::vector<std::pair<units::meter_t, double>>
@@ -33,4 +35,6 @@ const std::vector<std::pair<units::meter_t, double>>
         ShooterConstant::seventhDistanceShooterAngleCouple,
         ShooterConstant::eighthDistanceShooterAngleCouple,
         ShooterConstant::ninthDistanceShooterAngleCouple,
+        ShooterConstant::tenthDistanceShooterAngleCouple,
+        ShooterConstant::eleventhDistanceShooterAngleCouple,
     };

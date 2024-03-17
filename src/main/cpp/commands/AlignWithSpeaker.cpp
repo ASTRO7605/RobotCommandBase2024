@@ -8,7 +8,7 @@ void AlignWithSpeaker::Initialize() {
 }
 
 void AlignWithSpeaker::Execute() {
-    turn = -units::radians_per_second_t{m_pBase->GetPIDControlledRotationSpeedToSpeaker()}.value();
+    turn = -units::radians_per_second_t{m_pBase->GetPIDControlledRotationSpeed(true)}.value();
     if (turn > 1) {
         turn = 1;
     } else if (turn < -1) {

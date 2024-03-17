@@ -86,7 +86,7 @@ constexpr int RearRightCANcoderID = 13;
 
 constexpr double kPThetaRobot = 525;
 constexpr double kIThetaRobot = 0.01;
-constexpr double kDThetaRobot = 20;
+constexpr double kDThetaRobot = 25;
 
 constexpr double kPXYRobot = 0.0115;
 constexpr double kIXYRobot = 0;
@@ -102,8 +102,11 @@ constexpr auto kThresholdSpeakerInRangeToShoot = 3.9_m;
 constexpr auto kThresholdSpeakerInRangeToStartWheels = 6.0_m;
 constexpr auto kTimeBeforeBrake = 1_s;
 
-constexpr double kTimeForProjectionInFutureDistance = 0.35;
+constexpr double kTimeForProjectionInFutureDistance = 0.2;
 constexpr double kTimeForProjectionInFutureRotation = 0.55;
+
+constexpr auto kBlueSourceApproachAngle = 120_deg;
+constexpr auto kRedSourceApproachAngle = 60_deg;
 } // namespace DriveConstant
 
 namespace VisionConstant {
@@ -255,6 +258,14 @@ constexpr std::pair<units::meter_t, double> ninthDistanceWheelSpeedsCouple =
     std::make_pair(3.90_m, 4500);
 constexpr std::pair<units::meter_t, double> ninthDistanceShooterAngleCouple =
     std::make_pair(3.90_m, 360);
+constexpr std::pair<units::meter_t, double> tenthDistanceWheelSpeedsCouple =
+    std::make_pair(7_m, 4500);
+constexpr std::pair<units::meter_t, double> tenthDistanceShooterAngleCouple =
+    std::make_pair(7_m, 360);
+constexpr std::pair<units::meter_t, double> eleventhDistanceWheelSpeedsCouple =
+    std::make_pair(7.01_m, 4500);
+constexpr std::pair<units::meter_t, double> eleventhDistanceShooterAngleCouple =
+    std::make_pair(7.01_m, 450);
 extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance;
 extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
 constexpr double kStandByWheelRPM = 2000;

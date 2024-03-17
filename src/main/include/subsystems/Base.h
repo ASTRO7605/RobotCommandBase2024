@@ -122,7 +122,7 @@ class Base : public frc2::SubsystemBase {
 
     units::degree_t GetDesiredRotationToSpeaker();
 
-    units::degrees_per_second_t GetPIDControlledRotationSpeedToSpeaker();
+    units::degrees_per_second_t GetPIDControlledRotationSpeed(bool alignToSpeaker);
 
     bool IsRobotInRangeToShoot();
     bool IsRobotAlignedToShoot();
