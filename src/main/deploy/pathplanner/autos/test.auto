@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36,
-      "y": 5.52
+      "x": 1.33,
+      "y": 5.53
     },
     "rotation": 180.0
   },
@@ -53,6 +53,18 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle_multi_test_3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "middle_multi_test_4"
           }
         }
       ]
