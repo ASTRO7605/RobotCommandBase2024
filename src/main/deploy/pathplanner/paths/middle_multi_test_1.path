@@ -8,32 +8,101 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6820506034575122,
-        "y": 5.519139443130847
+        "x": 1.7662321955413156,
+        "y": 5.535354916863679
       },
       "isLocked": false,
       "linkedName": "middle_start"
     },
     {
       "anchor": {
-        "x": 2.1,
+        "x": 3.253,
         "y": 5.53
       },
       "prevControl": {
-        "x": 2.050074103586404,
-        "y": 5.532721188582011
+        "x": 2.9713410431575444,
+        "y": 5.530186459715308
+      },
+      "nextControl": {
+        "x": 4.011440034868261,
+        "y": 5.529497908695805
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.02,
+        "y": 7.39
+      },
+      "prevControl": {
+        "x": 4.4990296687220654,
+        "y": 7.432169800619438
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "middle_inter_1"
+      "linkedName": "middle_1st_note"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
-  "eventMarkers": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.7,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 520.0,
+        "maxAngularAcceleration": 500.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "adjust shooter angle"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "start shooter wheels"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "run intake continuously"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 520.0,
     "maxAngularAcceleration": 500.0
   },
@@ -46,7 +115,7 @@
   "folder": "middle_paths",
   "previewStartingState": {
     "rotation": 180.0,
-    "velocity": 0
+    "velocity": 1.0
   },
   "useDefaultConstraints": false
 }

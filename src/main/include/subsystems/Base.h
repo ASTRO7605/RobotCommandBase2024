@@ -137,6 +137,8 @@ class Base : public frc2::SubsystemBase {
 
     std::optional<frc::Pose2d> GetAveragePoseFromCameras();
 
+    void ResetGyroOffsetFromValue(units::radian_t offset);
+
   private:
     // Components (e.g. motor controllers and sensors) should generally be
     // declared private and exposed only through public methods.

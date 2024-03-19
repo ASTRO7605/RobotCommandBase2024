@@ -102,8 +102,8 @@ constexpr auto kThresholdSpeakerInRangeToShoot = 3.9_m;
 constexpr auto kThresholdSpeakerInRangeToStartWheels = 6.0_m;
 constexpr auto kTimeBeforeBrake = 1_s;
 
-constexpr double kTimeForProjectionInFutureDistance = 0.2;
-constexpr double kTimeForProjectionInFutureRotation = 0.55;
+constexpr double kTimeForProjectionInFutureDistance = 0.35;
+constexpr double kTimeForProjectionInFutureRotation = 0.2;
 
 constexpr auto kBlueSourceApproachAngle = 120_deg;
 constexpr auto kRedSourceApproachAngle = 60_deg;
@@ -207,8 +207,8 @@ constexpr double kPPositionAngle = 7.25;
 constexpr double kIPositionAngle = 0.015;
 constexpr double kDPositionAngle = 25.0;
 constexpr double kFPositionAngle = 0;
-constexpr double kVitesseAngle = 1000;      // 1/10 degre par seconde
-constexpr double kAccelerationAngle = 4000; // 1/10 degre par seconde^2
+constexpr double kVitesseAngle = 1500;      // 1/10 degre par seconde
+constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
 constexpr double angleThreshold = 7.5;      // dixieme de degre
 constexpr double kMaxAF = 0 /*.0445*/;

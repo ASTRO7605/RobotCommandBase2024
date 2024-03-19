@@ -101,6 +101,7 @@ class RobotContainer : public frc2::SubsystemBase {
     frc2::CommandXboxController m_CoPilotController;
 
     frc2::CommandPtr GetAutonomousCommand();
+    void ResetGyroOffsetFromAuto();
 
     void SeedEncoders();
     void BringBarreDown();

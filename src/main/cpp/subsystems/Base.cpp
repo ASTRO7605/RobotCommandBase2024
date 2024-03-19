@@ -489,3 +489,5 @@ frc::Translation2d Base::GetProjectedPositionOffset(bool usedForDistance) {
     return frc::Translation2d{units::meter_t{currentRobotSpeeds.vx() * timeForProjectionInFuture},
                               units::meter_t{currentRobotSpeeds.vy() * timeForProjectionInFuture}};
 }
+
+void Base::ResetGyroOffsetFromValue(units::radian_t offset) { m_GyroOffset = offset; }

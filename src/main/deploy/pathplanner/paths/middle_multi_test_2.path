@@ -3,78 +3,33 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.1,
-        "y": 5.53
+        "x": 7.02,
+        "y": 7.38
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.149976224800957,
-        "y": 5.528458262459358
+        "x": 6.371982743241082,
+        "y": 7.200932668667375
       },
       "isLocked": false,
-      "linkedName": "middle_inter_1"
+      "linkedName": "middle_1st_note"
     },
     {
       "anchor": {
-        "x": 3.1,
-        "y": 5.52
+        "x": 3.7462700372818274,
+        "y": 6.246751793591749
       },
       "prevControl": {
-        "x": 2.3290748283557576,
-        "y": 5.491758281171682
-      },
-      "nextControl": {
-        "x": 4.865857989236113,
-        "y": 5.584689630922775
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.02,
-        "y": 7.386404014813754
-      },
-      "prevControl": {
-        "x": 4.266942702010963,
-        "y": 7.536458167529369
+        "x": 4.066938903108577,
+        "y": 6.374045055782419
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "middle_1st_note"
+      "linkedName": "middle_inter_1"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 180.0,
-      "rotateFast": true
-    }
-  ],
-  "constraintZones": [
-    {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 4.0,
-        "maxAngularVelocity": 520.0,
-        "maxAngularAcceleration": 500.0
-      }
-    },
-    {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 1.75,
-      "maxWaypointRelativePos": 2.0,
-      "constraints": {
-        "maxVelocity": 2.5,
-        "maxAcceleration": 4.0,
-        "maxAngularVelocity": 520.0,
-        "maxAngularAcceleration": 500.0
-      }
-    }
-  ],
+  "rotationTargets": [],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
@@ -86,7 +41,13 @@
             {
               "type": "named",
               "data": {
-                "name": "run intake continuously"
+                "name": "start shooter wheels"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "adjust shooter angle"
               }
             }
           ]
@@ -96,14 +57,14 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 520.0,
     "maxAngularAcceleration": 500.0
   },
   "goalEndState": {
-    "velocity": 0.45,
-    "rotation": 180.0,
-    "rotateFast": false
+    "velocity": 0.0,
+    "rotation": -170.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "middle_paths",

@@ -381,25 +381,27 @@ void RobotContainer::ConfigureNamedCommands() {
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming));
     pathplanner::NamedCommands::registerCommand(
         "start shooter wheels",
-        frc2::InstantCommand(
-            [this] {
-                m_ShooterWheels.SetWheelSpeeds(m_ShooterWheels.GetInterpolatedWheelSpeeds(
-                                                   m_Base.GetDistanceToSpeaker().value()),
-                                               false);
-            },
-            {&m_ShooterWheels})
-            .Repeatedly());
+        frc2::RepeatCommand(frc2::InstantCommand(
+                                [this] {
+                                    m_ShooterWheels.SetWheelSpeeds(
+                                        m_ShooterWheels.GetInterpolatedWheelSpeeds(
+                                            m_Base.GetDistanceToSpeaker().value()),
+                                        false);
+                                },
+                                {&m_ShooterWheels}))
+            .ToPtr());
     pathplanner::NamedCommands::registerCommand("stop shooter wheels",
                                                 StopShooterWheels(&m_ShooterWheels).ToPtr());
     pathplanner::NamedCommands::registerCommand(
         "adjust shooter angle",
-        frc2::InstantCommand(
-            [this] {
-                m_ShooterAngle.SetShooterAngle(m_ShooterAngle.GetInterpolatedShooterAngle(
-                    m_Base.GetDistanceToSpeaker().value()));
-            },
-            {&m_ShooterAngle})
-            .Repeatedly());
+        frc2::RepeatCommand(frc2::InstantCommand(
+                                [this] {
+                                    m_ShooterAngle.SetShooterAngle(
+                                        m_ShooterAngle.GetInterpolatedShooterAngle(
+                                            m_Base.GetDistanceToSpeaker().value()));
+                                },
+                                {&m_ShooterAngle}))
+            .ToPtr());
     pathplanner::NamedCommands::registerCommand("auto intake",
                                                 AutomaticIntake(&m_Intake, &m_Base).ToPtr());
     pathplanner::NamedCommands::registerCommand("feed into shooter",
@@ -514,3 +516,13 @@ void RobotContainer::ChooseCorrectStageCommand() {
 // }
 
 void RobotContainer::ResetRobotOffsetFromField() { m_Base.ResetGyroTeleopOffsetPoseEstimator(); }
+
+void RobotContainer::ResetGyroOffsetFromAuto() {
+    std::string currentAutonomous = m_AutoChooser.GetSelected();
+    if (currentAutonomous != "") {
+        m_Base.ResetGyroOffsetFromValue(
+            pathplanner::PathPlannerAuto::getStartingPoseFromAutoFile(currentAutonomous)
+                .Rotation()
+                .Radians());
+    }
+}

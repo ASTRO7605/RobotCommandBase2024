@@ -65,6 +65,7 @@ void Robot::DisabledPeriodic() {
 void Robot::AutonomousInit() {
     m_autonomousCommand = m_Container.GetAutonomousCommand();
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Coast);
+    m_Container.ResetGyroOffsetFromAuto();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Schedule();
     }
