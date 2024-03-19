@@ -83,10 +83,10 @@ void Robot::TeleopInit() {
     m_Container.ResetRobotOffsetFromField();
     m_Container.SetLedForEnabled();
     m_Container.SetIdleModeSwerve(DriveConstant::IdleMode::Brake);
+    m_Container.StopIntake();
     if (m_autonomousCommand.get() != nullptr) {
         m_autonomousCommand.Cancel();
     }
-    frc2::PrintCommand("Fais des points caliss").Schedule();
 }
 
 /**

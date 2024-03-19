@@ -103,7 +103,7 @@ constexpr auto kThresholdSpeakerInRangeToStartWheels = 6.0_m;
 constexpr auto kTimeBeforeBrake = 1_s;
 
 constexpr double kTimeForProjectionInFutureDistance = 0.35;
-constexpr double kTimeForProjectionInFutureRotation = 0.2;
+constexpr double kTimeForProjectionInFutureRotation = 0.225;
 
 constexpr auto kBlueSourceApproachAngle = 120_deg;
 constexpr auto kRedSourceApproachAngle = 60_deg;
@@ -178,7 +178,7 @@ constexpr int capteurID = 1;
 constexpr double absoluteEncoderOffset = -2078.12;   // 1/10 degre
 constexpr double flywheelsSpeedManualSpeaker = 3000; // RPM
 constexpr double manualSpeakerAngle = 650;
-constexpr double flywheelsSpeedAmp = 550;   // RPM
+constexpr double flywheelsSpeedAmp = 500;   // RPM
 constexpr double flywheelsSpeedTrap = 1650; // RPM
 constexpr double speedThreshold = 100;      // RPM
 constexpr auto timeThreshold = 0.2_s;
@@ -218,7 +218,7 @@ constexpr double kPeakCurrentDuration = 0; // ms
 constexpr double kContinuousCurrent = 20;  // amperes
 constexpr double kForwardSoftLimit = 785;  // 1/10 degre
 constexpr double kReverseSoftLimit = 200;  // 1/10 degre
-constexpr double kAngleShooterAmp = 600;
+constexpr double kAngleShooterAmp = 610;
 constexpr double kAngleShooterTrap = 770;
 constexpr double kIntermediateAngleShooter = 450;
 constexpr double kRPMDifferenceSpin = 500;

@@ -526,3 +526,5 @@ void RobotContainer::ResetGyroOffsetFromAuto() {
                 .Radians());
     }
 }
+
+void RobotContainer::StopIntake() { m_Intake.SetIntake(false, false, false); }

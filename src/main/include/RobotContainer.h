@@ -116,6 +116,8 @@ class RobotContainer : public frc2::SubsystemBase {
 
     void ResetRobotOffsetFromField();
 
+    void StopIntake();
+
     // InPosition IsRobotInRightPoseForAuto();
     // void UpdateDisabledLed(InPosition in_position);
 

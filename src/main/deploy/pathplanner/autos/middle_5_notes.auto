@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.36,
-      "y": 5.52
+      "x": 1.33,
+      "y": 5.53
     },
     "rotation": 180.0
   },
@@ -12,34 +12,28 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "shoot note"
+            "pathName": "middle_multi_1"
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "wait",
                 "data": {
-                  "pathName": "middle_simple_1"
+                  "waitTime": 2.5
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "start intake"
+                  "name": "auto intake"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "feed into shooter"
           }
         },
         {
@@ -83,49 +77,6 @@
           "type": "path",
           "data": {
             "pathName": "middle_multi_4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "feed into shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middle_multi_5"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.5
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "auto intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middle_multi_6"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "feed into shooter"
           }
         }
       ]
