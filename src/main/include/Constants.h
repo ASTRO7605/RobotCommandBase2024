@@ -41,9 +41,9 @@ constexpr auto kMaxAutoAcceleration = 4.25_mps_sq;
 constexpr units::radians_per_second_t kMaxAutoAngularSpeed{std::numbers::pi * 1.5};
 constexpr units::radians_per_second_squared_t kMaxAutoAngularAcceleration{std::numbers::pi * 1.5};
 
-constexpr double kDirectionSlewRate = 1.5;  // radians per second *valeurs à tester et changer
-constexpr double kMagnitudeSlewRate = 8.0;  // percent per second (1 = 100%)
-constexpr double kRotationalSlewRate = 8.0; // percent per second (1 = 100%)
+constexpr double kDirectionSlewRate = 1.2;  // radians per second *valeurs à tester et changer
+constexpr double kMagnitudeSlewRate = 1.8;  // percent per second (1 = 100%)
+constexpr double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 constexpr double kControllerMovementDeadband = 0.15; // valeur minimum qu'on recoit des controllers
 constexpr double kControllerRotationDeadband = 0.15;
 // constexpr auto kRamseteB = 2.0 * 1_rad * 1_rad / (1_m * 1_m);
@@ -179,7 +179,7 @@ constexpr double absoluteEncoderOffset = -2078.12;   // 1/10 degre
 constexpr double flywheelsSpeedManualSpeaker = 3000; // RPM
 constexpr double manualSpeakerAngle = 650;
 constexpr double flywheelsSpeedAmp = 500;   // RPM
-constexpr double flywheelsSpeedTrap = 1650; // RPM
+constexpr double flywheelsSpeedTrap = 1550; // RPM
 constexpr double speedThreshold = 100;      // RPM
 constexpr auto timeThreshold = 0.2_s;
 constexpr double kPLeftFlywheel = 0.00025;
@@ -207,8 +207,8 @@ constexpr double kPPositionAngle = 7.25;
 constexpr double kIPositionAngle = 0.015;
 constexpr double kDPositionAngle = 25.0;
 constexpr double kFPositionAngle = 0;
-constexpr double kVitesseAngle = 1500;      // 1/10 degre par seconde
-constexpr double kAccelerationAngle = 6000; // 1/10 degre par seconde^2
+constexpr double kVitesseAngle = 1000;      // 1/10 degre par seconde
+constexpr double kAccelerationAngle = 4000; // 1/10 degre par seconde^2
 constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour mode manuel
 constexpr double angleThreshold = 7.5;      // dixieme de degre
 constexpr double kMaxAF = 0 /*.0445*/;

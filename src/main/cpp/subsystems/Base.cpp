@@ -267,7 +267,10 @@ frc::ChassisSpeeds Base::GetFieldRelativeSpeeds() {
     frc::ChassisSpeeds robotRelativeSpeeds{GetRobotRelativeSpeeds()};
 
     return frc::ChassisSpeeds::FromRobotRelativeSpeeds(
-        robotRelativeSpeeds, m_Gyro.GetRotation2d().Radians() - m_GyroOffset);
+        robotRelativeSpeeds,
+        m_Gyro.GetRotation2d().Radians() - m_GyroOffset -
+            ((frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed) ? 180_deg
+                                                                                       : 0_deg));
 }
 
 void Base::SetRobotPoseVisionEstimateLeft() {
