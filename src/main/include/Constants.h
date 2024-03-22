@@ -43,7 +43,7 @@ constexpr units::radians_per_second_squared_t kMaxAutoAngularAcceleration{std::n
 
 constexpr double kDirectionSlewRate = 1.2;  // radians per second *valeurs à tester et changer
 constexpr double kMagnitudeSlewRate = 1.8;  // percent per second (1 = 100%)
-constexpr double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
+constexpr double kRotationalSlewRate = 8.0; // percent per second (1 = 100%)
 constexpr double kControllerMovementDeadband = 0.15; // valeur minimum qu'on recoit des controllers
 constexpr double kControllerRotationDeadband = 0.15;
 // constexpr auto kRamseteB = 2.0 * 1_rad * 1_rad / (1_m * 1_m);
@@ -178,8 +178,8 @@ constexpr int capteurID = 1;
 constexpr double absoluteEncoderOffset = -2078.12;   // 1/10 degre
 constexpr double flywheelsSpeedManualSpeaker = 3000; // RPM
 constexpr double manualSpeakerAngle = 650;
-constexpr double flywheelsSpeedAmp = 500;   // RPM
-constexpr double flywheelsSpeedTrap = 1550; // RPM
+constexpr double flywheelsSpeedAmp = 550;   // RPM
+constexpr double flywheelsSpeedTrap = 1500; // RPM
 constexpr double speedThreshold = 100;      // RPM
 constexpr auto timeThreshold = 0.2_s;
 constexpr double kPLeftFlywheel = 0.00025;
