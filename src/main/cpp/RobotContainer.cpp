@@ -188,6 +188,8 @@ void RobotContainer::ConfigureBindings() {
 
     (m_CoPilotController.A() && !m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(IntakeCommand(&m_Intake, false).ToPtr());
+    (m_CoPilotController.A() && m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
+        .WhileTrue(IntakeCommand(&m_Intake, true).ToPtr());
     (m_CoPilotController.A() && m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
         .WhileTrue(AutomaticIntake(&m_Intake, &m_Base).ToPtr());
 
