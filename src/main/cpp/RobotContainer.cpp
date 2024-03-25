@@ -343,7 +343,7 @@ void RobotContainer::ConfigureNamedCommands() {
             frc2::ParallelDeadlineGroup(frc2::WaitCommand(0.5_s),
                                         BarrePosition(&m_Barre,
                                                       BarreConstant::k1erJointAngleTrapFinal,
-                                                      BarreConstant::k2eJointStartPosition)),
+                                                      BarreConstant::k2eJointAngleTrapApproach)),
             frc2::WaitCommand(0.5_s), frc2::InstantCommand([this]() { shootTrap.Schedule(); }))
             .ToPtr());
     pathplanner::NamedCommands::registerCommand(
@@ -412,6 +412,12 @@ void RobotContainer::ConfigureNamedCommands() {
         "run intake continuously",
         frc2::InstantCommand([this]() { m_Intake.SetIntake(true, false, true); }, {&m_Intake})
             .Repeatedly());
+    pathplanner::NamedCommands::registerCommand(
+        "prepare shooter wheels trap",
+        frc2::InstantCommand([this]() { startWheelsTrap.Schedule(); }, {}).ToPtr());
+    pathplanner::NamedCommands::registerCommand(
+        "prepare shooter angle trap",
+        frc2::InstantCommand([this]() { setShooterAngleTrap.Schedule(); }, {}).ToPtr());
 }
 
 void RobotContainer::ChooseCorrectStageCommand() {

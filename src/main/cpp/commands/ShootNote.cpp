@@ -76,9 +76,9 @@ void ShootNote::Execute() {
                 readyToShoot = true;
             }
         } else if (scoringPlace == ScoringPositions::amp) {
-            targetPremierJoint = BarreConstant::k1erJointAngleAmp;
-            targetDeuxiemeJoint = BarreConstant::k2eJointAngleAmpApproach;
-            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
+            // targetPremierJoint = BarreConstant::k1erJointAngleAmp;
+            // targetDeuxiemeJoint = BarreConstant::k2eJointAngleAmpApproach;
+            // m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
             if (m_pBarre->Is1erJointAtTargetAngle(targetPremierJoint)) {
                 isPremierJointAngledRight = true;
             }
@@ -94,9 +94,9 @@ void ShootNote::Execute() {
                 readyToShoot = true;
             }
         } else if (scoringPlace == ScoringPositions::trap) {
-            targetPremierJoint = BarreConstant::k1erJointAngleTrapFinal;
-            targetDeuxiemeJoint = BarreConstant::k2eJointAngleTrapApproach;
-            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
+            // targetPremierJoint = BarreConstant::k1erJointAngleTrapFinal;
+            // targetDeuxiemeJoint = BarreConstant::k2eJointAngleTrapApproach;
+            // m_pShooterWheels->SetWheelSpeeds(targetSpeeds, true);
             if (m_pShooterWheels->AreWheelsDoneAccelerating(
                     targetSpeeds, true)) { // did wheels reach their target
                 areWheelsAtRightSpeed = true;
@@ -171,8 +171,9 @@ void ShootNote::Execute() {
 
     if (m_State != ShooterConstant::ShooterState::noNote) {
         m_pShooterAngle->SetShooterAngle(currentShooterTargetAngle); // to update kAF continuously
-        m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
-        if (scoringPlace != ScoringPositions::speaker) {
+        if (scoringPlace == ScoringPositions::speaker) {
+            m_pShooterWheels->SetWheelSpeeds(targetSpeeds, false);
+        } else {
             m_pBarre->Set1erJointAngle(targetPremierJoint); // to update kAF continuously
             m_pBarre->Set2eJointAngle(targetDeuxiemeJoint); // to update kAF continuously
         }

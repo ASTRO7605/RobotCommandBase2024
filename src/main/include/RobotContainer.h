@@ -159,4 +159,11 @@ class RobotContainer : public frc2::SubsystemBase {
                   &m_CoPilotController, ShooterConstant::flywheelsSpeedTrap,
                   ShooterConstant::kAngleShooterTrap, false, ScoringPositions::trap)
             .WithInterruptBehavior(frc2::Command::InterruptionBehavior::kCancelIncoming)};
+
+    frc2::CommandPtr startWheelsTrap{
+        StartShooterWheels(&m_ShooterWheels, &m_Base, true, ShooterConstant::flywheelsSpeedTrap)
+            .ToPtr()};
+
+    frc2::CommandPtr setShooterAngleTrap{
+        ShooterPosition(&m_ShooterAngle, ShooterConstant::kAngleShooterTrap, false).ToPtr()};
 };
