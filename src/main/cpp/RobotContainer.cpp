@@ -225,6 +225,10 @@ void RobotContainer::ConfigureBindings() {
             StartShooterWheels(&m_ShooterWheels, &m_Base, false, ShooterConstant::flywheelsSpeedAmp)
                 .ToPtr());
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
+        .WhileTrue(BarrePosition(&m_Barre, BarreConstant::k1erJointAngleAmp,
+                                 BarreConstant::k2eJointAngleAmpApproach)
+                       .ToPtr());
+    (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .OnFalse(RedescendreBarre(&m_Barre, false, false).ToPtr());
     (m_CoPilotController.B() && !m_CoPilotController.LeftTrigger(OIConstant::axisThreshold))
         .OnFalse(StopShooterWheels(&m_ShooterWheels).ToPtr());
