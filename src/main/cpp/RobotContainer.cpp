@@ -37,8 +37,8 @@ RobotContainer::RobotContainer()
 
             dir_r *= dir_r;
             double turn = 0;
-
-            if (m_Base.IsRotationBeingControlled()) {
+            bool isRotationControlled{m_Base.IsRotationBeingControlled()};
+            if (isRotationControlled) {
                 turn = -units::radians_per_second_t{m_Base.GetPIDControlledRotationSpeed(
                                                         m_Base.IsRobotInRangeToStartWheels())}
                             .value();
@@ -88,10 +88,12 @@ RobotContainer::RobotContainer()
 
     m_AutoChooser.AddOption("Middle 1 note", "middle_1_note");
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
+    m_AutoChooser.AddOption("Middle 4 notes", "middle_4_notes");
     m_AutoChooser.AddOption("Middle 5 notes", "middle_5_notes");
 
     m_AutoChooser.AddOption("Source 1 note", "source_1_note");
     m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
+    m_AutoChooser.AddOption("Source 3 notes", "source_3_notes");
 
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
 
@@ -114,6 +116,10 @@ void RobotContainer::Periodic() {
 
 void RobotContainer::ConfigureBindings() {
     // Configure your trigger bindings here
+    m_TurnStick.Button(1).OnTrue(
+        frc2::InstantCommand([this]() { setShooterAngleTrap.Schedule(); }, {}).ToPtr());
+    m_TurnStick.Button(2).OnTrue(
+        frc2::InstantCommand([this]() { startWheelsTrap.Schedule(); }, {}).ToPtr());
     m_TurnStick.Button(5).WhileTrue(frc2::RunCommand([this]() {
                                         auto latestCameraPose{m_Base.GetAveragePoseFromCameras()};
                                         if (latestCameraPose.has_value()) {
@@ -287,7 +293,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     } else {
         return frc2::InstantCommand([]() {}).ToPtr();
     }
-    // return pathplanner::AutoBuilder::buildAuto("test");
+    // return pathplanner::AutoBuilder::buildAuto("New Auto");
 }
 
 void RobotContainer::ConfigureAmpPathfind() {
@@ -344,10 +350,9 @@ void RobotContainer::ConfigureNamedCommands() {
     pathplanner::NamedCommands::registerCommand(
         "barre final and shoot trap",
         frc2::SequentialCommandGroup(
-            frc2::ParallelDeadlineGroup(frc2::WaitCommand(0.5_s),
-                                        BarrePosition(&m_Barre,
-                                                      BarreConstant::k1erJointAngleTrapFinal,
-                                                      BarreConstant::k2eJointAngleTrapApproach)),
+            frc2::ParallelRaceGroup(frc2::WaitCommand(0.5_s),
+                                    BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal,
+                                                  BarreConstant::k2eJointAngleTrapApproach)),
             frc2::WaitCommand(0.5_s), frc2::InstantCommand([this]() { shootTrap.Schedule(); }))
             .ToPtr());
     pathplanner::NamedCommands::registerCommand(
@@ -418,10 +423,16 @@ void RobotContainer::ConfigureNamedCommands() {
             .Repeatedly());
     pathplanner::NamedCommands::registerCommand(
         "prepare shooter wheels trap",
-        frc2::InstantCommand([this]() { startWheelsTrap.Schedule(); }, {}).ToPtr());
+        frc2::InstantCommand(
+            [this]() { m_ShooterWheels.SetWheelSpeeds(ShooterConstant::flywheelsSpeedTrap, true); },
+            {&m_ShooterWheels})
+            .Repeatedly());
     pathplanner::NamedCommands::registerCommand(
         "prepare shooter angle trap",
-        frc2::InstantCommand([this]() { setShooterAngleTrap.Schedule(); }, {}).ToPtr());
+        frc2::InstantCommand(
+            [this]() { m_ShooterAngle.SetShooterAngle(ShooterConstant::kAngleShooterTrap); },
+            {&m_ShooterAngle})
+            .Repeatedly());
 }
 
 void RobotContainer::ChooseCorrectStageCommand() {

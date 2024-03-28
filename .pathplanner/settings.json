@@ -15,8 +15,8 @@
     "Stage"
   ],
   "defaultMaxVel": 3.5,
-  "defaultMaxAccel": 7.5,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 520.0,
-  "defaultMaxAngAccel": 1000.0,
+  "defaultMaxAngAccel": 500.0,
   "maxModuleSpeed": 4.25
 }

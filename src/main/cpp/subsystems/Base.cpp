@@ -118,6 +118,9 @@ void Base::Periodic() {
     m_RobotField.SetRobotPose(m_PoseEstimator.GetEstimatedPosition());
     frc::SmartDashboard::PutNumber("fieldXSpeed", GetFieldRelativeSpeeds().vx());
     frc::SmartDashboard::PutNumber("fieldYSpeed", GetFieldRelativeSpeeds().vy());
+    pidControllerThetaSpeaker.SetPID(frc::Preferences::GetDouble("kPThetaRobot"),
+                                     frc::Preferences::GetDouble("kIThetaRobot"),
+                                     frc::Preferences::GetDouble("kDThetaRobot"));
 }
 
 void Base::SetIdleMode(DriveConstant::IdleMode idleMode) {
@@ -188,7 +191,12 @@ void Base::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t y
 
         xSpeedCommanded = m_CurrentTranslationMag * cos(m_CurrentTranslationDir);
         ySpeedCommanded = m_CurrentTranslationMag * sin(m_CurrentTranslationDir);
-        m_CurrentRotation = m_rotLimiter.Calculate(rotationSpeed.value());
+        if (!IsRotationBeingControlled()) {
+            m_CurrentRotation = m_rotLimiter.Calculate(rotationSpeed.value());
+        } else {
+            m_CurrentRotation = rotationSpeed.value();
+        }
+
     } else {
         xSpeedCommanded = xSpeed.value();
         ySpeedCommanded = ySpeed.value();

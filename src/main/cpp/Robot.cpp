@@ -29,6 +29,10 @@ void Robot::RobotInit() {
     frc::Preferences::InitDouble("TestShooterAngle", 0);
     frc::Preferences::InitDouble("TestShooterSpeeds", 0);
 
+    frc::Preferences::InitDouble("kPThetaRobot", 0);
+    frc::Preferences::InitDouble("kIThetaRobot", 0);
+    frc::Preferences::InitDouble("kDThetaRobot", 0);
+
     hasInitHooksBeenScheduled = false;
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,

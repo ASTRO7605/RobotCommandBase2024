@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.33,
+      "y": 3.7
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed into shooter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Game autos",
+  "choreoAuto": false
+}

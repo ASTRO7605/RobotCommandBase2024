@@ -70,6 +70,7 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelDeadlineGroup.h>
+#include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/RepeatCommand.h>
 #include <frc2/command/RunCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>

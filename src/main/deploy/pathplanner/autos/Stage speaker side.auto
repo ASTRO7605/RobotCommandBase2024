@@ -6,39 +6,66 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "stage speaker approach"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "stage speaker backup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "extend crochets trap"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "stage speaker final"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "retract crochets trap"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "barre final and shoot trap"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "stage speaker approach"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "stage speaker backup"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "extend crochets trap"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "stage speaker final"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "retract crochets trap"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "barre final and shoot trap"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "stop shooter wheels"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
