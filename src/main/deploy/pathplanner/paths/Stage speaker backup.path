@@ -50,7 +50,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -59,6 +59,18 @@
               "type": "named",
               "data": {
                 "name": "barre approach trap"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "prepare shooter angle trap"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "prepare shooter wheels trap"
               }
             }
           ]

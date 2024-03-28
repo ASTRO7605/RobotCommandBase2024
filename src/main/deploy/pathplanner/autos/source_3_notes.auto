@@ -22,6 +22,80 @@
           "data": {
             "name": "feed into shooter"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_2"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed into shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_4"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed into shooter"
+          }
         }
       ]
     }

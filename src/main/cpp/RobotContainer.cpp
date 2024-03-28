@@ -82,6 +82,7 @@ RobotContainer::RobotContainer()
         },
         {&m_ShooterWheels}));
 
+    m_AutoChooser.AddOption("Amp 1 note", "amp_1_note");
     m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
     m_AutoChooser.AddOption("Amp 4 notes far", "amp_4_notes_far");
     m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");

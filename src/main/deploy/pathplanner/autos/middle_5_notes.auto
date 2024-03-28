@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle_multi_1"
+            "pathName": "middle_multi_left_1"
           }
         },
         {
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle_multi_2"
+            "pathName": "middle_multi_left_2"
           }
         },
         {
@@ -51,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle_multi_3"
+            "pathName": "middle_multi_left_3"
           }
         },
         {
@@ -76,7 +76,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middle_multi_4"
+            "pathName": "middle_multi_left_4"
           }
         }
       ]

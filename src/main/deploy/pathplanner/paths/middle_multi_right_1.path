@@ -1,0 +1,137 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.33,
+        "y": 5.53
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7662321955413156,
+        "y": 5.535354916863679
+      },
+      "isLocked": false,
+      "linkedName": "middle_start"
+    },
+    {
+      "anchor": {
+        "x": 3.253,
+        "y": 5.53
+      },
+      "prevControl": {
+        "x": 2.9713410431575444,
+        "y": 5.530186459715308
+      },
+      "nextControl": {
+        "x": 4.011440034868261,
+        "y": 5.529497908695805
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.1,
+        "y": 5.77
+      },
+      "prevControl": {
+        "x": 5.445518259775192,
+        "y": 7.480874095678198
+      },
+      "nextControl": {
+        "x": 7.1347580197526215,
+        "y": 5.7340572668975165
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.2,
+        "y": 5.77
+      },
+      "prevControl": {
+        "x": 7.15,
+        "y": 5.77
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "middle_2nd_note"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 0.7,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 520.0,
+        "maxAngularAcceleration": 500.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "adjust shooter angle"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "start shooter wheels"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.45,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "run intake continuously"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 520.0,
+    "maxAngularAcceleration": 500.0
+  },
+  "goalEndState": {
+    "velocity": 0.45,
+    "rotation": 180.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "middle_paths",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0.0
+  },
+  "useDefaultConstraints": false
+}
