@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 1.33,
-      "y": 3.7
+      "y": 3.65
     },
     "rotation": 180.0
   },
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "source_multi_2"
+            "pathName": "source_multi_right_2"
           }
         },
         {
@@ -51,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "source_multi_3"
+            "pathName": "source_multi_right_3"
           }
         },
         {
@@ -63,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "source_multi_4"
+            "pathName": "source_multi_right_4"
           }
         },
         {
@@ -88,7 +88,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "source_multi_5"
+            "pathName": "source_multi_right_5"
           }
         },
         {

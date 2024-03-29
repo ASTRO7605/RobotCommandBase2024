@@ -84,17 +84,20 @@ RobotContainer::RobotContainer()
 
     m_AutoChooser.AddOption("Amp 1 note", "amp_1_note");
     m_AutoChooser.AddOption("Amp 2 notes", "amp_2_notes");
-    m_AutoChooser.AddOption("Amp 4 notes far", "amp_4_notes_far");
+    m_AutoChooser.AddOption("Amp 4 notes far left", "amp_4_notes_far_left");
+    m_AutoChooser.AddOption("Amp 4 notes far right", "amp_4_notes_far_right");
     m_AutoChooser.AddOption("Amp 4 notes close", "amp_4_notes_close");
 
     m_AutoChooser.AddOption("Middle 1 note", "middle_1_note");
     m_AutoChooser.AddOption("Middle 2 notes", "middle_2_notes");
     m_AutoChooser.AddOption("Middle 4 notes", "middle_4_notes");
-    m_AutoChooser.AddOption("Middle 5 notes", "middle_5_notes");
+    m_AutoChooser.AddOption("Middle 5 notes left", "middle_5_notes_left");
+    m_AutoChooser.AddOption("Middle 5 notes right", "middle_5_notes_right");
 
     m_AutoChooser.AddOption("Source 1 note", "source_1_note");
     m_AutoChooser.AddOption("Source 2 notes", "source_2_notes");
-    m_AutoChooser.AddOption("Source 3 notes", "source_3_notes");
+    m_AutoChooser.AddOption("Source 3 notes left", "source_3_notes_left");
+    m_AutoChooser.AddOption("Source 3 notes right", "source_3_notes_right");
 
     frc::SmartDashboard::PutData("autoChooser", &m_AutoChooser);
 

@@ -1,0 +1,105 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.33,
+      "y": 3.65
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed into shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_left_2"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_left_3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed into shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_left_4"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "auto intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "source_multi_left_5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "feed into shooter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Game autos",
+  "choreoAuto": false
+}

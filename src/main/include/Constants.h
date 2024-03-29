@@ -103,7 +103,7 @@ constexpr auto kThresholdSpeakerInRangeToStartWheels = 6.0_m;
 constexpr auto kTimeBeforeBrake = 1_s;
 
 constexpr double kTimeForProjectionInFutureDistance = 0.35;
-constexpr double kTimeForProjectionInFutureRotation = 0.225;
+constexpr double kTimeForProjectionInFutureRotation = 0.25;
 
 constexpr auto kBlueSourceApproachAngle = 120_deg;
 constexpr auto kRedSourceApproachAngle = 60_deg;
@@ -213,9 +213,9 @@ constexpr double kPercentOutputAngle = 0.1; // dixieme de degre par seconde pour
 constexpr double angleThreshold = 7.5;      // dixieme de degre
 constexpr double kMaxAF = 0 /*.0445*/;
 constexpr double FDegToRad = std::numbers::pi / 180;
-constexpr double kPeakCurrentLimit = 20;   // amperes
+constexpr double kPeakCurrentLimit = 9;    // amperes
 constexpr double kPeakCurrentDuration = 0; // ms
-constexpr double kContinuousCurrent = 20;  // amperes
+constexpr double kContinuousCurrent = 9;   // amperes
 constexpr double kForwardSoftLimit = 785;  // 1/10 degre
 constexpr double kReverseSoftLimit = 200;  // 1/10 degre
 constexpr double kAngleShooterAmp = 640;
