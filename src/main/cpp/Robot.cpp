@@ -26,13 +26,6 @@ void Robot::RobotInit() {
     wpi::PortForwarder::GetInstance().Add(1182, "photonvision-a.local", 1182);
     wpi::PortForwarder::GetInstance().Add(1282, "photonvision-b.local", 1182);
 
-    frc::Preferences::InitDouble("TestShooterAngle", 0);
-    frc::Preferences::InitDouble("TestShooterSpeeds", 0);
-
-    frc::Preferences::InitDouble("kPThetaRobot", 0);
-    frc::Preferences::InitDouble("kIThetaRobot", 0);
-    frc::Preferences::InitDouble("kDThetaRobot", 0);
-
     hasInitHooksBeenScheduled = false;
 } /** * This function is called every 20 ms, no matter the mode. Use * this for
    * items like diagnostics that you want to run during disabled, * autonomous,

@@ -119,9 +119,6 @@ void Base::Periodic() {
     m_RobotField.SetRobotPose(m_PoseEstimator.GetEstimatedPosition());
     frc::SmartDashboard::PutNumber("fieldXSpeed", GetFieldRelativeSpeeds().vx());
     frc::SmartDashboard::PutNumber("fieldYSpeed", GetFieldRelativeSpeeds().vy());
-    pidControllerThetaSpeaker.SetPID(frc::Preferences::GetDouble("kPThetaRobot"),
-                                     frc::Preferences::GetDouble("kIThetaRobot"),
-                                     frc::Preferences::GetDouble("kDThetaRobot"));
 }
 
 void Base::SetIdleMode(DriveConstant::IdleMode idleMode) {
