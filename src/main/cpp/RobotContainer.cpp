@@ -357,7 +357,7 @@ void RobotContainer::ConfigureNamedCommands() {
             frc2::ParallelRaceGroup(frc2::WaitCommand(0.5_s),
                                     BarrePosition(&m_Barre, BarreConstant::k1erJointAngleTrapFinal,
                                                   BarreConstant::k2eJointAngleTrapApproach)),
-            frc2::WaitCommand(0.5_s), frc2::InstantCommand([this]() { shootTrap.Schedule(); }))
+            frc2::WaitCommand(1_s), frc2::InstantCommand([this]() { shootTrap.Schedule(); }))
             .ToPtr());
     pathplanner::NamedCommands::registerCommand(
         "extend crochets trap",

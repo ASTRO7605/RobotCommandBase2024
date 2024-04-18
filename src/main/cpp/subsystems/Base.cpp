@@ -75,6 +75,7 @@ Base::Base()
 }
 
 void Base::Periodic() {
+    frc::SmartDashboard::PutBoolean("isRotationBeingControlled", isRotationBeingControlled);
     if (std::isnan(m_PoseEstimator.GetEstimatedPosition().X().value()) ||
         std::isnan(m_PoseEstimator.GetEstimatedPosition().Y().value()) ||
         std::isnan(m_PoseEstimator.GetEstimatedPosition().Rotation().Degrees().value())) {

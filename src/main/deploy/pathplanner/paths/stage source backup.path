@@ -66,6 +66,18 @@
               "data": {
                 "name": "barre approach trap"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "prepare shooter angle trap"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "prepare shooter wheels trap"
+              }
             }
           ]
         }
