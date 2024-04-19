@@ -60,6 +60,7 @@ void ShootNote::Execute() {
         readyToShoot = false;
         timer.Stop();
         timer.Reset();
+        timerForRevUp.Restart();
         m_State = ShooterConstant::ShooterState::waitingForSubsystems;
         break;
     case (ShooterConstant::ShooterState::waitingForSubsystems):
@@ -72,7 +73,8 @@ void ShootNote::Execute() {
                     targetSpeeds, false)) { // did wheels reach their target
                 areWheelsAtRightSpeed = true;
             }
-            if (isShooterAngledRight && areWheelsAtRightSpeed) {
+            if ((isShooterAngledRight && areWheelsAtRightSpeed) ||
+                (timerForRevUp.Get() >= ShooterConstant::kMaxTimeForRevUp)) {
                 readyToShoot = true;
             }
         } else if (scoringPlace == ScoringPositions::amp) {
