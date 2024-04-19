@@ -49,8 +49,8 @@ ShooterWheels::ShooterWheels()
     m_RightFlywheelMotorPIDController.SetD(ShooterConstant::kDRightFlywheel);
     m_RightFlywheelMotorPIDController.SetFF(ShooterConstant::kFFRightFlywheel);
 
-    m_LeftFlywheelMotor.EnableVoltageCompensation(ShooterConstant::kVoltageCompensation);
-    m_RightFlywheelMotor.EnableVoltageCompensation(ShooterConstant::kVoltageCompensation);
+    m_LeftFlywheelMotor.EnableVoltageCompensation(/*ShooterConstant::kVoltageCompensation*/ 12);
+    m_RightFlywheelMotor.EnableVoltageCompensation(/*ShooterConstant::kVoltageCompensation*/ 12);
 
     m_LeftFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels);
     m_RightFlywheelMotor.SetSmartCurrentLimit(ShooterConstant::currentLimitFlywheels);
