@@ -63,6 +63,7 @@ ShooterWheels::ShooterWheels()
 
     // m_LeftFlywheelMotor.BurnFlash();
     // m_RightFlywheelMotor.BurnFlash();
+    isFeedingModeActivated = false;
 }
 
 void ShooterWheels::Periodic() {
@@ -124,3 +125,7 @@ bool ShooterWheels::AreWheelsDoneAccelerating(double target, bool spin) {
 double ShooterWheels::GetInterpolatedWheelSpeeds(double distanceMeters) {
     return interpolatingMapShooterWheels[distanceMeters];
 }
+
+void ShooterWheels::SetFeedingModeOn(bool on) { isFeedingModeActivated = on; }
+
+bool ShooterWheels::IsFeedingModeOn() { return isFeedingModeActivated; }

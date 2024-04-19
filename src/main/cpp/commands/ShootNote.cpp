@@ -193,6 +193,7 @@ bool ShootNote::IsFinished() {
 void ShootNote::End(bool interrupted) {
     m_pShooterWheels->StopWheels();
     m_pIntake->SetIntake(false, false, false);
+    m_pShooterWheels->SetFeedingModeOn(false);
     if (((scoringPlace == ScoringPositions::amp) || (scoringPlace == ScoringPositions::trap)) &&
         (m_State != ShooterConstant::ShooterState::noNote)) {
         m_RedescendreBarre.Schedule();

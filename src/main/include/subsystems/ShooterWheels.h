@@ -45,6 +45,9 @@ class ShooterWheels : public frc2::SubsystemBase {
 
     double GetInterpolatedWheelSpeeds(double distanceMeters);
 
+    void SetFeedingModeOn(bool on);
+    bool IsFeedingModeOn();
+
   private:
     rev::CANSparkMax m_LeftFlywheelMotor;
     rev::CANSparkMax m_RightFlywheelMotor;
@@ -58,6 +61,7 @@ class ShooterWheels : public frc2::SubsystemBase {
     std::shared_ptr<frc::DigitalInput> m_capteurInterieurShooter;
 
     bool areWheelsRunning;
+    bool isFeedingModeActivated;
 
     wpi::interpolating_map<double, double> interpolatingMapShooterWheels;
 };

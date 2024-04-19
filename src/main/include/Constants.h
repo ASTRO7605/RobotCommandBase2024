@@ -241,27 +241,27 @@ constexpr std::pair<units::meter_t, double> fourthDistanceShooterAngleCouple =
 constexpr std::pair<units::meter_t, double> fifthDistanceWheelSpeedsCouple =
     std::make_pair(2.52_m, 5500);
 constexpr std::pair<units::meter_t, double> fifthDistanceShooterAngleCouple =
-    std::make_pair(2.52_m, 440);
+    std::make_pair(2.52_m, 445);
 constexpr std::pair<units::meter_t, double> sixthDistanceWheelSpeedsCouple =
     std::make_pair(2.81_m, 5500);
 constexpr std::pair<units::meter_t, double> sixthDistanceShooterAngleCouple =
-    std::make_pair(2.81_m, 405);
+    std::make_pair(2.81_m, 415);
 constexpr std::pair<units::meter_t, double> seventhDistanceWheelSpeedsCouple =
     std::make_pair(3.11_m, 5500);
 constexpr std::pair<units::meter_t, double> seventhDistanceShooterAngleCouple =
-    std::make_pair(3.11_m, 395);
+    std::make_pair(3.11_m, 400);
 constexpr std::pair<units::meter_t, double> eighthDistanceWheelSpeedsCouple =
     std::make_pair(3.40_m, 5500);
 constexpr std::pair<units::meter_t, double> eighthDistanceShooterAngleCouple =
-    std::make_pair(3.40_m, 380);
+    std::make_pair(3.40_m, 387.5);
 constexpr std::pair<units::meter_t, double> ninthDistanceWheelSpeedsCouple =
     std::make_pair(3.90_m, 5500);
 constexpr std::pair<units::meter_t, double> ninthDistanceShooterAngleCouple =
-    std::make_pair(3.90_m, 360);
+    std::make_pair(3.90_m, 370);
 constexpr std::pair<units::meter_t, double> tenthDistanceWheelSpeedsCouple =
     std::make_pair(7_m, 5500);
 constexpr std::pair<units::meter_t, double> tenthDistanceShooterAngleCouple =
-    std::make_pair(7_m, 360);
+    std::make_pair(7_m, 365);
 constexpr std::pair<units::meter_t, double> eleventhDistanceWheelSpeedsCouple =
     std::make_pair(7.01_m, 4500);
 constexpr std::pair<units::meter_t, double> eleventhDistanceShooterAngleCouple =
@@ -269,7 +269,7 @@ constexpr std::pair<units::meter_t, double> eleventhDistanceShooterAngleCouple =
 extern const std::vector<std::pair<units::meter_t, double>> wheelSpeedsAccordingToDistance;
 extern const std::vector<std::pair<units::meter_t, double>> shooterAngleAccordingToDistance;
 constexpr double kStandByWheelRPM = 2000;
-constexpr auto kMaxTimeForRevUp = 1.75_s;
+constexpr auto kMaxTimeForRevUp = 1.5_s;
 } // namespace ShooterConstant
 
 namespace IntakeConstant {

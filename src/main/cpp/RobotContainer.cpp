@@ -72,7 +72,8 @@ RobotContainer::RobotContainer()
         {&m_ShooterAngle}));
     m_ShooterWheels.SetDefaultCommand(frc2::RunCommand(
         [this] {
-            if (m_Base.IsRobotInRangeToStartWheels() && m_Intake.IsObjectInIntake()) {
+            if ((m_Base.IsRobotInRangeToStartWheels() && m_Intake.IsObjectInIntake()) ||
+                m_ShooterWheels.IsFeedingModeOn()) {
                 m_ShooterWheels.SetWheelSpeeds(m_ShooterWheels.GetInterpolatedWheelSpeeds(
                                                    m_Base.GetDistanceToSpeaker().value()),
                                                false);
@@ -194,6 +195,11 @@ void RobotContainer::ConfigureBindings() {
             .ToPtr());
     m_CoPilotController.RightBumper().OnFalse(
         frc2::InstantCommand([this]() { m_Base.SetRotationBeingControlledFlag(false); }, {})
+            .ToPtr());
+
+    m_CoPilotController.RightStick().OnTrue(
+        frc2::InstantCommand(
+            [this]() { m_ShooterWheels.SetFeedingModeOn(!m_ShooterWheels.IsFeedingModeOn()); }, {})
             .ToPtr());
 
     (m_CoPilotController.A() && !m_CoPilotController.RightTrigger(OIConstant::axisThreshold))
